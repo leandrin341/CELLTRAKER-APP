@@ -1,0 +1,22 @@
+{
+  "name": "uroscan-ai-lito-vs-flebolito",
+  "version": "1.0.0",
+  "description": "Aplicación de diagnóstico asistido por IA para diferenciación entre Litos Ureterales Distales y Flebolitos Pélvicos en TC sin contraste - Hackathon Biociencias 2026 (Hospital Italiano de Buenos Aires, Servicio de Urología)",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python server.py",
+    "start": "python server.py",
+    "serve": "npx serve -l 3000"
+  },
+  "keywords": [
+    "urologia",
+    "lito-ureteral",
+    "flebolito",
+    "ia-medica",
+    "radiomics",
+    "hospital-italiano",
+    "hackathon-2026"
+  ],
+  "author": "leandrin341",
+  "license": "MIT"
+}
