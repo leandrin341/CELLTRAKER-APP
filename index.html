@@ -364,6 +364,9 @@
               <span class="font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7] text-xs" id="active-patient-header-name">
                 Roberto García (44a)
               </span>
+              <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-mono-numbers" id="active-patient-header-hc">
+                HC-2026-08412
+              </span>
             </div>
           </div>
 
@@ -839,8 +842,73 @@
         <!-- ========================================================================= -->
         <section class="lg:col-span-7 flex flex-col gap-4">
 
-          <!-- Tarjeta: Visor Tomográfico Profesional PACS (Limpio y Pro) -->
-          <div class="card-base p-4 flex flex-col gap-3">
+          <!-- ========================================================================= -->
+          <!-- ESTADO EN ESPERA (INICIAL: HASTA QUE SE SELECCIONE UN PACIENTE)           -->
+          <!-- ========================================================================= -->
+          <div id="ct-empty-state" class="card-base p-8 sm:p-12 flex flex-col items-center justify-center text-center min-h-[580px] bg-white border border-slate-200/90 shadow-2xs">
+            <div class="max-w-md flex flex-col items-center">
+              
+              <!-- Badge de Servicio Urología HIBA -->
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0FDF4] border border-[#C6EFD7] text-[#007D3E] text-[11px] font-bold uppercase tracking-wide mb-5">
+                <span class="w-2 h-2 rounded-full bg-[#009C4D] animate-pulse"></span>
+                <span>Hospital Italiano de Buenos Aires · PACS Urología</span>
+              </div>
+
+              <!-- Icono Ilustrativo DICOM / Tomógrafo Estilo Colony -->
+              <div class="w-20 h-20 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-400 mb-5 relative group shadow-inner">
+                <div class="absolute inset-0 rounded-2xl border border-dashed border-slate-300 pointer-events-none"></div>
+                <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                </svg>
+              </div>
+
+              <!-- Títulos y Textos Clínicos -->
+              <h3 class="text-base font-extrabold text-slate-900 tracking-tight mb-2">
+                Estudio Tomográfico & Radiológico en Reposo
+              </h3>
+              <p class="text-xs text-slate-500 font-medium leading-relaxed mb-6">
+                Seleccione un paciente de la lista de triage en el panel izquierdo para cargar automáticamente sus cortes tomográficos axiales y coronales, visualizar la posición de calipers/catéter ureteral y ejecutar el diagnóstico diferencial con IA.
+              </p>
+
+              <!-- Bento Preview Cards (Estilo Colony In Vitro) -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full text-left mb-6">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <div class="text-[10px] font-bold uppercase text-slate-400">Cortes Axiales</div>
+                  <div class="text-xs font-bold text-slate-800 mt-0.5">Lito vs Flebolito</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Rim Sign y lucencia central</div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-[#F0FDF4] border border-[#C6EFD7]">
+                  <div class="text-[10px] font-bold uppercase text-[#007D3E]">Calipers & Stent</div>
+                  <div class="text-xs font-bold text-[#006632] mt-0.5">Catéter Doble J</div>
+                  <div class="text-[10px] text-[#007D3E]/80 mt-0.5">Medición milimétrica (6 Fr)</div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <div class="text-[10px] font-bold uppercase text-slate-400">Modelo Multimodal</div>
+                  <div class="text-xs font-bold text-slate-800 mt-0.5">IA Validada 96.8%</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Guías EAU Urolitiasis</div>
+                </div>
+              </div>
+
+              <!-- Indicador de acción guiada -->
+              <div class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-2xs">
+                <svg class="w-4 h-4 text-[#009C4D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Haga clic en una tarjeta de paciente a la izquierda para comenzar</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ========================================================================= -->
+          <!-- ÁREA DE ESTUDIO ACTIVA (SE DESPLIEGA AL TOCAR UN PACIENTE)                 -->
+          <!-- ========================================================================= -->
+          <div id="ct-active-workspace" class="hidden flex flex-col gap-4">
+
+            <!-- Tarjeta: Visor Tomográfico Profesional PACS (Limpio y Pro) -->
+            <div class="card-base p-4 flex flex-col gap-3">
             
             <!-- Encabezado Limpio del Visor -->
             <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
@@ -1194,6 +1262,8 @@
             </div>
 
           </div>
+          <!-- FIN CT-ACTIVE-WORKSPACE -->
+        </div>
 
         </section>
 
@@ -1493,18 +1563,43 @@
       }
     };
 
+    // =======================================================
+    // HELPERS SEGUROS PARA MANIPULACIÓN DEL DOM
+    // =======================================================
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = (text !== undefined && text !== null) ? text : '';
+    }
+
+    function safeSetVal(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== undefined && val !== null) ? val : '';
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderEvaButtons(9);
       backToPatientList();
     });
 
     // =======================================================
-    // NAVEGACIÓN: SELECCIÓN DE PACIENTE VS DETALLE EN COLUMNA
+    // NAVEGACIÓN: SELECCIÓN DE PACIENTE Y APERTURA DE MÓDULOS
     // =======================================================
     function selectPatientAndOpenDashboard(id) {
       state.activeCase = id;
-      loadPatientData(id);
 
+      // 1. Mostrar la planilla clínica del paciente en el panel izquierdo
+      const selView = document.getElementById('patient-selection-view');
+      const detView = document.getElementById('patient-detail-dashboard');
+      if (selView) selView.classList.add('hidden');
+      if (detView) detView.classList.remove('hidden');
+
+      // 2. Abrir el visor tomográfico y módulo de IA en el panel derecho
+      const ctEmpty = document.getElementById('ct-empty-state');
+      const ctActive = document.getElementById('ct-active-workspace');
+      if (ctEmpty) ctEmpty.classList.add('hidden');
+      if (ctActive) ctActive.classList.remove('hidden');
+
+      // 3. Resaltar la tarjeta activa en la lista
       [1, 2, 3].forEach(n => {
         const card = document.getElementById(`patient-card-${n}`);
         if (card) {
@@ -1513,23 +1608,72 @@
         }
       });
 
-      const selView = document.getElementById('patient-selection-view');
-      const detView = document.getElementById('patient-detail-dashboard');
-      if (selView) selView.classList.add('hidden');
-      if (detView) detView.classList.remove('hidden');
+      // 4. Cargar datos del paciente y corte tomográfico de forma segura
+      try {
+        loadPatientData(id);
+      } catch (err) {
+        console.error('Error al cargar datos del paciente:', err);
+      }
 
-      detView.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // 5. Scroll suave al inicio si es necesario
+      if (detView) detView.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function backToPatientList() {
+      // 1. Regresar panel izquierdo a la lista de pacientes
       const selView = document.getElementById('patient-selection-view');
       const detView = document.getElementById('patient-detail-dashboard');
       if (detView) detView.classList.add('hidden');
       if (selView) selView.classList.remove('hidden');
+
+      // 2. Regresar panel derecho al estado en espera (tomografía cerrada)
+      const ctEmpty = document.getElementById('ct-empty-state');
+      const ctActive = document.getElementById('ct-active-workspace');
+      if (ctActive) ctActive.classList.add('hidden');
+      if (ctEmpty) ctEmpty.classList.remove('hidden');
+
+      // 3. Quitar resaltado de tarjetas
+      [1, 2, 3].forEach(n => {
+        const card = document.getElementById(`patient-card-${n}`);
+        if (card) card.classList.remove('patient-card-active');
+      });
     }
 
     function showTriageView() {
       backToPatientList();
+    }
+
+    function createNewBlankPatient() {
+      selectPatientAndOpenDashboard(1);
+      safeSetText('active-patient-header-name', 'Nuevo Ingreso (Guardia)');
+      safeSetText('active-patient-header-hc', 'HC-2026-NUEVO');
+      safeSetText('patient-card-name', 'Paciente de Guardia');
+      safeSetText('patient-card-hc', 'HC-2026-NUEVO');
+      safeSetText('patient-avatar-initials', 'PG');
+      safeSetVal('patient-age', '45');
+      safeSetVal('patient-gender', 'M');
+      safeSetVal('lab-creatinine', '1.05');
+      safeSetVal('lab-urea', '32');
+      safeSetVal('clinical-notes', 'Paciente ingresa con sospecha de cólico renoureteral para estudio tomográfico.');
+    }
+
+    function filterPatients(term) {
+      const query = (term || '').toLowerCase().trim();
+      [1, 2, 3].forEach(id => {
+        const card = document.getElementById(`patient-card-${id}`);
+        if (!card) return;
+        const p = state.patients[id];
+        if (!p) return;
+        const matches = p.name.toLowerCase().includes(query) ||
+                        p.patientId.toLowerCase().includes(query) ||
+                        (p.location && p.location.toLowerCase().includes(query)) ||
+                        (p.triageBadge && p.triageBadge.toLowerCase().includes(query));
+        if (!query || matches) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
     }
 
     function loadPatientData(id) {
@@ -1537,33 +1681,40 @@
       if (!p) return;
 
       // Header general
-      document.getElementById('active-patient-header-name').innerText = `${p.name} (${p.age}a)`;
-      document.getElementById('active-patient-header-hc').innerText = p.patientId;
-      document.getElementById('dicom-corner-id').innerText = p.patientId;
+      safeSetText('active-patient-header-name', `${p.name} (${p.age}a)`);
+      safeSetText('active-patient-header-hc', p.patientId);
+      safeSetText('dicom-corner-id', p.patientId);
 
       // Ficha de Filiación & Credencial
-      document.getElementById('patient-avatar-initials').innerText = p.initials;
-      document.getElementById('patient-card-name').innerText = p.name;
-      document.getElementById('patient-card-hc').innerText = p.patientId;
-      document.getElementById('patient-card-dni').innerText = `DNI: ${p.dni}`;
-      document.getElementById('patient-card-blood').innerText = p.blood;
-      document.getElementById('patient-card-location').innerText = p.location;
-      document.getElementById('patient-card-insurance').innerText = p.insurance;
-      document.getElementById('patient-card-allergies').innerText = p.allergies;
-      document.getElementById('patient-card-triage-badge').innerText = p.triageBadge;
-      document.getElementById('patient-card-triage-badge').className = `text-[10px] font-bold px-2 py-1 rounded-md shrink-0 border ${p.triageClass}`;
-      document.getElementById('patient-card-biometry').innerText = p.biometry;
-      document.getElementById('patient-card-bmi').innerText = p.bmi;
+      safeSetText('patient-avatar-initials', p.initials);
+      safeSetText('patient-card-name', p.name);
+      safeSetText('patient-card-hc', p.patientId);
+      safeSetText('patient-card-dni', `DNI: ${p.dni}`);
+      safeSetText('patient-card-blood', p.blood);
+      safeSetText('patient-card-location', p.location);
+      safeSetText('patient-card-insurance', p.insurance);
+      safeSetText('patient-card-allergies', p.allergies);
+      safeSetText('patient-card-triage-badge', p.triageBadge);
+      
+      const badgeEl = document.getElementById('patient-card-triage-badge');
+      if (badgeEl && p.triageClass) {
+        badgeEl.className = `text-[10px] font-bold px-2 py-1 rounded-md shrink-0 border ${p.triageClass}`;
+      }
+      
+      safeSetText('patient-card-biometry', p.biometry);
+      safeSetText('patient-card-bmi', p.bmi);
 
-      document.getElementById('patient-age').value = p.age;
-      document.getElementById('patient-gender').value = p.gender;
+      safeSetVal('patient-age', p.age);
+      safeSetVal('patient-gender', p.gender);
 
       // Tira de Signos Vitales
-      document.getElementById('vital-bp').innerText = p.vitals.bp;
-      document.getElementById('vital-hr').innerText = p.vitals.hr;
-      document.getElementById('vital-temp').innerText = p.vitals.temp;
-      document.getElementById('vital-sat').innerText = p.vitals.sat;
-      document.getElementById('vital-rr').innerText = p.vitals.rr;
+      if (p.vitals) {
+        safeSetText('vital-bp', p.vitals.bp);
+        safeSetText('vital-hr', p.vitals.hr);
+        safeSetText('vital-temp', p.vitals.temp);
+        safeSetText('vital-sat', p.vitals.sat);
+        safeSetText('vital-rr', p.vitals.rr);
+      }
 
       // Escala EVA
       renderEvaButtons(p.eva);
@@ -1579,22 +1730,22 @@
       }
 
       // Parámetros de Marcadores
-      document.getElementById('marker-ratio-val').innerText = p.markerRatio;
-      document.getElementById('marker-ratio-desc').innerText = p.markerRatioDesc;
-      document.getElementById('marker-hu-val').innerText = p.markerHu;
-      document.getElementById('marker-size-val').innerText = p.markerSize;
-      document.getElementById('marker-uvj-val').innerText = p.markerUvj;
-      document.getElementById('marker-pcr-val').innerText = p.markerPcr;
-      document.getElementById('marker-inl-val').innerText = p.markerInl;
-      document.getElementById('marker-ir-val').innerText = p.markerIr;
-      document.getElementById('marker-crystal-val').innerText = p.markerCrystal;
+      safeSetText('marker-ratio-val', p.markerRatio);
+      safeSetText('marker-ratio-desc', p.markerRatioDesc);
+      safeSetText('marker-hu-val', p.markerHu);
+      safeSetText('marker-size-val', p.markerSize);
+      safeSetText('marker-uvj-val', p.markerUvj);
+      safeSetText('marker-pcr-val', p.markerPcr);
+      safeSetText('marker-inl-val', p.markerInl);
+      safeSetText('marker-ir-val', p.markerIr);
+      safeSetText('marker-crystal-val', p.markerCrystal);
 
       // Función Renal & Laboratorio
-      document.getElementById('lab-creatinine').value = p.creatinine;
-      document.getElementById('lab-urea').value = p.urea;
-      document.getElementById('patient-card-egfr').innerText = p.egfr;
-      document.getElementById('patient-card-sediment').innerText = p.sediment;
-      document.getElementById('exam-giordano').value = p.giordano;
+      safeSetVal('lab-creatinine', p.creatinine);
+      safeSetVal('lab-urea', p.urea);
+      safeSetText('patient-card-egfr', p.egfr);
+      safeSetText('patient-card-sediment', p.sediment);
+      safeSetVal('exam-giordano', p.giordano);
 
       // Factores de Riesgo
       const riskContainer = document.getElementById('patient-risk-factors-container');
@@ -1606,15 +1757,17 @@
         `).join('');
       }
 
-      document.getElementById('clinical-pain').value = p.pain;
-      document.getElementById('clinical-onset').value = p.onset;
-      document.getElementById('clinical-hematuria').value = p.hematuria;
-      document.getElementById('clinical-notes').value = p.notes;
+      safeSetVal('clinical-pain', p.pain);
+      safeSetVal('clinical-onset', p.onset);
+      safeSetVal('clinical-hematuria', p.hematuria);
+      safeSetVal('clinical-notes', p.notes);
 
       updatePainBadge(p.pain);
 
       // Cargar corte tomográfico correspondiente
-      selectSampleImage(p.image, p.imageIndex);
+      if (typeof selectSampleImage === 'function') {
+        selectSampleImage(p.image, p.imageIndex);
+      }
 
       renderAiResults(p);
       updateClinicalScoreLive();
