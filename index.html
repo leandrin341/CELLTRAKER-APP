@@ -221,12 +221,12 @@
   <!-- ================= CUERPO PRINCIPAL ================= -->
     <!-- ================= LAYOUT PRINCIPAL: 2 PANELES DIVIDIDOS ================= -->
   <main class="flex-1 p-3 lg:p-5 overflow-y-auto">
-    <div class="max-w-[1720px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-5">
 
         <!-- ========================================================================= -->
         <!-- PANEL IZQUIERDO: SELECCIÓN DE PACIENTES O PLANILLA DETALLADA (COL 5 / 12) -->
         <!-- ========================================================================= -->
-        <section class="lg:col-span-5 flex flex-col gap-4">
+        <section class="md:col-span-5 flex flex-col gap-4">
           
           <!-- Elementos de Compatibilidad y Sincronización de Estado -->
           <input type="hidden" id="patient-id" value="HC-2026-08412">
@@ -234,8 +234,7 @@
           <span id="badge-pain-status" class="hidden">CÓLICO ACTIVO</span>
 
           <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
-          <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
-        <div id="patient-selection-view" class="flex flex-col gap-3">
+          <div id="patient-selection-view" style="display: flex;" class="flex-col gap-3">
           
           <div class="card-base p-4">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
@@ -348,7 +347,7 @@
         </div>
 
           <!-- VISTA B: DASHBOARD COMPLETO CON LA PLANILLA DEL PACIENTE Y MARCADORES -->
-          <div id="patient-detail-dashboard" class="hidden flex flex-col gap-4">
+          <div id="patient-detail-dashboard" style="display: none;" class="flex-col gap-4">
             
           <!-- Barra Superior de Navegación del Paciente Activo -->
           <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-2xs">
@@ -840,12 +839,12 @@
         <!-- ========================================================================= -->
         <!-- COLUMNA DERECHA: VISUALIZADOR TOMOGRÁFICO Y ANÁLISIS IA (COL 7 / 12)       -->
         <!-- ========================================================================= -->
-        <section class="lg:col-span-7 flex flex-col gap-4">
+        <section class="md:col-span-7 flex flex-col gap-4">
 
           <!-- ========================================================================= -->
           <!-- ESTADO EN ESPERA (INICIAL: HASTA QUE SE SELECCIONE UN PACIENTE)           -->
           <!-- ========================================================================= -->
-          <div id="ct-empty-state" class="card-base p-8 sm:p-12 flex flex-col items-center justify-center text-center min-h-[580px] bg-white border border-slate-200/90 shadow-2xs">
+          <div id="ct-empty-state" style="display: flex;" class="card-base p-8 sm:p-12 flex-col items-center justify-center text-center min-h-[580px] bg-white border border-slate-200/90 shadow-2xs">
             <div class="max-w-md flex flex-col items-center">
               
               <!-- Badge de Servicio Urología HIBA -->
@@ -905,7 +904,7 @@
           <!-- ========================================================================= -->
           <!-- ÁREA DE ESTUDIO ACTIVA (SE DESPLIEGA AL TOCAR UN PACIENTE)                 -->
           <!-- ========================================================================= -->
-          <div id="ct-active-workspace" class="hidden flex flex-col gap-4">
+          <div id="ct-active-workspace" style="display: none;" class="flex-col gap-4">
 
             <!-- Tarjeta: Visor Tomográfico Profesional PACS (Limpio y Pro) -->
             <div class="card-base p-4 flex flex-col gap-3">
@@ -1587,17 +1586,29 @@
     function selectPatientAndOpenDashboard(id) {
       state.activeCase = id;
 
-      // 1. Mostrar la planilla clínica del paciente en el panel izquierdo
+      // 1. Mostrar la planilla clínica del paciente en el panel izquierdo (sin conflicto de clases)
       const selView = document.getElementById('patient-selection-view');
       const detView = document.getElementById('patient-detail-dashboard');
-      if (selView) selView.classList.add('hidden');
-      if (detView) detView.classList.remove('hidden');
+      if (selView) {
+        selView.style.display = 'none';
+        selView.classList.add('hidden');
+      }
+      if (detView) {
+        detView.style.display = 'flex';
+        detView.classList.remove('hidden');
+      }
 
-      // 2. Abrir el visor tomográfico y módulo de IA en el panel derecho
+      // 2. Abrir el visor tomográfico y módulo de IA en el panel derecho (forzar visualización inmediata)
       const ctEmpty = document.getElementById('ct-empty-state');
       const ctActive = document.getElementById('ct-active-workspace');
-      if (ctEmpty) ctEmpty.classList.add('hidden');
-      if (ctActive) ctActive.classList.remove('hidden');
+      if (ctEmpty) {
+        ctEmpty.style.display = 'none';
+        ctEmpty.classList.add('hidden');
+      }
+      if (ctActive) {
+        ctActive.style.display = 'flex';
+        ctActive.classList.remove('hidden');
+      }
 
       // 3. Resaltar la tarjeta activa en la lista
       [1, 2, 3].forEach(n => {
@@ -1615,28 +1626,42 @@
         console.error('Error al cargar datos del paciente:', err);
       }
 
-      // 5. Scroll suave al inicio si es necesario
-      if (detView) detView.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // 5. Scroll suave al inicio de la página para que ambos paneles estén en pantalla
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function backToPatientList() {
       // 1. Regresar panel izquierdo a la lista de pacientes
       const selView = document.getElementById('patient-selection-view');
       const detView = document.getElementById('patient-detail-dashboard');
-      if (detView) detView.classList.add('hidden');
-      if (selView) selView.classList.remove('hidden');
+      if (detView) {
+        detView.style.display = 'none';
+        detView.classList.add('hidden');
+      }
+      if (selView) {
+        selView.style.display = 'flex';
+        selView.classList.remove('hidden');
+      }
 
       // 2. Regresar panel derecho al estado en espera (tomografía cerrada)
       const ctEmpty = document.getElementById('ct-empty-state');
       const ctActive = document.getElementById('ct-active-workspace');
-      if (ctActive) ctActive.classList.add('hidden');
-      if (ctEmpty) ctEmpty.classList.remove('hidden');
+      if (ctActive) {
+        ctActive.style.display = 'none';
+        ctActive.classList.add('hidden');
+      }
+      if (ctEmpty) {
+        ctEmpty.style.display = 'flex';
+        ctEmpty.classList.remove('hidden');
+      }
 
       // 3. Quitar resaltado de tarjetas
       [1, 2, 3].forEach(n => {
         const card = document.getElementById(`patient-card-${n}`);
         if (card) card.classList.remove('patient-card-active');
       });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showTriageView() {
@@ -1902,13 +1927,17 @@
       // Ocultar todas las capas SVG de calipers
       [1, 2, 3, 4].forEach(i => {
         const layer = document.getElementById(`layer-case-${i}`);
-        if (layer) layer.classList.add('hidden');
+        if (layer) {
+          layer.classList.add('hidden');
+          layer.style.display = 'none';
+        }
       });
 
       // Mostrar la capa SVG correspondiente si calipers están activos
       const activeLayer = document.getElementById(`layer-case-${thumbIndex}`);
       if (activeLayer && state.calipersVisible) {
         activeLayer.classList.remove('hidden');
+        activeLayer.style.display = '';
       }
 
       if (thumbIndex === 1) {
