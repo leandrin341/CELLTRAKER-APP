@@ -219,275 +219,155 @@
   </section>
 
   <!-- ================= CUERPO PRINCIPAL ================= -->
-  <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
-    
-    <!-- ========================================================================= -->
-    <!-- VISTA 1: DIRECTORIO Y TRIAGE DE PACIENTES (PANTALLA INICIAL)               -->
-    <!-- ========================================================================= -->
-    <div id="view-triage" class="max-w-[1500px] mx-auto flex flex-col gap-5">
-      
-      <!-- Encabezado de la Sección de Pacientes -->
-      <div class="card-base p-5 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></span>
-            <h1 class="text-base font-bold text-slate-900 tracking-tight">Directorio Clínico & Triage de Pacientes</h1>
-          </div>
-          <p class="text-[11px] text-slate-400 font-medium mt-1">
-            Seleccione un paciente de la lista para abrir su expediente clínico y acceder al visualizador tomográfico con análisis IA.
-          </p>
-        </div>
+    <!-- ================= LAYOUT PRINCIPAL: 2 PANELES DIVIDIDOS ================= -->
+  <main class="flex-1 p-3 lg:p-5 overflow-y-auto">
+    <div class="max-w-[1720px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-        <div class="flex items-center gap-3">
-          <!-- Buscador Rápido -->
-          <div class="relative w-64">
-            <input type="text" placeholder="Buscar por paciente, HC o síntoma..." class="w-full input-base pl-8 text-xs font-normal" oninput="filterPatients(this.value)">
-            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" stroke-width="2"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/>
-            </svg>
-          </div>
-
-          <button onclick="createNewBlankPatient()" class="px-3 py-1.5 rounded-lg bg-[#009C4D] text-white hover:bg-[#00823F] font-bold text-xs transition flex items-center gap-1.5 shadow-2xs">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>+ Cargar Nuevo Caso</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Filtros de Triage -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Filtrar Casos:</span>
-        <button class="px-3 py-1 rounded-full bg-[#009C4D] text-white font-bold text-[11px] transition shadow-2xs">
-          Todos los Casos (3)
-        </button>
-        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
-          Lito Ureteral Distal (2)
-        </button>
-        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
-          Flebolitos Pélvicos (1)
-        </button>
-        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
-          Control Catéter Doble J (1)
-        </button>
-      </div>
-
-      <!-- Grilla Bento de Tarjetas de Pacientes -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="patient-cards-grid">
-        
-        <!-- Tarjeta Paciente 1: Roberto García -->
-        <div onclick="selectPatientAndOpenDashboard(1)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
-          <div>
-            <div class="flex items-start justify-between gap-3 mb-3">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#E8F8EE] text-[#007D3E] font-bold text-sm flex items-center justify-center border border-[#C6EFD7]">
-                  RG
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Roberto García</h3>
-                  <div class="text-[11px] text-slate-400 font-mono-numbers">44 años · HC-2026-08412</div>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200 shrink-0">
-                CÓLICO AGUDO FID
-              </span>
-            </div>
-
-            <!-- Síntomas & Cuadro -->
-            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
-              Dolor cólico unilateral derecho intenso (EVA 9/10), microhematuria y cortejo vegetativo. Sospecha alta de litiasis obstructiva distal.
-            </p>
-
-            <!-- Datos Tomográficos Clave -->
-            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Estudio:</span>
-                <span class="font-semibold text-slate-700">TC Pelvis Sin Contraste</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Calcificación detectada:</span>
-                <span class="font-bold text-slate-900 font-mono-numbers">4.2 mm · 842 HU</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Signo característico:</span>
-                <span class="font-bold text-[#007D3E]">Soft-Tissue Rim Sign (+)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-[11px] font-bold text-[#007D3E]">93.4% Probabilidad Lito</span>
-            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(1);" class="px-3 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
-              <span>Abrir Expediente & Visor</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tarjeta Paciente 2: Clara Méndez -->
-        <div onclick="selectPatientAndOpenDashboard(2)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
-          <div>
-            <div class="flex items-start justify-between gap-3 mb-3">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center border border-slate-200">
-                  CM
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Clara Méndez</h3>
-                  <div class="text-[11px] text-slate-400 font-mono-numbers">56 años · HC-2026-03195</div>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
-                ASINTOMÁTICA
-              </span>
-            </div>
-
-            <!-- Síntomas & Cuadro -->
-            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
-              Evaluación ginecológica de rutina. Hallazgo incidental de calcificaciones pélvicas bilaterales sin dilatación ureteral ni dolor.
-            </p>
-
-            <!-- Datos Tomográficos Clave -->
-            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Estudio:</span>
-                <span class="font-semibold text-slate-700">TC Pelvis Sin Contraste</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Calcificación detectada:</span>
-                <span class="font-bold text-slate-900 font-mono-numbers">3.1 mm · 460 HU</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Signo característico:</span>
-                <span class="font-bold text-slate-700">Cola de Cometa (+)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-[11px] font-bold text-slate-500">95.2% Flebolito Benigno</span>
-            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(2);" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
-              <span>Abrir Expediente & Visor</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Tarjeta Paciente 3: Martín López (Catéter Doble J) -->
-        <div onclick="selectPatientAndOpenDashboard(3)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
-          <div>
-            <div class="flex items-start justify-between gap-3 mb-3">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 font-bold text-sm flex items-center justify-center border border-amber-200">
-                  ML
-                </div>
-                <div>
-                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Martín López</h3>
-                  <div class="text-[11px] text-slate-400 font-mono-numbers">51 años · HC-2026-11029</div>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
-                CATÉTER DOBLE J IN SITU
-              </span>
-            </div>
-
-            <!-- Síntomas & Cuadro -->
-            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
-              Lito ureteral distal de 5.1 mm impactado. Control radiológico post-colocación de catéter Doble J (6 Fr / 2.0 mm) para derivación urinaria.
-            </p>
-
-            <!-- Datos Tomográficos Clave -->
-            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Estudio:</span>
-                <span class="font-semibold text-slate-700">Control Radiológico / TC</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Lito impactado:</span>
-                <span class="font-bold text-slate-900 font-mono-numbers">5.1 mm distal</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-slate-400">Catéter ureteral:</span>
-                <span class="font-bold text-amber-700">6 Fr (2.0 mm) sobre el cálculo</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-[11px] font-bold text-amber-700">Descompresión Lograda</span>
-            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(3);" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
-              <span>Abrir Expediente & Visor</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- VISTA 2: DASHBOARD CLÍNICO DEL PACIENTE & ANÁLISIS DE TOMOGRAFÍA          -->
-    <!-- (SE ABRE CUANDO EL USUARIO SELECCIONA AL PACIENTE)                        -->
-    <!-- ========================================================================= -->
-    <div id="view-patient-workspace" class="hidden max-w-[1720px] mx-auto flex flex-col gap-4">
-      
-      <!-- Barra Superior de Navegación del Paciente Seleccionado -->
-      <div class="bg-white border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
-        
-        <div class="flex items-center gap-3">
-          <button onclick="showTriageView()" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 shadow-2xs">
-            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-            </svg>
-            <span>Volver al Directorio de Pacientes</span>
-          </button>
-
-          <div class="h-5 w-px bg-slate-200"></div>
-
-          <div class="flex items-center gap-2">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Paciente en Evaluación:</span>
-            <span class="font-extrabold text-[#007D3E] bg-[#F0FDF4] px-2.5 py-0.5 rounded-md border border-[#C6EFD7] text-xs" id="active-patient-header-name">
-              Roberto García (44a)
-            </span>
-            <span class="text-[10px] text-slate-400 font-mono-numbers" id="active-patient-header-hc">
-              HC-2026-08412
-            </span>
-          </div>
-        </div>
-
-        <!-- Selector Rápido de Pacientes sin volver a la lista -->
-        <div class="flex items-center gap-2">
-          <span class="text-[10px] font-semibold text-slate-400">Cambiar caso:</span>
-          <select id="quick-patient-select" onchange="selectPatientAndOpenDashboard(parseInt(this.value))" class="input-base py-1 text-xs font-semibold">
-            <option value="1">1. Roberto García (Lito distal 4.2mm)</option>
-            <option value="2">2. Clara Méndez (Flebolitos 3.1mm)</option>
-            <option value="3">3. Martín López (Catéter Doble J)</option>
-          </select>
-
-          <button onclick="openReportModal()" class="px-3 py-1.5 rounded-lg bg-[#009C4D] text-white hover:bg-[#00823F] font-bold text-xs transition flex items-center gap-1 shadow-2xs">
-            <span>Exportar Informe</span>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- ================= 2 COLUMNAS: PLANILLA IZQUIERDA Y TOMOGRAFÍA DERECHA ================= -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-                <!-- ========================================================================= -->
-        <!-- COLUMNA IZQUIERDA: PLANILLA CLÍNICA DEL PACIENTE (COL 5 / 12)             -->
+        <!-- ========================================================================= -->
+        <!-- PANEL IZQUIERDO: SELECCIÓN DE PACIENTES O PLANILLA DETALLADA (COL 5 / 12) -->
         <!-- ========================================================================= -->
         <section class="lg:col-span-5 flex flex-col gap-4">
+          
           <!-- Elementos de Compatibilidad y Sincronización de Estado -->
           <input type="hidden" id="patient-id" value="HC-2026-08412">
           <span id="patient-badge-id" class="hidden">HC-2026-08412</span>
           <span id="badge-pain-status" class="hidden">CÓLICO ACTIVO</span>
 
+          <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
+          <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
+        <div id="patient-selection-view" class="flex flex-col gap-3">
           
-          <!-- TARJETA 1: IDENTIDAD, FILIACIÓN & CREDENCIAL HOSPITALARIA -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="font-bold text-slate-900 text-xs tracking-tight">Seleccionar Paciente para Evaluación</h2>
+                  <span class="text-[10px] text-slate-400 font-medium">Bandeja de Triage · Servicio de Urología</span>
+                </div>
+              </div>
+              <button onclick="createNewBlankPatient()" class="px-2.5 py-1 rounded-md bg-[#009C4D] text-white hover:bg-[#00823F] font-semibold text-[11px] transition flex items-center gap-1 shadow-2xs">
+                <span>+ Nuevo Paciente</span>
+              </button>
+            </div>
+
+            <!-- Buscador Rápido de Pacientes -->
+            <div class="relative mb-3">
+              <input type="text" placeholder="Filtrar por nombre, HC o síntoma..." class="w-full input-base pl-8 text-xs font-normal" oninput="filterPatients(this.value)">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" stroke-width="2"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <!-- Lista de Pacientes Seleccionables (Bento Cards de Colony) -->
+            <div class="space-y-2.5" id="patient-cards-list">
+              
+              <!-- Paciente 1 -->
+              <div onclick="selectPatientAndOpenDashboard(1)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-1">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-[#E8F8EE] text-[#007D3E] font-bold text-xs flex items-center justify-center">
+                      RG
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Roberto García (44a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-08412 · Ingreso: Hoy 18:20</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">
+                    CÓLICO AGUDO FID
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Dolor cólico unilateral derecho, microhematuria (+). Sospecha lito ureteral obstructivo.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-[#007D3E] font-bold">TC: Corte axial L5-S1 (842 HU)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+              <!-- Paciente 2 -->
+              <div onclick="selectPatientAndOpenDashboard(2)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">
+                      CM
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Clara Méndez (56a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-03195 · Ingreso: Ayer 14:10</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                    ASINTOMÁTICA
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Control ginecológico. Calcificación pélvica incidental sin dilatación ureteral.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-slate-500 font-semibold">TC: Corte pélvico venoso (460 HU)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+              <!-- Paciente 3 -->
+              <div onclick="selectPatientAndOpenDashboard(3)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center">
+                      ML
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Martín López (38a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-11029 · Ingreso: Hoy 10:45</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                    CATÉTER DOBLE J
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Lito ureteral distal 5.1 mm impactado con Catéter Doble J posicionado.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-amber-700 font-semibold">Control: Catéter Doble J (6 Fr)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+          <!-- VISTA B: DASHBOARD COMPLETO CON LA PLANILLA DEL PACIENTE Y MARCADORES -->
+          <div id="patient-detail-dashboard" class="hidden flex flex-col gap-4">
+            
+          <!-- Barra Superior de Navegación del Paciente Activo -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-2xs">
+            <button onclick="backToPatientList()" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-semibold text-[11px] flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+              </svg>
+              <span>Volver a Lista de Pacientes</span>
+            </button>
+
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Paciente Activo:</span>
+              <span class="font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7] text-xs" id="active-patient-header-name">
+                Roberto García (44a)
+              </span>
+            </div>
+          </div>
+
+<!-- TARJETA 1: IDENTIDAD, FILIACIÓN & CREDENCIAL HOSPITALARIA -->
           <div class="card-base p-4 flex flex-col gap-3">
             <div class="flex items-start justify-between pb-3 border-b border-slate-100">
               <div class="flex items-center gap-3">
@@ -950,6 +830,8 @@
             </div>
           </div>
 
+          </div>
+
         </section>
 
         <!-- ========================================================================= -->
@@ -1315,10 +1197,7 @@
 
         </section>
 
-      </div>
-
     </div>
-
   </main>
 
   <!-- ================= MODAL PARA AÑADIR MARCADOR PERSONALIZADO ================= -->
@@ -1616,72 +1495,41 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderEvaButtons(9);
-      showTriageView();
+      backToPatientList();
     });
 
     // =======================================================
-    // NAVEGACIÓN: VISTA DE TRIAGE VS VISTA DE PACIENTE & VISOR
+    // NAVEGACIÓN: SELECCIÓN DE PACIENTE VS DETALLE EN COLUMNA
     // =======================================================
-    function showTriageView() {
-      document.getElementById('view-triage').classList.remove('hidden');
-      document.getElementById('view-patient-workspace').classList.add('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     function selectPatientAndOpenDashboard(id) {
       state.activeCase = id;
       loadPatientData(id);
 
-      const sel = document.getElementById('quick-patient-select');
-      if (sel) sel.value = id;
+      [1, 2, 3].forEach(n => {
+        const card = document.getElementById(`patient-card-${n}`);
+        if (card) {
+          if (n === id) card.classList.add('patient-card-active');
+          else card.classList.remove('patient-card-active');
+        }
+      });
 
-      document.getElementById('view-triage').classList.add('hidden');
-      document.getElementById('view-patient-workspace').classList.remove('hidden');
+      const selView = document.getElementById('patient-selection-view');
+      const detView = document.getElementById('patient-detail-dashboard');
+      if (selView) selView.classList.add('hidden');
+      if (detView) detView.classList.remove('hidden');
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      detView.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function createNewBlankPatient() {
-      const newId = `HC-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
-      document.getElementById('patient-id').value = newId;
-      document.getElementById('patient-badge-id').innerText = newId;
-      document.getElementById('patient-card-hc').innerText = newId;
-      document.getElementById('patient-card-name').innerText = 'Nuevo Paciente';
-      document.getElementById('patient-avatar-initials').innerText = 'NP';
-      document.getElementById('patient-age').value = '';
-      document.getElementById('clinical-notes').value = '';
-      document.getElementById('clinical-pain').value = 'none';
-      document.getElementById('clinical-hematuria').value = 'none';
-      document.getElementById('clinical-history').value = 'no';
-      document.getElementById('active-patient-header-name').innerText = `Nuevo Paciente (${newId})`;
-      document.getElementById('active-patient-header-hc').innerText = newId;
-      document.getElementById('dicom-corner-id').innerText = newId;
-
-      setEva(0);
-
-      document.getElementById('view-triage').classList.add('hidden');
-      document.getElementById('view-patient-workspace').classList.remove('hidden');
-      updateClinicalScoreLive();
+    function backToPatientList() {
+      const selView = document.getElementById('patient-selection-view');
+      const detView = document.getElementById('patient-detail-dashboard');
+      if (detView) detView.classList.add('hidden');
+      if (selView) selView.classList.remove('hidden');
     }
 
-    function filterPatients(query) {
-      const q = query.toLowerCase();
-      // filter hook if user searches
-    }
-
-    
-    // HELPERS SEGUROS PARA MANIPULACIÓN DEL DOM (EVITAN CUALQUIER ERROR NULL)
-    function safeSetText(id, text) {
-      const el = document.getElementById(id);
-      if (el) el.innerText = text;
-    }
-    function safeSetVal(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.value = val;
-    }
-    function safeSetHtml(id, html) {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = html;
+    function showTriageView() {
+      backToPatientList();
     }
 
     function loadPatientData(id) {
