@@ -78,12 +78,10 @@
       border-color: var(--hiba-green);
       box-shadow: 0 0 0 2px rgba(0, 156, 77, 0.15);
     }
-    .preset-btn-active {
+    .patient-card-active {
       background-color: var(--hiba-green-light) !important;
       border-color: var(--hiba-green) !important;
-      color: var(--hiba-green-hover) !important;
-      font-weight: 700 !important;
-      box-shadow: 0 1px 2px 0 rgba(0, 156, 77, 0.08);
+      box-shadow: 0 2px 8px -2px rgba(0, 156, 77, 0.15);
     }
     @media print {
       body * { visibility: hidden; }
@@ -113,20 +111,14 @@
       </div>
     </div>
 
-    <!-- Switcher de Modos estilo Colony (Dashboard Hub vs Estación Diagnóstica) -->
-    <div class="hidden md:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
-      <button onclick="switchViewMode('diagnostic')" id="tab-btn-diagnostic" class="px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-[#009C4D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-        </svg>
-        <span>Estación Diagnóstica</span>
-      </button>
-      <button onclick="switchViewMode('metrics')" id="tab-btn-metrics" class="px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-        </svg>
-        <span>Dashboard de Métricas</span>
-      </button>
+    <!-- Indicador de Contexto del Desafío -->
+    <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-1 text-xs">
+      <span class="w-2 h-2 rounded-full bg-[#009C4D]"></span>
+      <span class="text-slate-500 font-semibold text-[11px]">Diagnóstico Diferencial:</span>
+      <span class="font-bold text-slate-800 text-[11px]">Litos Ureterales Distales vs Flebolitos Pélvicos</span>
+      <span class="text-[10px] font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
+        TC Sin Contraste
+      </span>
     </div>
 
     <!-- Facultativo & Acciones -->
@@ -162,7 +154,7 @@
         <div>
           <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Casos Evaluados</div>
           <div class="text-lg font-extrabold text-slate-900 font-mono-numbers leading-tight mt-0.5">24</div>
-          <div class="text-[10px] text-slate-500 font-medium">Urología de Guardia</div>
+          <div class="text-[10px] text-slate-500 font-medium">Triage Urología HIBA</div>
         </div>
         <div class="w-7 h-7 rounded-lg bg-slate-200/60 text-slate-600 flex items-center justify-center">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -175,7 +167,7 @@
           <div class="text-[10px] font-bold text-[#007D3E] uppercase tracking-wide">Litos Ureterales</div>
           <div class="text-lg font-extrabold text-[#006632] font-mono-numbers leading-tight mt-0.5">15</div>
           <span class="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-[#C6EFD7] text-[#006632]">
-            CON RIM SIGN (+)
+            RIM SIGN (+) DETECTADO
           </span>
         </div>
         <div class="w-7 h-7 rounded-lg bg-[#C6EFD7] text-[#007D3E] flex items-center justify-center font-bold">
@@ -212,227 +204,395 @@
     </div>
   </section>
 
-  <!-- ================= SUB-BARRA DE CASOS PRECONFIGURADOS ================= -->
-  <div class="bg-white border-b border-slate-200/70 px-4 lg:px-6 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
-    <div class="flex items-center gap-2">
-      <span class="text-[11px] font-bold text-slate-400">Casos Clínicos de Referencia:</span>
-      <div class="flex items-center gap-1.5">
-        <button id="btn-preset-1" onclick="loadCasePreset(1)" class="px-3 py-1 rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 transition preset-btn-active font-medium">
-          Caso 1: Lito Ureteral Distal Obstructivo
-        </button>
-        <button id="btn-preset-2" onclick="loadCasePreset(2)" class="px-3 py-1 rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 transition font-medium">
-          Caso 2: Flebolito Pélvico Incidental
-        </button>
-        <button id="btn-preset-3" onclick="loadCasePreset(3)" class="px-3 py-1 rounded-md border border-slate-200 text-slate-700 hover:bg-slate-50 transition font-medium">
-          Caso 3: Calcificación Indeterminada
-        </button>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-2 ml-auto">
-      <button onclick="resetToBlank()" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 transition flex items-center gap-1.5 font-medium">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-        </svg>
-        <span>Limpiar Plantilla</span>
-      </button>
-    </div>
-  </div>
-
   <!-- ================= LAYOUT PRINCIPAL: 2 PANELES DIVIDIDOS ================= -->
   <main class="flex-1 p-3 lg:p-5 overflow-y-auto">
     <div class="max-w-[1720px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
 
       <!-- ========================================================================= -->
-      <!-- PANEL IZQUIERDO: PLANTILLA CLÍNICA DEL PACIENTE (COL 5 / 12)             -->
+      <!-- PANEL IZQUIERDO: SELECCIÓN DE PACIENTES O PLANILLA DETALLADA (COL 5 / 12) -->
       <!-- ========================================================================= -->
       <section class="lg:col-span-5 flex flex-col gap-4">
         
-        <!-- Tarjeta: Datos Generales del Paciente -->
-        <div class="card-base p-4">
-          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
+        <div id="patient-selection-view" class="flex flex-col gap-3">
+          
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="font-bold text-slate-900 text-xs tracking-tight">Seleccionar Paciente para Evaluación</h2>
+                  <span class="text-[10px] text-slate-400 font-medium">Bandeja de Triage · Servicio de Urología</span>
+                </div>
+              </div>
+              <button onclick="createNewBlankPatient()" class="px-2.5 py-1 rounded-md bg-[#009C4D] text-white hover:bg-[#00823F] font-semibold text-[11px] transition flex items-center gap-1 shadow-2xs">
+                <span>+ Nuevo Paciente</span>
+              </button>
+            </div>
+
+            <!-- Buscador Rápido de Pacientes -->
+            <div class="relative mb-3">
+              <input type="text" placeholder="Filtrar por nombre, HC o síntoma..." class="w-full input-base pl-8 text-xs font-normal" oninput="filterPatients(this.value)">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" stroke-width="2"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <!-- Lista de Pacientes Seleccionables (Bento Cards de Colony) -->
+            <div class="space-y-2.5" id="patient-cards-list">
+              
+              <!-- Paciente 1 -->
+              <div onclick="selectPatientAndOpenDashboard(1)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-1">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-[#E8F8EE] text-[#007D3E] font-bold text-xs flex items-center justify-center">
+                      RG
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Roberto García (44a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-08412 · Ingreso: Hoy 18:20</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">
+                    CÓLICO AGUDO FID
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Dolor cólico unilateral derecho, microhematuria (+). Sospecha lito ureteral obstructivo.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-[#007D3E] font-bold">TC: Corte axial L5-S1 (842 HU)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+              <!-- Paciente 2 -->
+              <div onclick="selectPatientAndOpenDashboard(2)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">
+                      CM
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Clara Méndez (56a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-03195 · Ingreso: Ayer 14:10</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                    ASINTOMÁTICA
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Control ginecológico. Calcificación pélvica incidental sin dilatación ureteral.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-slate-500 font-semibold">TC: Corte pélvico venoso (460 HU)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+              <!-- Paciente 3 -->
+              <div onclick="selectPatientAndOpenDashboard(3)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center">
+                      ML
+                    </span>
+                    <div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Martín López (38a)</div>
+                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-11029 · Ingreso: Hoy 10:45</div>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                    DOLOR INESPECÍFICO
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-500 font-medium">
+                  Dolor pélvico de 48h. Calcificación límite de 2.8 mm en estrecho pélvico.
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
+                  <span class="text-amber-700 font-semibold">TC: Corte de transición (590 HU)</span>
+                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VISTA B: DASHBOARD COMPLETO CON LA PLANILLA DEL PACIENTE Y MARCADORES -->
+        <div id="patient-detail-dashboard" class="hidden flex flex-col gap-4">
+          
+          <!-- Barra Superior de Navegación del Paciente Activo -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-2xs">
+            <button onclick="backToPatientList()" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-semibold text-[11px] flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+              </svg>
+              <span>Volver a Lista de Pacientes</span>
+            </button>
+
             <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-              </div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Plantilla Clínica del Paciente</h2>
-            </div>
-            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">HISTORIA CLÍNICA</span>
-          </div>
-
-          <div class="grid grid-cols-3 gap-3">
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">N° Registro / HC</label>
-              <input type="text" id="patient-id" value="HC-2026-08412" class="w-full input-base font-bold font-mono-numbers">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Edad</label>
-              <div class="relative">
-                <input type="number" id="patient-age" value="44" class="w-full input-base pr-8 font-semibold font-mono-numbers">
-                <span class="absolute right-2.5 top-2 text-slate-400 text-[10px] font-medium">años</span>
-              </div>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Sexo</label>
-              <select id="patient-gender" class="w-full input-base font-semibold">
-                <option value="M" selected>Masculino</option>
-                <option value="F">Femenino</option>
-              </select>
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Paciente Activo:</span>
+              <span class="font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7] text-xs" id="active-patient-header-name">
+                Roberto García (44a)
+              </span>
             </div>
           </div>
-        </div>
 
-        <!-- Tarjeta: Cuadro Clínico Actual y Síntomas -->
-        <div class="card-base p-4">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
+          <!-- Tarjeta 1: Datos Generales del Paciente -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <h2 class="font-bold text-slate-900 text-xs tracking-tight">Ficha de Filiación & Antecedentes</h2>
               </div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Sintomatología & Motivo de Consulta</h2>
-            </div>
-            <span class="text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200" id="badge-pain-status">CÓLICO ACTIVO</span>
-          </div>
-
-          <div class="space-y-3">
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Dolor en Flanco / Cólico Renal</label>
-              <select id="clinical-pain" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
-                <option value="right" selected>Presente unilateral agudo — Fosa Ilíaca Derecha</option>
-                <option value="left">Presente unilateral agudo — Fosa Ilíaca Izquierda</option>
-                <option value="atypical">Dolor abdominal inespecífico / difuso</option>
-                <option value="none">Asintomático (Hallazgo en TC por otra causa)</option>
-              </select>
+              <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded" id="patient-badge-id">HC-2026-08412</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
               <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Tiempo de Evolución</label>
-                <select id="clinical-onset" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
-                  <option value="acute" selected>&lt; 24 horas (Inicio agudo)</option>
-                  <option value="subacute">24 - 72 horas</option>
-                  <option value="chronic">&gt; 7 días / Crónico</option>
-                </select>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">N° Registro / HC</label>
+                <input type="text" id="patient-id" value="HC-2026-08412" class="w-full input-base font-bold font-mono-numbers">
               </div>
               <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Hematuria</label>
-                <select id="clinical-hematuria" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
-                  <option value="macro">Macroscópica (Visible)</option>
-                  <option value="micro" selected>Microscópica (Sedimento &gt; 10 hematíes/c)</option>
-                  <option value="none">Negativa / Ausente</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Síntomas Irritativos Distales</label>
-                <select id="clinical-voiding" class="w-full input-base font-medium">
-                  <option value="yes" selected>Disuria / Tenesmo vesical / Polaquiuria</option>
-                  <option value="no">Sin síntomas miccionales</option>
-                </select>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Edad</label>
+                <div class="relative">
+                  <input type="number" id="patient-age" value="44" class="w-full input-base pr-8 font-semibold font-mono-numbers">
+                  <span class="absolute right-2.5 top-2 text-slate-400 text-[10px] font-medium">años</span>
+                </div>
               </div>
               <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Episodios Previos de Litiasis</label>
-                <select id="clinical-history" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
-                  <option value="yes" selected>Sí (1 o más episodios confirmados)</option>
-                  <option value="no">No refiere antecedentes litiásicos</option>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Sexo</label>
+                <select id="patient-gender" class="w-full input-base font-semibold">
+                  <option value="M" selected>Masculino</option>
+                  <option value="F">Femenino</option>
                 </select>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Tarjeta: Laboratorio & Signos Físicos -->
-        <div class="card-base p-4">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                </svg>
+          <!-- Tarjeta 2: Cuadro Clínico Actual y Síntomas -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                </div>
+                <h2 class="font-bold text-slate-900 text-xs tracking-tight">Sintomatología & Motivo de Consulta</h2>
               </div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Parámetros de Laboratorio & Examen Físico</h2>
+              <span class="text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-200" id="badge-pain-status">CÓLICO ACTIVO</span>
             </div>
-            <span class="text-[10px] font-bold text-slate-400">BIOQUÍMICA</span>
-          </div>
 
-          <div class="grid grid-cols-3 gap-3">
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Creatinina</label>
-              <div class="relative">
-                <input type="text" id="lab-creatinine" value="1.18" class="w-full input-base pr-9 font-semibold font-mono-numbers">
-                <span class="absolute right-2 top-2 text-slate-400 text-[10px] font-medium">mg/dL</span>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Dolor en Flanco / Cólico Renal</label>
+                <select id="clinical-pain" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
+                  <option value="right" selected>Presente unilateral agudo — Fosa Ilíaca Derecha</option>
+                  <option value="left">Presente unilateral agudo — Fosa Ilíaca Izquierda</option>
+                  <option value="atypical">Dolor abdominal inespecífico / difuso</option>
+                  <option value="none">Asintomático (Hallazgo en TC por otra causa)</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Tiempo de Evolución</label>
+                  <select id="clinical-onset" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
+                    <option value="acute" selected>&lt; 24 horas (Inicio agudo)</option>
+                    <option value="subacute">24 - 72 horas</option>
+                    <option value="chronic">&gt; 7 días / Crónico</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Hematuria</label>
+                  <select id="clinical-hematuria" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
+                    <option value="macro">Macroscópica (Visible)</option>
+                    <option value="micro" selected>Microscópica (Sedimento &gt; 10 hematíes/c)</option>
+                    <option value="none">Negativa / Ausente</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Síntomas Irritativos Distales</label>
+                  <select id="clinical-voiding" class="w-full input-base font-medium">
+                    <option value="yes" selected>Disuria / Tenesmo vesical / Polaquiuria</option>
+                    <option value="no">Sin síntomas miccionales</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Episodios Previos de Litiasis</label>
+                  <select id="clinical-history" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
+                    <option value="yes" selected>Sí (1 o más episodios confirmados)</option>
+                    <option value="no">No refiere antecedentes litiásicos</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Leucocituria</label>
-              <select id="lab-leukocytes" class="w-full input-base font-medium">
-                <option value="normal" selected>Normal (&lt; 5/c)</option>
-                <option value="mild">Leve (10-25/c)</option>
-                <option value="high">Piuria (&gt; 50/c)</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Puño Percusión</label>
-              <select id="exam-giordano" class="w-full input-base font-medium">
-                <option value="positive" selected>Positiva ipsilateral</option>
-                <option value="negative">Negativa bilateral</option>
-              </select>
-            </div>
           </div>
-        </div>
 
-        <!-- Tarjeta: Observaciones del Especialista -->
-        <div class="card-base p-4">
-          <div class="flex items-center justify-between pb-2 mb-2">
-            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Observaciones Clínicas del Especialista</label>
-            <span class="text-[10px] font-semibold text-slate-400">NOTA MÉDICA</span>
-          </div>
-          <textarea id="clinical-notes" rows="2" class="w-full input-base resize-none text-xs text-slate-700 leading-relaxed font-medium" placeholder="Añadir notas clínicas adicionales sobre el caso...">Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC de abdomen y pelvis sin contraste por sospecha de litiasis ureteral obstructiva distal.</textarea>
-        </div>
+          <!-- Tarjeta 3: MÓDULO DE PARÁMETROS DE MARCADORES (LISTO PARA TUS MARCADORES) -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#E8F8EE] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="font-bold text-slate-900 text-xs tracking-tight">Parámetros de Marcadores</h2>
+                  <span class="text-[10px] text-slate-400 font-medium">Biomarcadores Clínicos, Inflamatorios & Radiómicos</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
+                PANEL MODULAR
+              </span>
+            </div>
 
-        <!-- Resumen de Probabilidad Clínica Basal -->
-        <div class="bg-[#F0FDF4] border border-[#C6EFD7] rounded-xl p-3.5 flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></div>
-            <div>
-              <div class="font-bold text-slate-900 text-xs">Probabilidad Clínica Pre-Tomografía</div>
-              <div class="text-[10px] text-slate-500 font-medium">Estimación basada en dolor, hematuria y antecedentes</div>
+            <!-- Grilla de Parámetros de Marcadores -->
+            <div class="grid grid-cols-2 gap-2.5 mb-3">
+              
+              <!-- Marcador 1: Atenuación Parietal -->
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador A · Ratio HU</div>
+                <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-ratio-text">1.82 (Edema Parietal)</div>
+                <div class="text-[10px] text-slate-400">Densidad anillo vs luz ureteral</div>
+              </div>
+
+              <!-- Marcador 2: PCR Ultrasensible -->
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador B · Inflamatorio</div>
+                <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-pcr-text">14.8 mg/L (PCR Elevada)</div>
+                <div class="text-[10px] text-slate-400">Proteína C Reactiva sérica</div>
+              </div>
+
+              <!-- Marcador 3: Índice Resistivo -->
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador C · Hemodinámico</div>
+                <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-resist-text">IR: 0.74 (Resistencia Alta)</div>
+                <div class="text-[10px] text-slate-400">Doppler arterial intrarrenal</div>
+              </div>
+
+              <!-- Marcador 4: Sedimento & Cristales -->
+              <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador D · Cristaluria</div>
+                <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-crystal-text">Oxalato Cálcico (++)</div>
+                <div class="text-[10px] text-slate-400">Cristaluria en orina fresca</div>
+              </div>
+
+            </div>
+
+            <div class="p-2 rounded-lg bg-slate-50 border border-slate-200/80 text-[10px] text-slate-500 flex items-center justify-between">
+              <span>Espacio modular listo para incorporar marcadores adicionales.</span>
+              <span class="text-[#007D3E] font-bold">Activo</span>
             </div>
           </div>
-          <div class="text-right">
-            <span id="clinical-pretest-badge" class="font-bold text-[#007D3E] text-sm font-mono-numbers">ALTA (88%)</span>
-            <span class="block text-[10px] font-semibold text-slate-400">SCORE UROLÓGICO</span>
+
+          <!-- Tarjeta 4: Laboratorio Estándar & Examen Físico -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                  </svg>
+                </div>
+                <h2 class="font-bold text-slate-900 text-xs tracking-tight">Laboratorio Estándar & Examen Físico</h2>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400">BIOQUÍMICA</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Creatinina</label>
+                <div class="relative">
+                  <input type="text" id="lab-creatinine" value="1.18" class="w-full input-base pr-9 font-semibold font-mono-numbers">
+                  <span class="absolute right-2 top-2 text-slate-400 text-[10px] font-medium">mg/dL</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Leucocituria</label>
+                <select id="lab-leukocytes" class="w-full input-base font-medium">
+                  <option value="normal" selected>Normal (&lt; 5/c)</option>
+                  <option value="mild">Leve (10-25/c)</option>
+                  <option value="high">Piuria (&gt; 50/c)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Puño Percusión</label>
+                <select id="exam-giordano" class="w-full input-base font-medium">
+                  <option value="positive" selected>Positiva ipsilateral</option>
+                  <option value="negative">Negativa bilateral</option>
+                </select>
+              </div>
+            </div>
           </div>
+
+          <!-- Tarjeta 5: Observaciones del Especialista -->
+          <div class="card-base p-4">
+            <div class="flex items-center justify-between pb-2 mb-2">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Observaciones Clínicas del Especialista</label>
+              <span class="text-[10px] font-semibold text-slate-400">NOTA MÉDICA</span>
+            </div>
+            <textarea id="clinical-notes" rows="2" class="w-full input-base resize-none text-xs text-slate-700 leading-relaxed font-medium" placeholder="Añadir notas clínicas adicionales sobre el caso...">Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC de abdomen y pelvis sin contraste por sospecha de litiasis ureteral obstructiva distal.</textarea>
+          </div>
+
+          <!-- Resumen de Probabilidad Clínica Basal -->
+          <div class="bg-[#F0FDF4] border border-[#C6EFD7] rounded-xl p-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></div>
+              <div>
+                <div class="font-bold text-slate-900 text-xs">Probabilidad Clínica Pre-Tomografía</div>
+                <div class="text-[10px] text-slate-500 font-medium">Estimación basada en dolor, hematuria y antecedentes</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span id="clinical-pretest-badge" class="font-bold text-[#007D3E] text-sm font-mono-numbers">ALTA (88%)</span>
+              <span class="block text-[10px] font-semibold text-slate-400">SCORE UROLÓGICO</span>
+            </div>
+          </div>
+
         </div>
 
       </section>
 
       <!-- ========================================================================= -->
-      <!-- PANEL DERECHO: ESTUDIO TOMOGRÁFICO & ANÁLISIS IA (COL 7 / 12)            -->
+      <!-- PANEL DERECHO: ESTUDIO TOMOGRÁFICO CON CALIPERS Y CATÉTER (COL 7 / 12)    -->
       <!-- ========================================================================= -->
       <section class="lg:col-span-7 flex flex-col gap-4">
 
-        <!-- Tarjeta: Visor Tomográfico Profesional (Sin HUDs Sci-Fi) -->
+        <!-- Tarjeta: Visor Tomográfico Profesional -->
         <div class="card-base p-4 flex flex-col gap-3">
           
           <!-- Encabezado Limpio del Visor -->
           <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
             <div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Tomografía Computada de Pelvis</h2>
-              <!-- Subtítulo en gris claro como solicitó el usuario -->
+              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Estudio Tomográfico & Radiológico</h2>
               <span class="text-[11px] text-slate-400 font-medium block mt-0.5" id="viewer-subtext">
                 TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical
               </span>
             </div>
 
-            <!-- Botón Subir Tomografía Limpio -->
+            <!-- Botones de Acción Superior -->
             <div class="flex items-center gap-2">
+              <button onclick="toggleCaliperOverlay()" id="btn-toggle-calipers" class="px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1 shadow-2xs">
+                <span>Medición & Catéter: ON</span>
+              </button>
               <input type="file" id="ct-file-input" accept="image/*,.dcm" class="hidden" onchange="handleFileUpload(event)">
               <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
                 <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,7 +603,7 @@
             </div>
           </div>
 
-          <!-- Cortes de Muestra Rápidos (Pills elegantes) -->
+          <!-- Cortes Clínicos Seleccionables -->
           <div class="flex items-center gap-2 text-[11px] overflow-x-auto pb-0.5">
             <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Cortes Clínicos:</span>
             <button id="thumb-1" onclick="selectSampleImage('assets/samples/ct_axial_stone_hydronephrosis.jpg', 1)" class="px-2.5 py-1 rounded-md border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold shrink-0 transition">
@@ -460,23 +620,93 @@
             </button>
           </div>
 
-          <!-- CONTENEDOR DEL VISOR DE ALTA FIDELIDAD (LIMPIO, SIN HUDs ROBÓTICOS) -->
-          <div class="relative w-full h-[360px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewer-container">
+          <!-- CONTENEDOR DEL VISOR CON OVERLAY DE MEDICIONES Y CATÉTER -->
+          <div class="relative w-full h-[370px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewer-container">
             
-            <!-- Imagen Tomográfica -->
-            <div id="image-transform-wrapper" class="relative transition-transform duration-75 flex items-center justify-center">
-              <img id="ct-main-image" src="assets/samples/ct_axial_stone_hydronephrosis.jpg" alt="Tomografía Computada de Pelvis" class="max-h-[350px] max-w-full object-contain filter contrast-100 transition-all duration-150">
+            <div id="image-transform-wrapper" class="relative w-full h-full flex items-center justify-center">
+              <img id="ct-main-image" src="assets/samples/ct_axial_stone_hydronephrosis.jpg" alt="Tomografía Computada de Pelvis" class="max-h-[360px] max-w-full object-contain filter contrast-100 transition-all duration-150">
               
-              <!-- Marcador Sutil y Médico de la Calcificación (Sin estética arcade) -->
-              <div id="roi-marker" class="absolute pointer-events-none transition-all duration-300 flex items-center justify-center" style="top: 48%; left: 54%; width: 36px; height: 36px; margin-top: -18px; margin-left: -18px;">
-                <div class="w-full h-full border border-emerald-400 rounded-md bg-emerald-400/10 shadow-sm"></div>
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 text-emerald-300 font-bold font-mono-numbers text-[9px] bg-slate-900/80 px-1 py-0.2 rounded border border-emerald-500/40 whitespace-nowrap">
-                  842 HU
-                </div>
-              </div>
+              <!-- OVERLAY SVG DINÁMICO DE CALIPERS, FLEBOLITOS Y CATÉTER DOBLE J -->
+              <svg id="caliper-catheter-overlay" class="absolute inset-0 w-full h-full pointer-events-none transition-all duration-200" viewBox="0 0 600 370" preserveAspectRatio="xMidYMid meet">
+                
+                <!-- CAPA CASO 1: LITO URETERAL DISTAL (AXIAL) -->
+                <g id="layer-case-1">
+                  <!-- Caliper de Medición del Lito -->
+                  <circle cx="282" cy="180" r="16" fill="rgba(0, 156, 77, 0.12)" stroke="#009C4D" stroke-width="1.8" stroke-dasharray="3 2"/>
+                  <line x1="266" y1="180" x2="298" y2="180" stroke="#00B85B" stroke-width="1.5"/>
+                  <line x1="266" y1="175" x2="266" y2="185" stroke="#00B85B" stroke-width="1.5"/>
+                  <line x1="298" y1="175" x2="298" y2="185" stroke="#00B85B" stroke-width="1.5"/>
+                  
+                  <!-- Etiqueta de Medición del Lito -->
+                  <rect x="306" y="166" width="168" height="38" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(0, 156, 77, 0.6)" stroke-width="1"/>
+                  <text x="314" y="180" fill="#4ADE80" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11">Lito Ureteral: 4.2 mm</text>
+                  <text x="314" y="194" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5">842 HU · Soft-Tissue Rim (+)</text>
+
+                  <!-- Halo Ureteral / Rim Sign Callout -->
+                  <circle cx="282" cy="180" r="23" fill="none" stroke="#38BDF8" stroke-width="1.2" stroke-dasharray="2 2"/>
+                  <path d="M 282 157 L 282 140 L 220 140" fill="none" stroke="#38BDF8" stroke-width="1"/>
+                  <rect x="110" y="128" width="105" height="22" rx="4" fill="rgba(15, 23, 42, 0.85)"/>
+                  <text x="116" y="143" fill="#38BDF8" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5">Halo parietal: 1.8 mm</text>
+                </g>
+
+                <!-- CAPA CASO 2: FLEBOLITOS PÉLVICOS (AXIAL) -->
+                <g id="layer-case-2" class="hidden">
+                  <!-- Flebolito 1 -->
+                  <circle cx="270" cy="190" r="14" fill="rgba(148, 163, 184, 0.15)" stroke="#94A3B8" stroke-width="1.8"/>
+                  <circle cx="270" cy="190" r="4" fill="rgba(15, 23, 42, 0.9)" stroke="#CBD5E1" stroke-width="1"/>
+                  <rect x="290" y="174" width="160" height="34" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(148, 163, 184, 0.5)"/>
+                  <text x="298" y="188" fill="#F1F5F9" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Flebolito: 3.1 mm</text>
+                  <text x="298" y="200" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">460 HU · Lucencia Central</text>
+
+                  <!-- Flebolito 2 con cola de cometa -->
+                  <circle cx="340" cy="225" r="11" fill="rgba(148, 163, 184, 0.15)" stroke="#94A3B8" stroke-width="1.5"/>
+                  <path d="M 340 225 Q 365 240 385 248" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-dasharray="3 2"/>
+                  <rect x="390" y="238" width="140" height="20" rx="4" fill="rgba(15, 23, 42, 0.85)"/>
+                  <text x="396" y="252" fill="#93C5FD" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9">Signo Cola de Cometa</text>
+                </g>
+
+                <!-- CAPA CASO 3: SCOUT VIEW CALCIFICACIONES -->
+                <g id="layer-case-3" class="hidden">
+                  <circle cx="295" cy="210" r="18" fill="rgba(245, 158, 11, 0.12)" stroke="#F59E0B" stroke-width="1.8"/>
+                  <rect x="320" y="196" width="165" height="34" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(245, 158, 11, 0.6)"/>
+                  <text x="328" y="210" fill="#FCD34D" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Calcificación Pélvica: 4.8 mm</text>
+                  <text x="328" y="222" fill="#CBD5E1" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Estrecho pélvico · Límite anatómico</text>
+                </g>
+
+                <!-- CAPA CASO 4: CATÉTER DOBLE J POSÁNDOSE SOBRE EL LITO (LO QUE PIDIÓ EL USUARIO) -->
+                <g id="layer-case-4" class="hidden">
+                  <!-- Trazado Anatómico del Catéter Doble J -->
+                  <!-- Rulo proximal (Pelvis renal) -->
+                  <path d="M 350 48 C 365 35, 385 50, 375 70 C 365 85, 345 78, 345 62" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
+                  
+                  <!-- Recorrido Ureteral descendente pasando sobre el lito -->
+                  <path d="M 350 75 Q 345 130 338 185 Q 332 235 328 265 Q 320 295 305 320" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 3"/>
+
+                  <!-- Rulo distal en Vejiga -->
+                  <path d="M 305 320 C 290 335, 270 330, 275 312 C 280 295, 300 300, 305 315" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
+
+                  <!-- Lito Impactado donde se posa el catéter -->
+                  <circle cx="330" cy="245" r="16" fill="rgba(239, 68, 68, 0.2)" stroke="#EF4444" stroke-width="2"/>
+                  
+                  <!-- Callout Catéter Doble J -->
+                  <path d="M 345 130 L 400 110" fill="none" stroke="#FACC15" stroke-width="1.2"/>
+                  <rect x="404" y="96" width="168" height="32" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#FACC15" stroke-width="1"/>
+                  <text x="412" y="110" fill="#FDE047" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Catéter Doble J (6 Fr)</text>
+                  <text x="412" y="122" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Calibre: 2.0 mm · Stent Ureteral</text>
+
+                  <!-- Callout Lito Impactado con Medición Aproximada -->
+                  <path d="M 330 245 L 230 235" fill="none" stroke="#EF4444" stroke-width="1.2"/>
+                  <rect x="68" y="218" width="160" height="42" rx="6" fill="rgba(15, 23, 42, 0.92)" stroke="#EF4444" stroke-width="1"/>
+                  <text x="76" y="233" fill="#FCA5A5" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Lito Impactado: 5.1 mm</text>
+                  <text x="76" y="246" fill="#F1F5F9" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Catéter posado sobre el cálculo</text>
+                  <text x="76" y="255" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5">Distancia a vejiga: 16 mm</text>
+                </g>
+
+              </svg>
+
             </div>
 
-            <!-- Indicador de Procesamiento IA Profesional -->
+            <!-- Indicador de Procesamiento IA -->
             <div id="ai-processing-overlay" class="absolute inset-0 bg-slate-900/85 backdrop-blur-xs hidden flex-col items-center justify-center text-white z-30">
               <div class="w-10 h-10 rounded-full border-2 border-[#009C4D] border-t-transparent animate-spin mb-3"></div>
               <div class="font-bold text-xs text-white">Analizando tomografía computada...</div>
@@ -485,14 +715,14 @@
 
           </div>
 
-          <!-- Barra de Parámetros y Ventana en Gris Elegante (Como solicitó el usuario) -->
+          <!-- Barra de Parámetros en Gris Limpio -->
           <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
-              <div>Modo: <span class="text-slate-600 font-semibold" id="bar-modality">TC Pelvis Sin Contraste</span></div>
+              <div>Estudio: <span class="text-slate-600 font-semibold" id="bar-modality">TC Pelvis Sin Contraste</span></div>
               <span class="text-slate-300">•</span>
               <div>Densidad: <span class="text-slate-700 font-bold font-mono-numbers" id="bar-density">842 HU (Cálculo)</span></div>
               <span class="text-slate-300">•</span>
-              <div>Escala: <span class="text-slate-600 font-mono-numbers">1.0 mm/px</span></div>
+              <div>Medición: <span class="text-[#007D3E] font-bold font-mono-numbers" id="bar-caliper-measurement">4.2 mm</span></div>
             </div>
 
             <!-- Selector de Ventana Médica -->
@@ -785,11 +1015,13 @@
     const state = {
       activeCase: 1,
       currentImage: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
+      currentImageIndex: 1,
+      calipersVisible: true,
       windowMode: 'bone',
-      analysisDone: true,
-      data: {
+      patients: {
         1: {
-          name: 'Caso 1: Lito Ureteral Distal Obstructivo',
+          name: 'Roberto García',
+          initials: 'RG',
           patientId: 'HC-2026-08412',
           age: 44,
           gender: 'M',
@@ -803,11 +1035,14 @@
           giordano: 'positive',
           notes: 'Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC sin contraste por sospecha de litiasis ureteral obstructiva distal.',
           image: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
-          roiTop: '48%',
-          roiLeft: '54%',
-          roiLabel: '842 HU',
+          imageIndex: 1,
+          caliperMeasure: '4.2 mm (Lito distal)',
           subtext: 'TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical',
           density: '842 HU (Cálculo)',
+          markerRatio: '1.82 (Edema Parietal)',
+          markerPcr: '14.8 mg/L (PCR Elevada)',
+          markerResist: 'IR: 0.74 (Resistencia Alta)',
+          markerCrystal: 'Oxalato Cálcico (++)',
           probStone: 93.4,
           probPhlebolith: 6.6,
           confidence: '94.6%',
@@ -819,7 +1054,8 @@
           recommendation: 'Lito de 4.2 mm no complicado en uréter terminal derecho con adecuada función renal. Se sugiere Tratamiento Expulsivo Médico (MET) con Tamsulosina 0.4 mg/día + hidratación reglada y analgesia pautada. Control ecográfico/clínico en 72 horas. Ante persistencia de dolor o fiebre, coordinar evaluación para ureteroscopia (URS).'
         },
         2: {
-          name: 'Caso 2: Flebolito Pélvico Incidental',
+          name: 'Clara Méndez',
+          initials: 'CM',
           patientId: 'HC-2026-03195',
           age: 56,
           gender: 'F',
@@ -833,11 +1069,14 @@
           giordano: 'negative',
           notes: 'Estudio de control solicitado por ginecología. Sin dolor lumbosacro ni síntomas del tracto urinario inferior.',
           image: 'assets/samples/pelvic_phleboliths.jpg',
-          roiTop: '50%',
-          roiLeft: '48%',
-          roiLabel: '460 HU',
+          imageIndex: 2,
+          caliperMeasure: '3.1 mm (Flebolito)',
           subtext: 'TC pelvis sin contraste · Corte axial pélvico inferior · Plexo venoso perivesical',
           density: '460 HU (Flebolito)',
+          markerRatio: '1.02 (Sin halo)',
+          markerPcr: '2.1 mg/L (Normal)',
+          markerResist: 'IR: 0.58 (Normal)',
+          markerCrystal: 'Negativo',
           probStone: 4.8,
           probPhlebolith: 95.2,
           confidence: '97.1%',
@@ -849,7 +1088,8 @@
           recommendation: 'Hallazgo incidental benigno compatible con calcificación venosa pélvica (flebolito). No requiere tratamiento urológico ni estudios complementarios adicionales. Desestimar sospecha de litiasis obstructiva.'
         },
         3: {
-          name: 'Caso 3: Calcificación Indeterminada',
+          name: 'Martín López',
+          initials: 'ML',
           patientId: 'HC-2026-11029',
           age: 38,
           gender: 'M',
@@ -863,11 +1103,14 @@
           giordano: 'negative',
           notes: 'Dolor pélvico vago de 48h de evolución. Sedimento con microhematuria aislada. TC de baja dosis con calcificación límite de 2.8 mm en estrecho pélvico.',
           image: 'assets/samples/pelvic_calcification_differential.jpg',
-          roiTop: '46%',
-          roiLeft: '51%',
-          roiLabel: '590 HU',
+          imageIndex: 3,
+          caliperMeasure: '4.8 mm (Calcificación)',
           subtext: 'TC pelvis sin contraste · Corte axial de transición · Nivel límite de resolución',
           density: '590 HU (Indeterminada)',
+          markerRatio: '1.35 (Límite)',
+          markerPcr: '6.4 mg/L (Leve)',
+          markerResist: 'IR: 0.65 (Normal)',
+          markerCrystal: 'Fosfatos amorfos',
           probStone: 52.3,
           probPhlebolith: 47.7,
           confidence: '61.4%',
@@ -882,92 +1125,154 @@
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadCasePreset(1);
+      // Por defecto iniciamos con el paciente 1 cargado para el visor, pero en vista lista o detalle
+      loadPatientData(1);
     });
 
-    // Cargar Preset de Caso Clínico
-    function loadCasePreset(caseNum) {
-      state.activeCase = caseNum;
-      const c = state.data[caseNum];
-      if (!c) return;
+    // FLUJO: SELECCIONAR PACIENTE DE LA LISTA Y ABRIR DASHBOARD COMPLETO
+    function selectPatientAndOpenDashboard(id) {
+      state.activeCase = id;
+      loadPatientData(id);
 
+      // Resaltar tarjeta seleccionada en la lista
       [1, 2, 3].forEach(n => {
-        const btn = document.getElementById(`btn-preset-${n}`);
-        if (btn) {
-          if (n === caseNum) {
-            btn.classList.add('preset-btn-active');
-          } else {
-            btn.classList.remove('preset-btn-active');
-          }
+        const card = document.getElementById(`patient-card-${n}`);
+        if (card) {
+          if (n === id) card.classList.add('patient-card-active');
+          else card.classList.remove('patient-card-active');
         }
       });
 
-      // Llenar campos de plantilla
-      document.getElementById('patient-id').value = c.patientId;
-      document.getElementById('patient-age').value = c.age;
-      document.getElementById('patient-gender').value = c.gender;
-      document.getElementById('clinical-pain').value = c.pain;
-      document.getElementById('clinical-onset').value = c.onset;
-      document.getElementById('clinical-hematuria').value = c.hematuria;
-      document.getElementById('clinical-voiding').value = c.voiding;
-      document.getElementById('clinical-history').value = c.history;
-      document.getElementById('lab-creatinine').value = c.creatinine;
-      document.getElementById('lab-leukocytes').value = c.leukocytes;
-      document.getElementById('exam-giordano').value = c.giordano;
-      document.getElementById('clinical-notes').value = c.notes;
+      // Transición fluida a la planilla completa
+      document.getElementById('patient-selection-view').classList.add('hidden');
+      document.getElementById('patient-detail-dashboard').classList.remove('hidden');
 
-      updatePainBadge(c.pain);
+      // Scroll suave
+      document.getElementById('patient-detail-dashboard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-      // Cargar imagen y textos limpios en gris
-      setViewerClean(c.image, c.roiTop, c.roiLeft, c.roiLabel, c.subtext, c.density);
-      updateThumbnailSelection(caseNum);
+    function backToPatientList() {
+      document.getElementById('patient-detail-dashboard').classList.add('hidden');
+      document.getElementById('patient-selection-view').classList.remove('hidden');
+    }
 
-      renderAiResults(c);
+    function createNewBlankPatient() {
+      const newId = `HC-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+      document.getElementById('patient-id').value = newId;
+      document.getElementById('patient-badge-id').innerText = newId;
+      document.getElementById('patient-age').value = '';
+      document.getElementById('clinical-notes').value = '';
+      document.getElementById('clinical-pain').value = 'none';
+      document.getElementById('clinical-hematuria').value = 'none';
+      document.getElementById('clinical-history').value = 'no';
+      document.getElementById('active-patient-header-name').innerText = `Nuevo Paciente (${newId})`;
+
+      document.getElementById('patient-selection-view').classList.add('hidden');
+      document.getElementById('patient-detail-dashboard').classList.remove('hidden');
       updateClinicalScoreLive();
     }
 
-    function setViewerClean(imgSrc, top, left, label, subtext, density) {
-      const img = document.getElementById('ct-main-image');
-      img.src = imgSrc;
-      state.currentImage = imgSrc;
-
-      const roi = document.getElementById('roi-marker');
-      if (top && left) {
-        roi.style.top = top;
-        roi.style.left = left;
-        roi.querySelector('div:nth-child(2)').innerText = label || '';
-      }
-
-      if (subtext) document.getElementById('viewer-subtext').innerText = subtext;
-      if (density) document.getElementById('bar-density').innerText = density;
+    function filterPatients(query) {
+      const q = query.toLowerCase();
+      [1, 2, 3].forEach(n => {
+        const p = state.patients[n];
+        const card = document.getElementById(`patient-card-${n}`);
+        if (card) {
+          const match = p.name.toLowerCase().includes(q) || p.patientId.toLowerCase().includes(q) || p.notes.toLowerCase().includes(q);
+          card.style.display = match ? 'flex' : 'none';
+        }
+      });
     }
 
+    function loadPatientData(id) {
+      const p = state.patients[id];
+      if (!p) return;
+
+      document.getElementById('active-patient-header-name').innerText = `${p.name} (${p.age}a)`;
+      document.getElementById('patient-badge-id').innerText = p.patientId;
+      document.getElementById('patient-id').value = p.patientId;
+      document.getElementById('patient-age').value = p.age;
+      document.getElementById('patient-gender').value = p.gender;
+      document.getElementById('clinical-pain').value = p.pain;
+      document.getElementById('clinical-onset').value = p.onset;
+      document.getElementById('clinical-hematuria').value = p.hematuria;
+      document.getElementById('clinical-voiding').value = p.voiding;
+      document.getElementById('clinical-history').value = p.history;
+      document.getElementById('lab-creatinine').value = p.creatinine;
+      document.getElementById('lab-leukocytes').value = p.leukocytes;
+      document.getElementById('exam-giordano').value = p.giordano;
+      document.getElementById('clinical-notes').value = p.notes;
+
+      // Actualizar Parámetros de Marcadores
+      document.getElementById('marker-ratio-text').innerText = p.markerRatio;
+      document.getElementById('marker-pcr-text').innerText = p.markerPcr;
+      document.getElementById('marker-resist-text').innerText = p.markerResist;
+      document.getElementById('marker-crystal-text').innerText = p.markerCrystal;
+
+      updatePainBadge(p.pain);
+
+      // Cargar corte tomográfico correspondiente
+      selectSampleImage(p.image, p.imageIndex);
+
+      renderAiResults(p);
+      updateClinicalScoreLive();
+    }
+
+    // VISOR DE IMÁGENES & CONTROL DE CALIPERS / CATÉTER
     function selectSampleImage(imgSrc, thumbIndex) {
       state.currentImage = imgSrc;
+      state.currentImageIndex = thumbIndex;
       document.getElementById('ct-main-image').src = imgSrc;
       updateThumbnailSelection(thumbIndex);
 
-      const roi = document.getElementById('roi-marker');
+      // Ocultar todas las capas SVG de calipers
+      [1, 2, 3, 4].forEach(i => {
+        const layer = document.getElementById(`layer-case-${i}`);
+        if (layer) layer.classList.add('hidden');
+      });
+
+      // Mostrar la capa SVG correspondiente si calipers están activos
+      const activeLayer = document.getElementById(`layer-case-${thumbIndex}`);
+      if (activeLayer && state.calipersVisible) {
+        activeLayer.classList.remove('hidden');
+      }
+
       if (thumbIndex === 1) {
         document.getElementById('viewer-subtext').innerText = 'TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical';
         document.getElementById('bar-density').innerText = '842 HU (Cálculo)';
-        roi.style.top = '48%'; roi.style.left = '54%';
-        roi.querySelector('div:nth-child(2)').innerText = '842 HU';
+        document.getElementById('bar-caliper-measurement').innerText = '4.2 mm (Lito distal)';
       } else if (thumbIndex === 2) {
         document.getElementById('viewer-subtext').innerText = 'TC pelvis sin contraste · Corte axial pélvico inferior · Plexo venoso';
         document.getElementById('bar-density').innerText = '460 HU (Flebolito)';
-        roi.style.top = '50%'; roi.style.left = '48%';
-        roi.querySelector('div:nth-child(2)').innerText = '460 HU';
+        document.getElementById('bar-caliper-measurement').innerText = '3.1 mm (Flebolito)';
       } else if (thumbIndex === 3) {
         document.getElementById('viewer-subtext').innerText = 'Radiografía digital / Scout view · Evaluación de calcificaciones pélvicas';
         document.getElementById('bar-density').innerText = 'Múltiples focos';
-        roi.style.top = '62%'; roi.style.left = '45%';
-        roi.querySelector('div:nth-child(2)').innerText = 'Lito';
+        document.getElementById('bar-caliper-measurement').innerText = '4.8 mm';
       } else if (thumbIndex === 4) {
-        document.getElementById('viewer-subtext').innerText = 'Radiografía de control · Uréter derecho cateterizado con Doble J';
-        document.getElementById('bar-density').innerText = 'Catéter Doble J';
-        roi.style.top = '52%'; roi.style.left = '46%';
-        roi.querySelector('div:nth-child(2)').innerText = 'Catéter';
+        document.getElementById('viewer-subtext').innerText = 'Radiografía con Catéter Doble J posándose sobre lito ureteral impactado';
+        document.getElementById('bar-density').innerText = 'Catéter Doble J radiopaco';
+        document.getElementById('bar-caliper-measurement').innerText = '5.1 mm (Lito) · 6 Fr (Catéter)';
+      }
+    }
+
+    function toggleCaliperOverlay() {
+      state.calipersVisible = !state.calipersVisible;
+      const btn = document.getElementById('btn-toggle-calipers');
+      const overlay = document.getElementById('caliper-catheter-overlay');
+
+      if (state.calipersVisible) {
+        btn.innerHTML = '<span>Medición & Catéter: ON</span>';
+        btn.className = 'px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1 shadow-2xs';
+        overlay.classList.remove('opacity-0');
+        selectSampleImage(state.currentImage, state.currentImageIndex);
+      } else {
+        btn.innerHTML = '<span>Medición & Catéter: OFF</span>';
+        btn.className = 'px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 font-semibold text-[11px] transition flex items-center gap-1';
+        [1, 2, 3, 4].forEach(i => {
+          const layer = document.getElementById(`layer-case-${i}`);
+          if (layer) layer.classList.add('hidden');
+        });
       }
     }
 
@@ -995,13 +1300,13 @@
         document.getElementById('ct-main-image').src = customUrl;
         document.getElementById('viewer-subtext').innerText = `TC importada: ${file.name} · Procesamiento de corte`;
         document.getElementById('bar-density').innerText = 'Calculando...';
+        document.getElementById('bar-caliper-measurement').innerText = 'A definir';
         
         runAiAnalysis();
       };
       reader.readAsDataURL(file);
     }
 
-    // Windowing
     function setWindowing(mode) {
       state.windowMode = mode;
       const img = document.getElementById('ct-main-image');
@@ -1019,17 +1324,16 @@
       }
     }
 
-    // Simulación IA
     function runAiAnalysis() {
       const overlay = document.getElementById('ai-processing-overlay');
       const stepText = document.getElementById('ai-processing-step');
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
 
-      stepText.innerText = 'Analizando signos radiológicos y densidad tomográfica...';
+      stepText.innerText = 'Analizando signos radiológicos, calipers y catéter...';
 
       setTimeout(() => {
-        stepText.innerText = 'Correlacionando con plantilla de síntomas clínicos...';
+        stepText.innerText = 'Correlacionando con planilla clínica y marcadores...';
       }, 700);
 
       setTimeout(() => {
@@ -1206,31 +1510,6 @@
       } else {
         b.innerText = 'ASINTOMÁTICO';
         b.className = 'text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200';
-      }
-    }
-
-    function resetToBlank() {
-      document.getElementById('patient-id').value = `HC-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
-      document.getElementById('patient-age').value = '';
-      document.getElementById('clinical-notes').value = '';
-      document.getElementById('clinical-pain').value = 'none';
-      document.getElementById('clinical-hematuria').value = 'none';
-      document.getElementById('clinical-history').value = 'no';
-      updateClinicalScoreLive();
-    }
-
-    function switchViewMode(mode) {
-      const btnDiag = document.getElementById('tab-btn-diagnostic');
-      const btnMetrics = document.getElementById('tab-btn-metrics');
-
-      if (mode === 'diagnostic') {
-        btnDiag.className = 'px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5';
-        btnMetrics.className = 'px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium';
-        document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
-      } else {
-        btnMetrics.className = 'px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5';
-        btnDiag.className = 'px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium';
-        document.querySelector('section').scrollIntoView({ behavior: 'smooth' });
       }
     }
 
