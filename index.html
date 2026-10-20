@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UroScan AI — Diagnóstico Diferencial de Calcificaciones Pélvicas</title>
+  <title>Colony Urología — Diagnóstico Asistido Hospital Italiano</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,15 +17,16 @@
             mono: ['"JetBrains Mono"', 'monospace']
           },
           colors: {
-            brand: {
-              50: '#F0FAFC',
-              100: '#E0F7FA',
-              200: '#B2EBF2',
-              500: '#00ACC1',
-              600: '#0891B2',
-              700: '#0E7490',
-              800: '#155E75',
-              900: '#164E63'
+            hiba: {
+              50: '#F0FDF4',
+              100: '#E8F8EE',
+              200: '#C6EFD7',
+              300: '#A3E5BC',
+              500: '#00B85B',
+              600: '#009C4D', // Verde Oficial Hospital Italiano
+              700: '#007D3E',
+              800: '#006632',
+              900: '#004D25'
             }
           }
         }
@@ -33,6 +34,12 @@
     }
   </script>
   <style>
+    :root {
+      --hiba-green: #009C4D;
+      --hiba-green-hover: #00823F;
+      --hiba-green-light: #F0FDF4;
+      --hiba-green-border: #C6EFD7;
+    }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #F8FAFC;
@@ -59,7 +66,7 @@
       background-color: #F8FAFC;
       border: 1px solid #CBD5E1;
       border-radius: 0.55rem;
-      padding: 0.5rem 0.75rem;
+      padding: 0.45rem 0.7rem;
       font-size: 0.75rem;
       color: #1E293B;
       font-weight: 500;
@@ -68,27 +75,15 @@
     .input-base:focus {
       outline: none;
       background-color: #FFFFFF;
-      border-color: #0891B2;
-      box-shadow: 0 0 0 2px rgba(8, 145, 178, 0.15);
+      border-color: var(--hiba-green);
+      box-shadow: 0 0 0 2px rgba(0, 156, 77, 0.15);
     }
     .preset-btn-active {
-      background-color: #F0FAFC !important;
-      border-color: #0891B2 !important;
-      color: #0E7490 !important;
+      background-color: var(--hiba-green-light) !important;
+      border-color: var(--hiba-green) !important;
+      color: var(--hiba-green-hover) !important;
       font-weight: 700 !important;
-      box-shadow: 0 1px 2px 0 rgba(8, 145, 178, 0.08);
-    }
-    .filter-btn-active {
-      background-color: #0891B2 !important;
-      color: #FFFFFF !important;
-      font-weight: 600;
-    }
-    .animate-scan-pulse {
-      animation: scanPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes scanPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.8; }
+      box-shadow: 0 1px 2px 0 rgba(0, 156, 77, 0.08);
     }
     @media print {
       body * { visibility: hidden; }
@@ -99,20 +94,18 @@
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 text-xs">
 
-  <!-- ================= HEADER INSTITUCIONAL (ESTILO COLONY IN VITRO) ================= -->
-  <header class="h-14 bg-white border-b border-slate-200/90 px-4 lg:px-6 flex items-center justify-between z-20 shrink-0 shadow-xs">
+  <!-- ================= HEADER INSTITUCIONAL (COLONY + HOSPITAL ITALIANO) ================= -->
+  <header class="h-14 bg-white border-b border-slate-200/90 px-4 lg:px-6 flex items-center justify-between z-20 shrink-0">
     
-    <!-- Identidad UroScan AI / Hospital Italiano -->
+    <!-- Logo & Nombre: Colony Urología (Hospital Italiano) -->
     <div class="flex items-center gap-3 shrink-0">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-600 to-teal-700 flex items-center justify-center text-white shadow-xs">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-        </svg>
+      <div class="w-8 h-8 rounded-lg bg-[#009C4D] flex items-center justify-center text-white shadow-xs font-bold text-xs tracking-tight">
+        HI
       </div>
       <div>
         <div class="flex items-center gap-1.5 font-extrabold text-[13px] tracking-tight text-slate-900 leading-none">
-          <span>UroScan</span><span class="text-cyan-700 font-extrabold">AI</span>
-          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 ml-1">LIMS v2.4</span>
+          <span>Colony</span><span class="text-[#009C4D]">Urología</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7] ml-1">LIMS v2.4</span>
         </div>
         <span class="text-[10px] font-semibold text-slate-400 block mt-0.5">
           Hospital Italiano de Buenos Aires · Servicio de Urología
@@ -120,19 +113,23 @@
       </div>
     </div>
 
-    <!-- Indicador de Contexto / Hackathon -->
-    <div class="hidden md:flex items-center gap-3">
-      <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-1 text-xs">
-        <span class="w-2 h-2 rounded-full bg-cyan-600 animate-pulse"></span>
-        <span class="text-slate-500 font-semibold text-[11px]">Desafío Diagnóstico:</span>
-        <span class="font-bold text-slate-800 text-[11px]">Litos Ureterales Distales vs Flebolitos Pélvicos</span>
-        <span class="text-[10px] font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
-          TC Sin Contraste
-        </span>
-      </div>
+    <!-- Switcher de Modos estilo Colony (Dashboard Hub vs Estación Diagnóstica) -->
+    <div class="hidden md:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
+      <button onclick="switchViewMode('diagnostic')" id="tab-btn-diagnostic" class="px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-[#009C4D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+        </svg>
+        <span>Estación Diagnóstica</span>
+      </button>
+      <button onclick="switchViewMode('metrics')" id="tab-btn-metrics" class="px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Dashboard de Métricas</span>
+      </button>
     </div>
 
-    <!-- Facultativo / Controles de Acción -->
+    <!-- Facultativo & Acciones -->
     <div class="flex items-center gap-3">
       <button onclick="openReportModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition text-xs shadow-2xs">
         <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,19 +142,78 @@
 
       <!-- Perfil Médico -->
       <div class="flex items-center gap-2.5">
-        <div class="w-7 h-7 rounded-full bg-cyan-800 text-white font-bold text-xs flex items-center justify-center shadow-2xs">
+        <div class="w-7 h-7 rounded-lg bg-slate-900 text-white font-bold text-xs flex items-center justify-center">
           DS
         </div>
         <div class="hidden xl:block text-left leading-tight">
           <div class="font-bold text-slate-800 text-xs">Dr. Diego Santillán</div>
-          <div class="text-[10px] text-slate-400 font-medium">Urología · Hackathon 2026</div>
+          <div class="text-[10px] text-slate-400 font-medium">Servicio de Urología</div>
         </div>
       </div>
     </div>
   </header>
 
+  <!-- ================= SUB-BARRA DE DASHBOARD METRICS (ESTILO BENTO COLONY) ================= -->
+  <section class="bg-white border-b border-slate-200/90 px-4 lg:px-6 py-2.5">
+    <div class="max-w-[1720px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3">
+      
+      <!-- KPI 1: Casos en Guardia -->
+      <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Casos Evaluados</div>
+          <div class="text-lg font-extrabold text-slate-900 font-mono-numbers leading-tight mt-0.5">24</div>
+          <div class="text-[10px] text-slate-500 font-medium">Urología de Guardia</div>
+        </div>
+        <div class="w-7 h-7 rounded-lg bg-slate-200/60 text-slate-600 flex items-center justify-center">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+      </div>
+
+      <!-- KPI 2: Litos Confirmados (Verde HIBA) -->
+      <div class="bg-[#F0FDF4] p-2.5 rounded-xl border border-[#C6EFD7] flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-bold text-[#007D3E] uppercase tracking-wide">Litos Ureterales</div>
+          <div class="text-lg font-extrabold text-[#006632] font-mono-numbers leading-tight mt-0.5">15</div>
+          <span class="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-[#C6EFD7] text-[#006632]">
+            CON RIM SIGN (+)
+          </span>
+        </div>
+        <div class="w-7 h-7 rounded-lg bg-[#C6EFD7] text-[#007D3E] flex items-center justify-center font-bold">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+      </div>
+
+      <!-- KPI 3: Flebolitos Pélvicos Descartados -->
+      <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Flebolitos Benignos</div>
+          <div class="text-lg font-extrabold text-slate-800 font-mono-numbers leading-tight mt-0.5">9</div>
+          <span class="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-slate-200 text-slate-700">
+            SIN OBSTRUCCIÓN
+          </span>
+        </div>
+        <div class="w-7 h-7 rounded-lg bg-slate-200/70 text-slate-600 flex items-center justify-center">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+      </div>
+
+      <!-- KPI 4: Precisión Diagnóstica Validada -->
+      <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+        <div>
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Concordancia IA</div>
+          <div class="text-lg font-extrabold text-slate-900 font-mono-numbers leading-tight mt-0.5">96.8%</div>
+          <div class="text-[10px] text-slate-500 font-medium">Validado Urología HIBA</div>
+        </div>
+        <div class="w-7 h-7 rounded-lg bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center font-bold text-xs">
+          AUC
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ================= SUB-BARRA DE CASOS PRECONFIGURADOS ================= -->
-  <div class="bg-white border-b border-slate-200/80 px-4 lg:px-6 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+  <div class="bg-white border-b border-slate-200/70 px-4 lg:px-6 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
     <div class="flex items-center gap-2">
       <span class="text-[11px] font-bold text-slate-400">Casos Clínicos de Referencia:</span>
       <div class="flex items-center gap-1.5">
@@ -196,7 +252,7 @@
         <div class="card-base p-4">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-700">
+              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
@@ -295,7 +351,7 @@
         <div class="card-base p-4">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700">
+              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
                 </svg>
@@ -341,16 +397,16 @@
         </div>
 
         <!-- Resumen de Probabilidad Clínica Basal -->
-        <div class="bg-cyan-50/70 border border-cyan-200 rounded-xl p-3.5 flex items-center justify-between">
+        <div class="bg-[#F0FDF4] border border-[#C6EFD7] rounded-xl p-3.5 flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <div class="w-2.5 h-2.5 rounded-full bg-cyan-600"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></div>
             <div>
               <div class="font-bold text-slate-900 text-xs">Probabilidad Clínica Pre-Tomografía</div>
               <div class="text-[10px] text-slate-500 font-medium">Estimación basada en dolor, hematuria y antecedentes</div>
             </div>
           </div>
           <div class="text-right">
-            <span id="clinical-pretest-badge" class="font-bold text-cyan-800 text-sm font-mono-numbers">ALTA (88%)</span>
+            <span id="clinical-pretest-badge" class="font-bold text-[#007D3E] text-sm font-mono-numbers">ALTA (88%)</span>
             <span class="block text-[10px] font-semibold text-slate-400">SCORE UROLÓGICO</span>
           </div>
         </div>
@@ -362,21 +418,24 @@
       <!-- ========================================================================= -->
       <section class="lg:col-span-7 flex flex-col gap-4">
 
-        <!-- Tarjeta: Visor Tomográfico y Carga -->
+        <!-- Tarjeta: Visor Tomográfico Profesional (Sin HUDs Sci-Fi) -->
         <div class="card-base p-4 flex flex-col gap-3">
           
-          <!-- Encabezado del Visor y Selectores de Muestra -->
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+          <!-- Encabezado Limpio del Visor -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
             <div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Estudio Tomográfico (TC Sin Contraste)</h2>
-              <span class="text-[10px] text-slate-400 font-medium">Corte Axial Pélvico a Nivel de Trayecto Ureteral Distal</span>
+              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Tomografía Computada de Pelvis</h2>
+              <!-- Subtítulo en gris claro como solicitó el usuario -->
+              <span class="text-[11px] text-slate-400 font-medium block mt-0.5" id="viewer-subtext">
+                TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical
+              </span>
             </div>
 
-            <!-- Controles de Muestra Rápida -->
-            <div class="flex items-center gap-1.5">
+            <!-- Botón Subir Tomografía Limpio -->
+            <div class="flex items-center gap-2">
               <input type="file" id="ct-file-input" accept="image/*,.dcm" class="hidden" onchange="handleFileUpload(event)">
-              <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-md bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                 </svg>
                 <span>Subir Tomografía</span>
@@ -384,112 +443,76 @@
             </div>
           </div>
 
-          <!-- Pestañas de Imágenes de Muestra del Caso -->
-          <div class="flex items-center gap-2 text-[11px] overflow-x-auto pb-1">
-            <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Cortes de TC:</span>
-            <button id="thumb-1" onclick="selectSampleImage('assets/samples/ct_axial_stone_hydronephrosis.jpg', 1)" class="px-2.5 py-1 rounded-md border border-cyan-400 bg-cyan-50 text-cyan-800 font-bold shrink-0">
+          <!-- Cortes de Muestra Rápidos (Pills elegantes) -->
+          <div class="flex items-center gap-2 text-[11px] overflow-x-auto pb-0.5">
+            <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Cortes Clínicos:</span>
+            <button id="thumb-1" onclick="selectSampleImage('assets/samples/ct_axial_stone_hydronephrosis.jpg', 1)" class="px-2.5 py-1 rounded-md border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold shrink-0 transition">
               1. Axial: Lito Ureteral (Rim Sign)
             </button>
-            <button id="thumb-2" onclick="selectSampleImage('assets/samples/pelvic_phleboliths.jpg', 2)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0">
-              2. Axial: Flebolitos Pélvicos (Comet Tail)
+            <button id="thumb-2" onclick="selectSampleImage('assets/samples/pelvic_phleboliths.jpg', 2)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
+              2. Axial: Flebolitos Pélvicos
             </button>
-            <button id="thumb-3" onclick="selectSampleImage('assets/samples/scout_pelvic_calcifications.jpg', 3)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0">
+            <button id="thumb-3" onclick="selectSampleImage('assets/samples/scout_pelvic_calcifications.jpg', 3)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
               3. Radiografía / Scout Pélvico
             </button>
-            <button id="thumb-4" onclick="selectSampleImage('assets/samples/radiography_ureteral_catheter.jpg', 4)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0">
+            <button id="thumb-4" onclick="selectSampleImage('assets/samples/radiography_ureteral_catheter.jpg', 4)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
               4. Control Catéter Doble J
             </button>
           </div>
 
-          <!-- ÁREA INTERACTIVA DEL VISOR DE TOMOGRAFÍA -->
-          <div class="relative w-full h-[360px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none group" id="viewer-container">
+          <!-- CONTENEDOR DEL VISOR DE ALTA FIDELIDAD (LIMPIO, SIN HUDs ROBÓTICOS) -->
+          <div class="relative w-full h-[360px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewer-container">
             
-            <!-- Imagen Tomográfica con Canvas interactivo -->
-            <div id="image-transform-wrapper" class="relative transition-transform duration-75 flex items-center justify-center cursor-crosshair">
+            <!-- Imagen Tomográfica -->
+            <div id="image-transform-wrapper" class="relative transition-transform duration-75 flex items-center justify-center">
               <img id="ct-main-image" src="assets/samples/ct_axial_stone_hydronephrosis.jpg" alt="Tomografía Computada de Pelvis" class="max-h-[350px] max-w-full object-contain filter contrast-100 transition-all duration-150">
               
-              <!-- Marcador de Calcificación Sospechosa (ROI / Bounding Box) -->
-              <div id="roi-marker" class="absolute pointer-events-none transition-all duration-300 flex items-center justify-center" style="top: 48%; left: 54%; width: 44px; height: 44px; margin-top: -22px; margin-left: -22px;">
-                <div class="w-full h-full border-2 border-cyan-400 rounded-lg shadow-sm bg-cyan-400/15 animate-pulse"></div>
-                <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-slate-900/90 text-cyan-300 font-bold font-mono-numbers text-[10px] px-2 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap shadow-xs">
-                  ROI: 842 HU
+              <!-- Marcador Sutil y Médico de la Calcificación (Sin estética arcade) -->
+              <div id="roi-marker" class="absolute pointer-events-none transition-all duration-300 flex items-center justify-center" style="top: 48%; left: 54%; width: 36px; height: 36px; margin-top: -18px; margin-left: -18px;">
+                <div class="w-full h-full border border-emerald-400 rounded-md bg-emerald-400/10 shadow-sm"></div>
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 text-emerald-300 font-bold font-mono-numbers text-[9px] bg-slate-900/80 px-1 py-0.2 rounded border border-emerald-500/40 whitespace-nowrap">
+                  842 HU
                 </div>
-                <!-- Retícula central -->
-                <div class="absolute w-2 h-0.5 bg-cyan-300"></div>
-                <div class="absolute h-2 w-0.5 bg-cyan-300"></div>
               </div>
             </div>
 
-            <!-- Overlay de Información Radiológica HUD (Top Left) -->
-            <div class="absolute top-2.5 left-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] p-2.5 rounded-lg border border-slate-700/60 pointer-events-none space-y-0.5">
-              <div class="text-cyan-400 font-bold" id="hud-modality">TC PELVIS SIN CONTRASTE</div>
-              <div>CORTE: <span id="hud-slice" class="text-slate-300 font-medium">AXIAL L5-S1 (URÉTER TERMINAL)</span></div>
-              <div>VENTANA: <span id="hud-window" class="text-slate-300 font-medium">ÓSEA / CÁLCULOS (W:1500 L:450)</span></div>
-              <div>DENSIDAD: <span id="hud-hu" class="text-emerald-400 font-bold font-mono-numbers">842 HU (CÁLCULO DILATADO)</span></div>
-            </div>
-
-            <!-- Overlay de Información Radiológica HUD (Top Right) -->
-            <div class="absolute top-2.5 right-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] px-2.5 py-1 rounded-lg border border-slate-700/60 pointer-events-none">
-              <span class="text-slate-400 font-medium">ESCALA:</span> <span class="text-slate-200 font-bold font-mono-numbers">1.0 mm/px</span>
-            </div>
-
-            <!-- Barra de Controles Flotante del Visor (Bottom Center) -->
-            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-slate-700 text-white rounded-lg px-3 py-1.5 flex items-center gap-3 shadow-lg text-[11px]">
-              
-              <!-- Herramientas de Ventana / Windowing -->
-              <div class="flex items-center gap-1 border-r border-slate-700 pr-2">
-                <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-0.5 rounded text-[10px] bg-cyan-600 text-white font-bold transition">
-                  Ósea / Litos
-                </button>
-                <button onclick="setWindowing('soft')" id="win-soft" class="px-2.5 py-0.5 rounded text-[10px] text-slate-300 hover:text-white hover:bg-slate-800 font-medium transition">
-                  Tejidos Blandos
-                </button>
-                <button onclick="setWindowing('radiomics')" id="win-radiomics" class="px-2.5 py-0.5 rounded text-[10px] text-slate-300 hover:text-white hover:bg-slate-800 font-medium transition">
-                  Filtro Halo
-                </button>
-              </div>
-
-              <!-- Zoom & Pan -->
-              <div class="flex items-center gap-1 border-r border-slate-700 pr-2">
-                <button onclick="adjustZoom(-0.2)" title="Reducir Zoom" class="p-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
-                </button>
-                <span id="zoom-label" class="font-bold text-[10px] px-1 text-slate-300 font-mono-numbers">100%</span>
-                <button onclick="adjustZoom(0.2)" title="Aumentar Zoom" class="p-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                </button>
-                <button onclick="resetZoom()" title="Resetear Zoom" class="px-1.5 py-0.5 text-[9px] font-bold text-slate-400 hover:text-white hover:bg-slate-800 rounded">
-                  1:1
-                </button>
-              </div>
-
-              <!-- Toggle ROI -->
-              <div class="flex items-center gap-1.5">
-                <button onclick="toggleRoi()" id="btn-toggle-roi" class="px-2.5 py-0.5 rounded text-[10px] bg-slate-800 text-cyan-400 border border-cyan-500/40 font-bold transition">
-                  ROI Calcificación: ON
-                </button>
-              </div>
-            </div>
-
-            <!-- Indicador de Procesamiento IA (Oculto por defecto) -->
-            <div id="ai-processing-overlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm hidden flex-col items-center justify-center text-white z-30">
-              <div class="w-12 h-12 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin mb-3"></div>
-              <div class="font-bold text-sm text-cyan-400">ANALIZANDO TOMOGRAFÍA CON IA...</div>
-              <div class="text-[11px] text-slate-300 mt-1 font-medium" id="ai-processing-step">Segmentando calcificación en uréter distal...</div>
-              <div class="w-48 bg-slate-800 h-1 rounded-full mt-3 overflow-hidden">
-                <div class="bg-cyan-500 h-full animate-scan-pulse w-full"></div>
-              </div>
+            <!-- Indicador de Procesamiento IA Profesional -->
+            <div id="ai-processing-overlay" class="absolute inset-0 bg-slate-900/85 backdrop-blur-xs hidden flex-col items-center justify-center text-white z-30">
+              <div class="w-10 h-10 rounded-full border-2 border-[#009C4D] border-t-transparent animate-spin mb-3"></div>
+              <div class="font-bold text-xs text-white">Analizando tomografía computada...</div>
+              <div class="text-[11px] text-slate-400 mt-1 font-medium" id="ai-processing-step">Extrayendo densidad HU y morfología parietal...</div>
             </div>
 
           </div>
 
+          <!-- Barra de Parámetros y Ventana en Gris Elegante (Como solicitó el usuario) -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
+              <div>Modo: <span class="text-slate-600 font-semibold" id="bar-modality">TC Pelvis Sin Contraste</span></div>
+              <span class="text-slate-300">•</span>
+              <div>Densidad: <span class="text-slate-700 font-bold font-mono-numbers" id="bar-density">842 HU (Cálculo)</span></div>
+              <span class="text-slate-300">•</span>
+              <div>Escala: <span class="text-slate-600 font-mono-numbers">1.0 mm/px</span></div>
+            </div>
+
+            <!-- Selector de Ventana Médica -->
+            <div class="flex items-center gap-1">
+              <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs">
+                Ventana Ósea
+              </button>
+              <button onclick="setWindowing('soft')" id="win-soft" class="px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition">
+                Tejidos Blandos
+              </button>
+            </div>
+          </div>
+
           <!-- BOTÓN PRINCIPAL: EJECUTAR ANÁLISIS DE INTELIGENCIA ARTIFICIAL -->
           <div class="pt-1">
-            <button onclick="runAiAnalysis()" id="btn-run-ai" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 via-cyan-700 to-teal-700 hover:from-cyan-700 hover:to-teal-800 text-white font-bold text-xs tracking-wide shadow-xs hover:shadow-md transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            <button onclick="runAiAnalysis()" id="btn-run-ai" class="w-full py-2.5 px-4 rounded-xl bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs tracking-wide shadow-xs hover:shadow-md transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
-              <span>EJECUTAR ANÁLISIS DIFERENCIAL CON INTELIGENCIA ARTIFICIAL</span>
+              <span>Ejecutar Análisis Diferencial con Inteligencia Artificial</span>
             </button>
           </div>
         </div>
@@ -501,7 +524,7 @@
           
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -511,7 +534,7 @@
                 <span class="text-[10px] text-slate-400 font-medium">Modelo Multimodal: Radiomics + Visión Convolucional + Cuadro Clínico</span>
               </div>
             </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200" id="confidence-badge">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7]" id="confidence-badge">
               CONFIANZA: 94.6%
             </span>
           </div>
@@ -520,12 +543,12 @@
           <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 mb-4">
             <div class="flex justify-between items-center mb-1.5">
               <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></span>
                 <span class="font-bold text-slate-900 text-xs">Lito Ureteral Distal</span>
-                <span class="text-[10px] text-slate-500 font-semibold">(Litiasis Obstructiva)</span>
+                <span class="text-[10px] text-slate-400 font-medium">(Litiasis Obstructiva)</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <span class="text-[10px] text-slate-500 font-semibold">(Calcificación Venosa)</span>
+                <span class="text-[10px] text-slate-400 font-medium">(Calcificación Venosa)</span>
                 <span class="font-bold text-slate-900 text-xs">Flebolito Pélvico</span>
                 <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
               </div>
@@ -533,7 +556,7 @@
 
             <!-- Barra de Progreso Dividida -->
             <div class="h-3.5 w-full bg-slate-200 rounded-full overflow-hidden flex shadow-inner">
-              <div id="bar-stone" class="bg-cyan-600 h-full transition-all duration-700 flex items-center justify-start pl-2" style="width: 93.4%;">
+              <div id="bar-stone" class="bg-[#009C4D] h-full transition-all duration-700 flex items-center justify-start pl-2" style="width: 93.4%;">
                 <span class="text-[9px] font-bold text-white font-mono-numbers" id="prob-stone-text">93.4%</span>
               </div>
               <div id="bar-phlebolith" class="bg-slate-400 h-full transition-all duration-700 flex items-center justify-end pr-2" style="width: 6.6%;">
@@ -542,16 +565,16 @@
             </div>
 
             <div class="flex justify-between items-center mt-2 text-[10px] text-slate-500">
-              <span id="stone-verdict-tag" class="text-cyan-800 font-bold bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
-                PROBABILIDAD ALTA DE LITIASIS
+              <span id="stone-verdict-tag" class="text-[#007D3E] font-bold bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
+                ALTA PROBABILIDAD DE LITIASIS URETERAL
               </span>
-              <span id="phlebolith-verdict-tag" class="text-slate-500 font-medium">
+              <span id="phlebolith-verdict-tag" class="text-slate-400 font-medium">
                 BAJA PROBABILIDAD DE FLEBOLITO
               </span>
             </div>
           </div>
 
-          <!-- DESGLOSE EXPLICABLE DE CRITERIOS DIAGNÓSTICOS (SLIDES 10 Y 12 DEL CONGRESO) -->
+          <!-- DESGLOSE EXPLICABLE DE CRITERIOS DIAGNÓSTICOS -->
           <div class="space-y-2 mb-4">
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-bold uppercase text-slate-400">Desglose de Criterios Clínico-Radiológicos:</span>
@@ -562,7 +585,7 @@
               
               <!-- Criterio 1: Trayecto Ureteral -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-path-icon" class="w-4 h-4 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 mt-0.5">
+                <div id="crit-path-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
                   <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 </div>
                 <div>
@@ -573,7 +596,7 @@
 
               <!-- Criterio 2: Signo del Halo / Soft-Tissue Rim Sign -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-rim-icon" class="w-4 h-4 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 mt-0.5">
+                <div id="crit-rim-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
                   <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 </div>
                 <div>
@@ -595,7 +618,7 @@
 
               <!-- Criterio 4: Signos Secundarios de Obstrucción -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-obstr-icon" class="w-4 h-4 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 mt-0.5">
+                <div id="crit-obstr-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
                   <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 </div>
                 <div>
@@ -604,9 +627,9 @@
                 </div>
               </div>
 
-              <!-- Criterio 5: Morfología y Atenuación HU (Ancho completo) -->
+              <!-- Criterio 5: Morfología y Atenuación HU -->
               <div class="sm:col-span-2 p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-hu-icon" class="w-4 h-4 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 mt-0.5">
+                <div id="crit-hu-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
                   <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 </div>
                 <div>
@@ -619,10 +642,10 @@
           </div>
 
           <!-- CONDUCTA CLÍNICA Y TERAPÉUTICA ASISTIDA -->
-          <div class="bg-cyan-50/50 border border-cyan-200 rounded-xl p-3 flex flex-col gap-2">
+          <div class="bg-[#F0FDF4] border border-[#C6EFD7] rounded-xl p-3 flex flex-col gap-2">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold uppercase text-cyan-800">Conducta Médica Recomendada (Servicio de Urología):</span>
-              <span class="text-[10px] font-bold text-cyan-700 bg-white px-2 py-0.5 rounded border border-cyan-200">MET RECOMENDADO</span>
+              <span class="text-[11px] font-bold uppercase text-[#007D3E]">Conducta Médica Recomendada (Servicio de Urología):</span>
+              <span class="text-[10px] font-bold text-[#006632] bg-white px-2 py-0.5 rounded border border-[#C6EFD7]">MET RECOMENDADO</span>
             </div>
             <p class="text-slate-700 text-[11px] leading-relaxed font-medium" id="recommendation-text">
               Lito de 4.2 mm no complicado en uréter terminal derecho con adecuada función renal. Se sugiere <strong>Tratamiento Expulsivo Médico (MET)</strong> con Tamsulosina 0.4 mg/día + hidratación reglada y analgesia pautada. Control ecográfico/clínico en 72 horas. Ante persistencia de dolor o fiebre, coordinar evaluación para ureteroscopia (URS).
@@ -641,8 +664,8 @@
                 </svg>
                 <span id="copy-btn-text">Copiar Hallazgos</span>
               </button>
-              <button onclick="openReportModal()" class="px-3 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-800 text-white font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-cyan-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onclick="openReportModal()" class="px-3.5 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
+                <svg class="w-3.5 h-3.5 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                 </svg>
                 <span>Generar Informe Médico</span>
@@ -664,7 +687,7 @@
       <!-- Modal Header -->
       <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded bg-cyan-700 text-white flex items-center justify-center font-bold text-xs">
+          <div class="w-7 h-7 rounded bg-[#009C4D] text-white flex items-center justify-center font-bold text-xs">
             HI
           </div>
           <div>
@@ -689,7 +712,7 @@
           </div>
           <div class="text-right text-[10px] text-slate-500 font-medium">
             <div>FECHA: <span id="rep-date" class="font-bold text-slate-700">19/10/2026</span></div>
-            <div>ESTUDIO: <span class="font-bold text-cyan-800">TC ABDOMEN Y PELVIS S/C</span></div>
+            <div>ESTUDIO: <span class="font-bold text-[#007D3E]">TC ABDOMEN Y PELVIS S/C</span></div>
             <div>HC: <span id="rep-hc" class="font-bold text-slate-900 font-mono-numbers">HC-2026-08412</span></div>
           </div>
         </div>
@@ -703,14 +726,14 @@
 
         <!-- Hallazgos Tomográficos & IA -->
         <div class="space-y-2">
-          <div class="font-bold border-b border-slate-100 pb-1 text-[11px] uppercase tracking-wide text-cyan-800">
+          <div class="font-bold border-b border-slate-100 pb-1 text-[11px] uppercase tracking-wide text-[#007D3E]">
             Hallazgos Tomográficos & Clasificación por Inteligencia Artificial
           </div>
           
-          <div class="p-3 rounded-lg border border-cyan-200 bg-cyan-50/40 space-y-1.5">
+          <div class="p-3 rounded-lg border border-[#C6EFD7] bg-[#F0FDF4] space-y-1.5">
             <div class="flex justify-between items-center">
               <span class="font-bold text-slate-800 text-xs" id="rep-primary-diag">DIAGNÓSTICO: Lito Ureteral Distal Obstructivo</span>
-              <span class="font-bold text-cyan-900 bg-cyan-100 px-2 py-0.5 rounded text-[10px] font-mono-numbers" id="rep-prob-badge">PROBABILIDAD: 93.4%</span>
+              <span class="font-bold text-[#006632] bg-[#C6EFD7] px-2 py-0.5 rounded text-[10px] font-mono-numbers" id="rep-prob-badge">PROBABILIDAD: 93.4%</span>
             </div>
             <p class="text-slate-600 leading-relaxed text-[11px] font-medium" id="rep-findings-text">
               Se identifica imagen hiperdensa de aproximadamente 4.2 mm y atenuación de 842 HU en el trayecto del uréter distal prevesical ipsilateral. Se constata la presencia de <strong>signo del halo o tejido blando circunferencial (Soft-Tissue Rim Sign)</strong> compatible con edema parietal ureteral. Se descarta signo de la cola de cometa venosa. Se evidencian signos secundarios de obstrucción urinaria caracterizados por dilatación ureteral proximal y leve estriación de la grasa perirrenal.
@@ -731,8 +754,8 @@
         <!-- Firma Digital Médica -->
         <div class="pt-4 border-t border-slate-200 flex justify-between items-end text-[10px] text-slate-400 font-medium">
           <div>
-            <div>Validado mediante UroScan AI v2.4 (FDA 21 CFR Part 11 compliant)</div>
-            <div>Hospital Italiano de Buenos Aires</div>
+            <div>Validado mediante Colony Urología v2.4 (Hospital Italiano)</div>
+            <div>Servicio de Urología · HIBA</div>
           </div>
           <div class="text-right">
             <div class="font-bold text-slate-700 text-xs">Dr. Diego Santillán</div>
@@ -747,7 +770,7 @@
         <button onclick="closeReportModal()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-xs">
           Cerrar
         </button>
-        <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-800 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs">
+        <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
           <span>Imprimir / Descargar PDF</span>
         </button>
@@ -762,9 +785,7 @@
     const state = {
       activeCase: 1,
       currentImage: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
-      zoom: 1.0,
       windowMode: 'bone',
-      roiVisible: true,
       analysisDone: true,
       data: {
         1: {
@@ -784,10 +805,9 @@
           image: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
           roiTop: '48%',
           roiLeft: '54%',
-          roiLabel: 'ROI: 842 HU',
-          hudModality: 'TC PELVIS SIN CONTRASTE',
-          hudSlice: 'AXIAL L5-S1 (URÉTER TERMINAL)',
-          hudDensity: '842 HU (CÁLCULO DILATADO)',
+          roiLabel: '842 HU',
+          subtext: 'TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical',
+          density: '842 HU (Cálculo)',
           probStone: 93.4,
           probPhlebolith: 6.6,
           confidence: '94.6%',
@@ -815,10 +835,9 @@
           image: 'assets/samples/pelvic_phleboliths.jpg',
           roiTop: '50%',
           roiLeft: '48%',
-          roiLabel: 'ROI: 460 HU (Lucencia)',
-          hudModality: 'TC PELVIS SIN CONTRASTE',
-          hudSlice: 'AXIAL PÉLVICO INFERIOR',
-          hudDensity: '460 HU (FLEBOLITO VENOSO)',
+          roiLabel: '460 HU',
+          subtext: 'TC pelvis sin contraste · Corte axial pélvico inferior · Plexo venoso perivesical',
+          density: '460 HU (Flebolito)',
           probStone: 4.8,
           probPhlebolith: 95.2,
           confidence: '97.1%',
@@ -846,10 +865,9 @@
           image: 'assets/samples/pelvic_calcification_differential.jpg',
           roiTop: '46%',
           roiLeft: '51%',
-          roiLabel: 'ROI: 590 HU (Dudoso)',
-          hudModality: 'TC PELVIS SIN CONTRASTE',
-          hudSlice: 'AXIAL PÉLVICO TRANSICIÓN',
-          hudDensity: '590 HU (INDETERMINADA)',
+          roiLabel: '590 HU',
+          subtext: 'TC pelvis sin contraste · Corte axial de transición · Nivel límite de resolución',
+          density: '590 HU (Indeterminada)',
           probStone: 52.3,
           probPhlebolith: 47.7,
           confidence: '61.4%',
@@ -863,7 +881,6 @@
       }
     };
 
-    // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       loadCasePreset(1);
     });
@@ -874,7 +891,6 @@
       const c = state.data[caseNum];
       if (!c) return;
 
-      // Actualizar botones de preset
       [1, 2, 3].forEach(n => {
         const btn = document.getElementById(`btn-preset-${n}`);
         if (btn) {
@@ -886,7 +902,7 @@
         }
       });
 
-      // Llenar campos de la plantilla clínica
+      // Llenar campos de plantilla
       document.getElementById('patient-id').value = c.patientId;
       document.getElementById('patient-age').value = c.age;
       document.getElementById('patient-gender').value = c.gender;
@@ -900,22 +916,17 @@
       document.getElementById('exam-giordano').value = c.giordano;
       document.getElementById('clinical-notes').value = c.notes;
 
-      // Actualizar badge de dolor
       updatePainBadge(c.pain);
 
-      // Cargar imagen en el visor
-      setViewerImage(c.image, c.roiTop, c.roiLeft, c.roiLabel, c.hudModality, c.hudSlice, c.hudDensity);
-
-      // Actualizar thumbnails
+      // Cargar imagen y textos limpios en gris
+      setViewerClean(c.image, c.roiTop, c.roiLeft, c.roiLabel, c.subtext, c.density);
       updateThumbnailSelection(caseNum);
 
-      // Actualizar resultados de IA
       renderAiResults(c);
       updateClinicalScoreLive();
     }
 
-    // Actualizar imagen y marcadores en el visor
-    function setViewerImage(imgSrc, top, left, label, modality, slice, density) {
+    function setViewerClean(imgSrc, top, left, label, subtext, density) {
       const img = document.getElementById('ct-main-image');
       img.src = imgSrc;
       state.currentImage = imgSrc;
@@ -924,47 +935,40 @@
       if (top && left) {
         roi.style.top = top;
         roi.style.left = left;
-        roi.querySelector('div:nth-child(2)').innerText = label || 'ROI';
-        roi.style.display = state.roiVisible ? 'flex' : 'none';
+        roi.querySelector('div:nth-child(2)').innerText = label || '';
       }
 
-      if (modality) document.getElementById('hud-modality').innerText = modality;
-      if (slice) document.getElementById('hud-slice').innerText = slice;
-      if (density) document.getElementById('hud-hu').innerText = density;
-
-      resetZoom();
+      if (subtext) document.getElementById('viewer-subtext').innerText = subtext;
+      if (density) document.getElementById('bar-density').innerText = density;
     }
 
-    // Seleccionar muestra desde miniaturas de cortes
     function selectSampleImage(imgSrc, thumbIndex) {
       state.currentImage = imgSrc;
       document.getElementById('ct-main-image').src = imgSrc;
       updateThumbnailSelection(thumbIndex);
 
-      if (thumbIndex === 1) {
-        document.getElementById('hud-slice').innerText = 'AXIAL L5-S1 (URÉTER TERMINAL)';
-        document.getElementById('hud-hu').innerText = '842 HU (CÁLCULO DILATADO)';
-        moveRoi('48%', '54%', 'ROI: 842 HU');
-      } else if (thumbIndex === 2) {
-        document.getElementById('hud-slice').innerText = 'AXIAL PÉLVICO INFERIOR';
-        document.getElementById('hud-hu').innerText = '460 HU (FLEBOLITO VENOSO)';
-        moveRoi('50%', '48%', 'ROI: 460 HU');
-      } else if (thumbIndex === 3) {
-        document.getElementById('hud-slice').innerText = 'RADIOGRAFÍA SIMPLE / SCOUT VIEW';
-        document.getElementById('hud-hu').innerText = 'CALCIFICACIONES MÚLTIPLES';
-        moveRoi('62%', '45%', 'CALCIFICACIÓN');
-      } else if (thumbIndex === 4) {
-        document.getElementById('hud-slice').innerText = 'CONTROL CATÉTER DOBLE J';
-        document.getElementById('hud-hu').innerText = 'URÉTER DERECHO CATETERIZADO';
-        moveRoi('52%', '46%', 'CATÉTER DJ');
-      }
-    }
-
-    function moveRoi(top, left, label) {
       const roi = document.getElementById('roi-marker');
-      roi.style.top = top;
-      roi.style.left = left;
-      roi.querySelector('div:nth-child(2)').innerText = label;
+      if (thumbIndex === 1) {
+        document.getElementById('viewer-subtext').innerText = 'TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical';
+        document.getElementById('bar-density').innerText = '842 HU (Cálculo)';
+        roi.style.top = '48%'; roi.style.left = '54%';
+        roi.querySelector('div:nth-child(2)').innerText = '842 HU';
+      } else if (thumbIndex === 2) {
+        document.getElementById('viewer-subtext').innerText = 'TC pelvis sin contraste · Corte axial pélvico inferior · Plexo venoso';
+        document.getElementById('bar-density').innerText = '460 HU (Flebolito)';
+        roi.style.top = '50%'; roi.style.left = '48%';
+        roi.querySelector('div:nth-child(2)').innerText = '460 HU';
+      } else if (thumbIndex === 3) {
+        document.getElementById('viewer-subtext').innerText = 'Radiografía digital / Scout view · Evaluación de calcificaciones pélvicas';
+        document.getElementById('bar-density').innerText = 'Múltiples focos';
+        roi.style.top = '62%'; roi.style.left = '45%';
+        roi.querySelector('div:nth-child(2)').innerText = 'Lito';
+      } else if (thumbIndex === 4) {
+        document.getElementById('viewer-subtext').innerText = 'Radiografía de control · Uréter derecho cateterizado con Doble J';
+        document.getElementById('bar-density').innerText = 'Catéter Doble J';
+        roi.style.top = '52%'; roi.style.left = '46%';
+        roi.querySelector('div:nth-child(2)').innerText = 'Catéter';
+      }
     }
 
     function updateThumbnailSelection(index) {
@@ -972,15 +976,14 @@
         const btn = document.getElementById(`thumb-${i}`);
         if (btn) {
           if (i === index) {
-            btn.className = 'px-2.5 py-1 rounded-md border border-cyan-400 bg-cyan-50 text-cyan-800 font-bold shrink-0';
+            btn.className = 'px-2.5 py-1 rounded-md border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold shrink-0 transition';
           } else {
-            btn.className = 'px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0';
+            btn.className = 'px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition';
           }
         }
       });
     }
 
-    // Subida de imagen personalizada por el usuario
     function handleFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -990,112 +993,56 @@
         const customUrl = e.target.result;
         state.currentImage = customUrl;
         document.getElementById('ct-main-image').src = customUrl;
-        document.getElementById('hud-modality').innerText = 'IMAGEN DE USUARIO';
-        document.getElementById('hud-slice').innerText = file.name.toUpperCase();
-        document.getElementById('hud-hu').innerText = 'DENSIDAD A CALCULAR';
-        moveRoi('50%', '50%', 'ROI: USUARIO');
+        document.getElementById('viewer-subtext').innerText = `TC importada: ${file.name} · Procesamiento de corte`;
+        document.getElementById('bar-density').innerText = 'Calculando...';
         
-        // Simular análisis IA automático para el archivo cargado
         runAiAnalysis();
       };
       reader.readAsDataURL(file);
     }
 
-    // Controles de Visor: Zoom & Pan
-    function adjustZoom(delta) {
-      state.zoom = Math.max(0.6, Math.min(3.0, state.zoom + delta));
-      applyImageTransform();
-    }
-
-    function resetZoom() {
-      state.zoom = 1.0;
-      applyImageTransform();
-    }
-
-    function applyImageTransform() {
-      const wrapper = document.getElementById('image-transform-wrapper');
-      wrapper.style.transform = `scale(${state.zoom})`;
-      document.getElementById('zoom-label').innerText = `${Math.round(state.zoom * 100)}%`;
-    }
-
-    // Controles de Visor: Windowing
+    // Windowing
     function setWindowing(mode) {
       state.windowMode = mode;
       const img = document.getElementById('ct-main-image');
-      const hudWin = document.getElementById('hud-window');
-
-      // Botones styling
-      ['bone', 'soft', 'radiomics'].forEach(m => {
-        const btn = document.getElementById(`win-${m}`);
-        if (btn) {
-          if (m === mode) {
-            btn.className = 'px-2.5 py-0.5 rounded text-[10px] bg-cyan-600 text-white font-bold transition';
-          } else {
-            btn.className = 'px-2.5 py-0.5 rounded text-[10px] text-slate-300 hover:text-white hover:bg-slate-800 font-medium transition';
-          }
-        }
-      });
+      const btnBone = document.getElementById('win-bone');
+      const btnSoft = document.getElementById('win-soft');
 
       if (mode === 'bone') {
         img.style.filter = 'contrast(160%) brightness(95%)';
-        hudWin.innerText = 'ÓSEA / CÁLCULOS (W:1500 L:450)';
-      } else if (mode === 'soft') {
-        img.style.filter = 'contrast(115%) brightness(105%)';
-        hudWin.innerText = 'TEJIDOS BLANDOS (W:400 L:40)';
-      } else if (mode === 'radiomics') {
-        img.style.filter = 'contrast(220%) brightness(110%) saturate(150%)';
-        hudWin.innerText = 'FILTRO REALCE HALO RADIÓMICO';
-      }
-    }
-
-    // Toggle de Región de Interés (ROI)
-    function toggleRoi() {
-      state.roiVisible = !state.roiVisible;
-      const roi = document.getElementById('roi-marker');
-      const btn = document.getElementById('btn-toggle-roi');
-      if (state.roiVisible) {
-        roi.style.display = 'flex';
-        btn.innerText = 'ROI Calcificación: ON';
-        btn.className = 'px-2.5 py-0.5 rounded text-[10px] bg-slate-800 text-cyan-400 border border-cyan-500/40 font-bold transition';
+        btnBone.className = 'px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs';
+        btnSoft.className = 'px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition';
       } else {
-        roi.style.display = 'none';
-        btn.innerText = 'ROI Calcificación: OFF';
-        btn.className = 'px-2.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 hover:text-slate-200 font-medium transition';
+        img.style.filter = 'contrast(115%) brightness(105%)';
+        btnSoft.className = 'px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs';
+        btnBone.className = 'px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition';
       }
     }
 
-    // Ejecución de Análisis con IA con animación realista
+    // Simulación IA
     function runAiAnalysis() {
       const overlay = document.getElementById('ai-processing-overlay');
       const stepText = document.getElementById('ai-processing-step');
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
 
-      stepText.innerText = 'Paso 1/3: Extrayendo características de densidad y textura (Radiomics)...';
+      stepText.innerText = 'Analizando signos radiológicos y densidad tomográfica...';
 
       setTimeout(() => {
-        stepText.innerText = 'Paso 2/3: Evaluando Soft-Tissue Rim Sign y Comet-Tail Sign...';
+        stepText.innerText = 'Correlacionando con plantilla de síntomas clínicos...';
       }, 700);
-
-      setTimeout(() => {
-        stepText.innerText = 'Paso 3/3: Integrando plantilla de signos clínicos y trayecto anatómico...';
-      }, 1400);
 
       setTimeout(() => {
         overlay.classList.remove('flex');
         overlay.classList.add('hidden');
-        
-        // Calcular dinámicamente según estado actual de la plantilla
         calculateAndRenderResults();
         
-        // Feedback visual en botón
         const btn = document.getElementById('btn-run-ai');
         btn.classList.add('ring-2', 'ring-emerald-400');
         setTimeout(() => btn.classList.remove('ring-2', 'ring-emerald-400'), 1000);
-      }, 2100);
+      }, 1400);
     }
 
-    // Calcular y renderizar resultados combinando imagen + clínica
     function calculateAndRenderResults() {
       const pain = document.getElementById('clinical-pain').value;
       const hematuria = document.getElementById('clinical-hematuria').value;
@@ -1103,7 +1050,6 @@
       const onset = document.getElementById('clinical-onset').value;
 
       let baseScore = 50;
-
       if (pain === 'right' || pain === 'left') baseScore += 24;
       else if (pain === 'none') baseScore -= 30;
 
@@ -1114,7 +1060,6 @@
       if (history === 'yes') baseScore += 8;
       if (onset === 'acute') baseScore += 6;
 
-      // Ponderación de imagen seleccionada
       if (state.activeCase === 1) {
         baseScore = Math.max(82, Math.min(97, baseScore + 10));
       } else if (state.activeCase === 2) {
@@ -1176,14 +1121,14 @@
       const pTag = document.getElementById('phlebolith-verdict-tag');
 
       if (c.probStone >= 70) {
-        sTag.className = 'text-cyan-800 font-bold bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200';
+        sTag.className = 'text-[#007D3E] font-bold bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]';
         sTag.innerText = 'ALTA PROBABILIDAD DE LITIASIS URETERAL';
         pTag.className = 'text-slate-400 font-medium';
         pTag.innerText = 'BAJA PROBABILIDAD DE FLEBOLITO';
       } else if (c.probStone <= 30) {
         sTag.className = 'text-slate-400 font-medium';
         sTag.innerText = 'BAJA PROBABILIDAD DE LITIASIS';
-        pTag.className = 'text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
+        pTag.className = 'text-[#007D3E] font-bold bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]';
         pTag.innerText = 'ALTA PROBABILIDAD DE FLEBOLITO';
       } else {
         sTag.className = 'text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200';
@@ -1192,14 +1137,12 @@
         pTag.innerText = 'REQUIERE CORRELACIÓN';
       }
 
-      // Render Criterios
       updateCriterionUI('crit-path', c.critPath);
       updateCriterionUI('crit-rim', c.critRim);
       updateCriterionUI('crit-comet', c.critComet);
       updateCriterionUI('crit-obstr', c.critObstr);
       updateCriterionUI('crit-hu', c.critHu);
 
-      // Recomendación
       document.getElementById('recommendation-text').innerHTML = c.recommendation;
       document.getElementById('analysis-stamp').innerText = `AN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     }
@@ -1210,7 +1153,7 @@
       const icon = document.getElementById(`${prefix}-icon`);
 
       if (crit.favStone === true) {
-        icon.className = 'w-4 h-4 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 mt-0.5';
+        icon.className = 'w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5';
         icon.innerHTML = '<svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
       } else if (crit.favStone === false) {
         icon.className = 'w-4 h-4 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 mt-0.5';
@@ -1221,7 +1164,6 @@
       }
     }
 
-    // Actualización dinámica cuando el médico cambia la plantilla clínica
     function updateClinicalScoreLive() {
       const pain = document.getElementById('clinical-pain').value;
       const hematuria = document.getElementById('clinical-hematuria').value;
@@ -1243,7 +1185,7 @@
 
       if (preScore >= 75) {
         badge.innerText = `ALTA (${preScore}%)`;
-        badge.className = 'font-bold text-cyan-800 text-sm font-mono-numbers';
+        badge.className = 'font-bold text-[#007D3E] text-sm font-mono-numbers';
       } else if (preScore <= 35) {
         badge.innerText = `BAJA (${preScore}%)`;
         badge.className = 'font-bold text-slate-500 text-sm font-mono-numbers';
@@ -1277,12 +1219,26 @@
       updateClinicalScoreLive();
     }
 
+    function switchViewMode(mode) {
+      const btnDiag = document.getElementById('tab-btn-diagnostic');
+      const btnMetrics = document.getElementById('tab-btn-metrics');
+
+      if (mode === 'diagnostic') {
+        btnDiag.className = 'px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5';
+        btnMetrics.className = 'px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium';
+        document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        btnMetrics.className = 'px-3 py-1 rounded-md bg-white text-slate-900 shadow-2xs font-bold transition flex items-center gap-1.5';
+        btnDiag.className = 'px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5 font-medium';
+        document.querySelector('section').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
     // Modal de Informe Médico
     function openReportModal() {
       const modal = document.getElementById('report-modal');
       modal.classList.remove('hidden');
 
-      // Transferir valores al reporte
       const id = document.getElementById('patient-id').value;
       const age = document.getElementById('patient-age').value;
       const gender = document.getElementById('patient-gender').value === 'M' ? 'Masculino' : 'Femenino';
@@ -1305,7 +1261,7 @@
 
     function copyFindingsToClipboard() {
       const stoneProb = document.getElementById('prob-stone-text').innerText;
-      const text = `INFORME UROSCAN AI (HOSPITAL ITALIANO)\n` +
+      const text = `INFORME COLONY UROLOGÍA (HOSPITAL ITALIANO)\n` +
         `Estudio: TC Pelvis Sin Contraste\n` +
         `Diagnóstico Asistido: Lito Ureteral Distal (${stoneProb}) vs Flebolito Pélvico (${document.getElementById('prob-phlebolith-text').innerText})\n` +
         `Criterios Radiológicos: Rim Sign (+), Ausencia de Comet-Tail, Trayecto Ureteral coincidente.\n` +
