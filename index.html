@@ -319,7 +319,7 @@
 
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-[11px] font-bold text-[#007D3E]">93.4% Probabilidad Lito</span>
-            <div class="px-3 py-1.5 rounded-lg bg-[#009C4D] group-hover:bg-[#00823F] text-white font-bold text-xs transition flex items-center gap-1">
+            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(1);" class="px-3 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
               <span>Abrir Expediente & Visor</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
             </div>
@@ -368,10 +368,10 @@
 
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-[11px] font-bold text-slate-500">95.2% Flebolito Benigno</span>
-            <div class="px-3 py-1.5 rounded-lg bg-slate-800 group-hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1">
+            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(2);" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
               <span>Abrir Expediente & Visor</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -417,10 +417,10 @@
 
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span class="text-[11px] font-bold text-amber-700">Descompresión Lograda</span>
-            <div class="px-3 py-1.5 rounded-lg bg-slate-800 group-hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1">
+            <button type="button" onclick="event.stopPropagation(); selectPatientAndOpenDashboard(3);" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1 shadow-2xs">
               <span>Abrir Expediente & Visor</span>
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -481,6 +481,11 @@
         <!-- COLUMNA IZQUIERDA: PLANILLA CLÍNICA DEL PACIENTE (COL 5 / 12)             -->
         <!-- ========================================================================= -->
         <section class="lg:col-span-5 flex flex-col gap-4">
+          <!-- Elementos de Compatibilidad y Sincronización de Estado -->
+          <input type="hidden" id="patient-id" value="HC-2026-08412">
+          <span id="patient-badge-id" class="hidden">HC-2026-08412</span>
+          <span id="badge-pain-status" class="hidden">CÓLICO ACTIVO</span>
+
           
           <!-- TARJETA 1: IDENTIDAD, FILIACIÓN & CREDENCIAL HOSPITALARIA -->
           <div class="card-base p-4 flex flex-col gap-3">
@@ -653,6 +658,25 @@
             </div>
 
             <!-- Selects Clínicos Clave -->
+            
+            <div class="grid grid-cols-2 gap-3 pt-1 border-t border-slate-100 text-[11px] mb-2">
+              <div>
+                <label class="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Localización del Cólico</label>
+                <select id="clinical-pain" onchange="updateClinicalScoreLive()" class="w-full input-base font-semibold">
+                  <option value="right" selected>Fosa Ilíaca Derecha (FID)</option>
+                  <option value="left">Fosa Ilíaca Izquierda (FII)</option>
+                  <option value="atypical">Dolor difuso / atípico</option>
+                  <option value="none">Asintomático</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Litiasis Previa</label>
+                <select id="clinical-history" onchange="updateClinicalScoreLive()" class="w-full input-base font-semibold">
+                  <option value="yes" selected>Sí (1 o más episodios)</option>
+                  <option value="no">Sin antecedentes</option>
+                </select>
+              </div>
+            </div>
             <div class="grid grid-cols-2 gap-3 pt-1 border-t border-slate-100 text-[11px]">
               <div>
                 <label class="block text-[9.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Tiempo de Evolución</label>
@@ -1643,6 +1667,21 @@
     function filterPatients(query) {
       const q = query.toLowerCase();
       // filter hook if user searches
+    }
+
+    
+    // HELPERS SEGUROS PARA MANIPULACIÓN DEL DOM (EVITAN CUALQUIER ERROR NULL)
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    }
+    function safeSetVal(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+    function safeSetHtml(id, html) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
     }
 
     function loadPatientData(id) {
