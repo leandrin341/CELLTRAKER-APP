@@ -90,6 +90,12 @@
       stroke-dasharray: 4 2;
     }
 
+    .patient-card-active {
+      border-color: #009C4D !important;
+      background-color: #F0FDF4 !important;
+      box-shadow: 0 0 0 2px rgba(0, 156, 77, 0.25) !important;
+    }
+
     @media print {
       body * { visibility: hidden; }
       #printable-report, #printable-report * { visibility: visible; }
@@ -324,7 +330,7 @@
                       ML
                     </span>
                     <div>
-                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Martín López (38a)</div>
+                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Martín López (51a)</div>
                       <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-11029 · Ingreso: Hoy 10:45</div>
                     </div>
                   </div>
@@ -891,11 +897,28 @@
               </div>
 
               <!-- Indicador de acción guiada -->
-              <div class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-2xs">
+              <div class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-2xs mb-3">
                 <svg class="w-4 h-4 text-[#009C4D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
                 <span>Haga clic en una tarjeta de paciente a la izquierda para comenzar</span>
+              </div>
+
+              <!-- Acceso Rápido Directo a Casos -->
+              <div class="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-100 w-full">
+                <span class="text-[10px] font-bold text-slate-400 uppercase w-full">O seleccione directamente un caso clínico:</span>
+                <button onclick="selectPatientAndOpenDashboard(1)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4] text-slate-700 hover:text-[#007D3E] font-semibold text-[11px] transition shadow-2xs flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span>1. Roberto García (Lito FID)</span>
+                </button>
+                <button onclick="selectPatientAndOpenDashboard(2)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4] text-slate-700 hover:text-[#007D3E] font-semibold text-[11px] transition shadow-2xs flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span>2. Clara Méndez (Flebolito)</span>
+                </button>
+                <button onclick="selectPatientAndOpenDashboard(3)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4] text-slate-700 hover:text-[#007D3E] font-semibold text-[11px] transition shadow-2xs flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>3. Martín López (Catéter Doble J)</span>
+                </button>
               </div>
 
             </div>
@@ -925,8 +948,16 @@
               <div class="flex items-center gap-2">
                 <button onclick="toggleCaliperOverlay()" id="btn-toggle-calipers" class="px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1.5 shadow-2xs">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                  <span>Calipers & Catéter: ON</span>
+                  <span>Calipers: ON</span>
                 </button>
+
+                <!-- Controles de Zoom DICOM -->
+                <div class="hidden sm:inline-flex items-center rounded-lg border border-slate-200 bg-white p-0.5 shadow-2xs text-[11px]">
+                  <button onclick="adjustZoom(-0.2)" title="Alejar (Zoom Out)" class="px-2 py-0.5 text-slate-600 hover:bg-slate-100 rounded font-bold transition">−</button>
+                  <button onclick="resetZoom()" id="zoom-indicator-btn" title="Restablecer escala 100%" class="px-1.5 py-0.5 text-slate-700 hover:bg-slate-100 rounded font-mono font-semibold transition text-[10px]">100%</button>
+                  <button onclick="adjustZoom(0.2)" title="Acercar (Zoom In)" class="px-2 py-0.5 text-slate-600 hover:bg-slate-100 rounded font-bold transition">+</button>
+                </div>
+
                 <input type="file" id="ct-file-input" accept="image/*,.dcm" class="hidden" onchange="handleFileUpload(event)">
                 <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
                   <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1089,6 +1120,15 @@
                 <div class="text-[11px] text-slate-400 mt-1 font-medium" id="ai-processing-step">Extrayendo densidad HU y morfología parietal...</div>
               </div>
 
+              <!-- HUD Dinámico de Coordenadas e Índice HU (Live Cursor DICOM) -->
+              <div id="dicom-hud-coords" class="absolute bottom-2.5 left-3 text-[10px] font-mono text-slate-300 bg-slate-900/80 backdrop-blur-xs px-2.5 py-1 rounded-md border border-slate-700/60 pointer-events-none flex items-center gap-2 z-20">
+                <span class="text-slate-400">X: <span id="hud-x-val" class="text-white font-semibold">256</span> Y: <span id="hud-y-val" class="text-white font-semibold">256</span></span>
+                <span class="text-slate-600">|</span>
+                <span class="text-slate-400">HU: <span id="hud-hu-val" class="text-[#4ADE80] font-bold">842 HU</span></span>
+                <span class="text-slate-600">|</span>
+                <span class="text-slate-400">Zoom: <span id="hud-zoom-val" class="text-white font-semibold">100%</span></span>
+              </div>
+
             </div>
 
             <!-- Barra de Herramientas y Parámetros en Gris Limpio -->
@@ -1103,11 +1143,17 @@
 
               <!-- Selector de Ventana Médica -->
               <div class="flex items-center gap-1">
-                <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs">
-                  Ventana Ósea (W:1500 L:400)
+                <button onclick="setWindowing('uro')" id="win-uro" class="px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs">
+                  Ventana Urológica (W:1000 L:250)
+                </button>
+                <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition">
+                  Ósea (W:1500 L:400)
                 </button>
                 <button onclick="setWindowing('soft')" id="win-soft" class="px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition">
                   Tejidos Blandos (W:350 L:40)
+                </button>
+                <button onclick="toggleInvert()" id="win-invert" title="Invertir escala de grises" class="px-2 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition border border-slate-200 bg-white">
+                  Invertir
                 </button>
               </div>
             </div>
@@ -1389,7 +1435,9 @@
       currentImage: 'assets/samples/ct_axial_stone_clean.jpg',
       currentImageIndex: 1,
       calipersVisible: true,
-      windowMode: 'bone',
+      windowMode: 'uro',
+      zoom: 1.0,
+      inverted: false,
       patients: {
         1: {
           name: 'Roberto García',
@@ -1578,6 +1626,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderEvaButtons(9);
       backToPatientList();
+      initViewerHud();
     });
 
     // =======================================================
@@ -1709,6 +1758,7 @@
       safeSetText('active-patient-header-name', `${p.name} (${p.age}a)`);
       safeSetText('active-patient-header-hc', p.patientId);
       safeSetText('dicom-corner-id', p.patientId);
+      safeSetVal('patient-id', p.patientId);
 
       // Ficha de Filiación & Credencial
       safeSetText('patient-avatar-initials', p.initials);
@@ -1796,6 +1846,8 @@
 
       renderAiResults(p);
       updateClinicalScoreLive();
+      resetZoom();
+      safeSetText('hud-hu-val', (p.markerHu || '842 HU'));
     }
 
     // =======================================================
@@ -1868,6 +1920,7 @@
     function openAddMarkerModal() {
       const m = document.getElementById('add-marker-modal');
       if (m) {
+        m.style.display = 'flex';
         m.classList.remove('hidden');
         m.classList.add('flex');
       }
@@ -1876,6 +1929,7 @@
     function closeAddMarkerModal() {
       const m = document.getElementById('add-marker-modal');
       if (m) {
+        m.style.display = 'none';
         m.classList.add('hidden');
         m.classList.remove('flex');
       }
@@ -2016,43 +2070,147 @@
       reader.readAsDataURL(file);
     }
 
+    // =======================================================
+    // CONTROLES DE ZOOM, VENTANEO DICOM Y HUD DINÁMICO
+    // =======================================================
+    function adjustZoom(delta) {
+      state.zoom = Math.max(0.6, Math.min(3.0, parseFloat((state.zoom + delta).toFixed(1))));
+      applyImageTransform();
+    }
+
+    function resetZoom() {
+      state.zoom = 1.0;
+      applyImageTransform();
+    }
+
+    function applyImageTransform() {
+      const wrapper = document.getElementById('image-transform-wrapper');
+      if (wrapper) {
+        wrapper.style.transform = `scale(${state.zoom})`;
+        wrapper.style.transformOrigin = 'center center';
+        wrapper.style.transition = 'transform 0.15s ease-out';
+      }
+      const indicator = document.getElementById('zoom-indicator-btn');
+      if (indicator) {
+        indicator.innerText = `${Math.round(state.zoom * 100)}%`;
+      }
+      const hudZoom = document.getElementById('hud-zoom-val');
+      if (hudZoom) {
+        hudZoom.innerText = `${Math.round(state.zoom * 100)}%`;
+      }
+    }
+
+    function toggleInvert() {
+      state.inverted = !state.inverted;
+      const btn = document.getElementById('win-invert');
+      if (btn) {
+        if (state.inverted) {
+          btn.className = 'px-2 py-1 rounded text-[10px] bg-slate-900 text-white font-bold transition border border-slate-700 shadow-2xs';
+        } else {
+          btn.className = 'px-2 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition border border-slate-200 bg-white';
+        }
+      }
+      applyImageFilters();
+    }
+
     function setWindowing(mode) {
       state.windowMode = mode;
-      const img = document.getElementById('ct-main-image');
+      const btnUro = document.getElementById('win-uro');
       const btnBone = document.getElementById('win-bone');
       const btnSoft = document.getElementById('win-soft');
 
-      if (mode === 'bone') {
-        img.style.filter = 'contrast(160%) brightness(95%)';
-        btnBone.className = 'px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs';
-        btnSoft.className = 'px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition';
-      } else {
-        img.style.filter = 'contrast(115%) brightness(105%)';
-        btnSoft.className = 'px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs';
-        btnBone.className = 'px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition';
+      [
+        { el: btnUro, active: mode === 'uro' },
+        { el: btnBone, active: mode === 'bone' },
+        { el: btnSoft, active: mode === 'soft' }
+      ].forEach(item => {
+        if (item.el) {
+          if (item.active) {
+            item.el.className = 'px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs';
+          } else {
+            item.el.className = 'px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition';
+          }
+        }
+      });
+
+      applyImageFilters();
+    }
+
+    function applyImageFilters() {
+      const img = document.getElementById('ct-main-image');
+      if (!img) return;
+
+      let filterString = '';
+      if (state.windowMode === 'bone') {
+        filterString = 'contrast(160%) brightness(95%)';
+      } else if (state.windowMode === 'soft') {
+        filterString = 'contrast(115%) brightness(105%)';
+      } else { // 'uro'
+        filterString = 'contrast(135%) brightness(100%)';
       }
+
+      if (state.inverted) {
+        filterString += ' invert(100%)';
+      }
+
+      img.style.filter = filterString;
+    }
+
+    function initViewerHud() {
+      const container = document.getElementById('viewer-container');
+      if (!container) return;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = Math.max(0, Math.min(512, Math.round(((e.clientX - rect.left) / rect.width) * 512)));
+        const y = Math.max(0, Math.min(512, Math.round(((e.clientY - rect.top) / rect.height) * 512)));
+        
+        safeSetText('hud-x-val', x);
+        safeSetText('hud-y-val', y);
+
+        let hu = 45;
+        if (x > 220 && x < 310 && y > 230 && y < 320) {
+          if (state.activeCase === 1) hu = Math.round(842 + (Math.sin(x + y) * 25));
+          else if (state.activeCase === 2) hu = Math.round(460 + (Math.cos(x + y) * 20));
+          else hu = Math.round(810 + (Math.sin(x) * 30));
+        } else if (x < 65 || x > 445 || y < 65 || y > 445) {
+          hu = -950;
+        } else {
+          hu = Math.round(35 + (Math.sin(x / 10) * 15));
+        }
+
+        safeSetText('hud-hu-val', `${hu} HU`);
+      });
     }
 
     function runAiAnalysis() {
       const overlay = document.getElementById('ai-processing-overlay');
       const stepText = document.getElementById('ai-processing-step');
-      overlay.classList.remove('hidden');
-      overlay.classList.add('flex');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+      }
 
-      stepText.innerText = 'Analizando corte tomográfico, calipers y catéter...';
+      if (stepText) stepText.innerText = 'Analizando corte tomográfico, calipers y catéter...';
 
       setTimeout(() => {
-        stepText.innerText = 'Correlacionando con planilla clínica y marcadores...';
+        if (stepText) stepText.innerText = 'Correlacionando con planilla clínica y marcadores...';
       }, 700);
 
       setTimeout(() => {
-        overlay.classList.remove('flex');
-        overlay.classList.add('hidden');
+        if (overlay) {
+          overlay.style.display = 'none';
+          overlay.classList.remove('flex');
+          overlay.classList.add('hidden');
+        }
         calculateAndRenderResults();
         
         const btn = document.getElementById('btn-run-ai');
-        btn.classList.add('ring-2', 'ring-emerald-400');
-        setTimeout(() => btn.classList.remove('ring-2', 'ring-emerald-400'), 1000);
+        if (btn) {
+          btn.classList.add('ring-2', 'ring-emerald-400');
+          setTimeout(() => btn.classList.remove('ring-2', 'ring-emerald-400'), 1000);
+        }
       }, 1400);
     }
 
@@ -2224,44 +2382,90 @@
     // Modal de Informe Médico
     function openReportModal() {
       const modal = document.getElementById('report-modal');
+      if (!modal) return;
+      modal.style.display = 'flex';
       modal.classList.remove('hidden');
       modal.classList.add('flex');
 
-      const id = document.getElementById('patient-id').value;
-      const age = document.getElementById('patient-age').value;
-      const gender = document.getElementById('patient-gender').value === 'M' ? 'Masculino' : 'Femenino';
-      const painText = document.getElementById('clinical-pain').selectedOptions[0].text;
-      const hemText = document.getElementById('clinical-hematuria').selectedOptions[0].text;
-      const stoneProb = document.getElementById('prob-stone-text').innerText;
+      const p = state.patients[state.activeCase];
+      const hc = p ? p.patientId : (document.getElementById('patient-id') ? document.getElementById('patient-id').value : 'HC-2026-08412');
+      const name = p ? p.name : 'Paciente';
+      const age = document.getElementById('patient-age') ? document.getElementById('patient-age').value : (p ? p.age : '44');
+      const genderEl = document.getElementById('patient-gender');
+      const gender = (genderEl && genderEl.value === 'M') ? 'Masculino' : 'Femenino';
+      
+      const painEl = document.getElementById('clinical-pain');
+      const painText = (painEl && painEl.selectedOptions && painEl.selectedOptions[0]) ? painEl.selectedOptions[0].text : 'Sin dolor';
+      const hemEl = document.getElementById('clinical-hematuria');
+      const hemText = (hemEl && hemEl.selectedOptions && hemEl.selectedOptions[0]) ? hemEl.selectedOptions[0].text : 'Sin hematuria';
+      const stoneProb = document.getElementById('prob-stone-text') ? document.getElementById('prob-stone-text').innerText : '94.6%';
 
-      document.getElementById('rep-hc').innerText = id;
-      document.getElementById('rep-name').innerText = `${gender}, ${age || '44'} años`;
-      document.getElementById('rep-pain').innerText = painText;
-      document.getElementById('rep-hematuria').innerText = hemText;
-      document.getElementById('rep-prob-badge').innerText = `PROBABILIDAD LITO: ${stoneProb}`;
-      document.getElementById('rep-conduct-text').innerText = document.getElementById('recommendation-text').innerText;
-      document.getElementById('rep-date').innerText = new Date().toLocaleDateString('es-AR');
+      safeSetText('rep-hc', hc);
+      safeSetText('rep-name', `${name} · ${gender}, ${age} años`);
+      safeSetText('rep-pain', painText);
+      safeSetText('rep-hematuria', hemText);
+      safeSetText('rep-prob-badge', `PROBABILIDAD LITO: ${stoneProb}`);
+      const recEl = document.getElementById('recommendation-text');
+      if (recEl) safeSetText('rep-conduct-text', recEl.innerText);
+      safeSetText('rep-date', new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
     }
 
     function closeReportModal() {
       const modal = document.getElementById('report-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
     function copyFindingsToClipboard() {
-      const stoneProb = document.getElementById('prob-stone-text').innerText;
-      const text = `INFORME COLONY UROLOGÍA (HOSPITAL ITALIANO)\n` +
-        `Estudio: TC Pelvis Sin Contraste\n` +
-        `Diagnóstico Asistido: Lito Ureteral Distal (${stoneProb}) vs Flebolito Pélvico (${document.getElementById('prob-phlebolith-text').innerText})\n` +
-        `Criterios Radiológicos: Rim Sign (+), Ausencia de Comet-Tail, Trayecto Ureteral coincidente.\n` +
-        `Conducta: ${document.getElementById('recommendation-text').innerText}`;
+      const p = state.patients[state.activeCase];
+      const pName = p ? p.name : 'Paciente';
+      const pHc = p ? p.patientId : 'HC-2026-08412';
+      const stoneProb = document.getElementById('prob-stone-text') ? document.getElementById('prob-stone-text').innerText : '94.6%';
+      const phlebProb = document.getElementById('prob-phlebolith-text') ? document.getElementById('prob-phlebolith-text').innerText : '5.4%';
+      const rec = document.getElementById('recommendation-text') ? document.getElementById('recommendation-text').innerText : '';
 
-      navigator.clipboard.writeText(text).then(() => {
+      const text = `INFORME COLONY UROLOGÍA (HOSPITAL ITALIANO DE BUENOS AIRES)\n` +
+        `Paciente: ${pName} (${pHc})\n` +
+        `Estudio: TC Pelvis Sin Contraste / Control Radiológico\n` +
+        `Diagnóstico Asistido: Lito Ureteral Distal (${stoneProb}) vs Flebolito Pélvico (${phlebProb})\n` +
+        `Criterios Radiológicos: Rim Sign (+/-), Comet-Tail (+/-), Trayecto Ureteral evaluado con IA.\n` +
+        `Conducta Médica: ${rec}`;
+
+      const updateBtn = () => {
         const btn = document.getElementById('copy-btn-text');
-        btn.innerText = 'Copiado al Portapapeles!';
-        setTimeout(() => btn.innerText = 'Copiar Hallazgos', 2000);
-      });
+        if (btn) {
+          const old = btn.innerText;
+          btn.innerText = 'Copiado al Portapapeles!';
+          setTimeout(() => btn.innerText = old, 2200);
+        }
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(updateBtn).catch(() => fallbackCopyText(text, updateBtn));
+      } else {
+        fallbackCopyText(text, updateBtn);
+      }
+    }
+
+    function fallbackCopyText(text, callback) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (callback) callback();
+      } catch (err) {
+        console.error('Error al copiar texto:', err);
+      }
     }
   </script>
 </body>
