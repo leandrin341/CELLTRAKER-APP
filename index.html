@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -78,11 +78,18 @@
       border-color: var(--hiba-green);
       box-shadow: 0 0 0 2px rgba(0, 156, 77, 0.15);
     }
-    .patient-card-active {
-      background-color: var(--hiba-green-light) !important;
-      border-color: var(--hiba-green) !important;
-      box-shadow: 0 2px 8px -2px rgba(0, 156, 77, 0.15);
+
+    /* Caliper styling */
+    .caliper-tick {
+      stroke: #009C4D;
+      stroke-width: 1.5;
     }
+    .caliper-line {
+      stroke: #009C4D;
+      stroke-width: 1.5;
+      stroke-dasharray: 4 2;
+    }
+
     @media print {
       body * { visibility: hidden; }
       #printable-report, #printable-report * { visibility: visible; }
@@ -97,13 +104,13 @@
     
     <!-- Logo & Nombre: Colony Urología (Hospital Italiano) -->
     <div class="flex items-center gap-3 shrink-0">
-      <div class="w-8 h-8 rounded-lg bg-[#009C4D] flex items-center justify-center text-white shadow-xs font-bold text-xs tracking-tight">
+      <div onclick="showTriageView()" class="w-8 h-8 rounded-lg bg-[#009C4D] flex items-center justify-center text-white shadow-xs font-bold text-xs tracking-tight cursor-pointer hover:bg-[#00823F] transition">
         HI
       </div>
       <div>
-        <div class="flex items-center gap-1.5 font-extrabold text-[13px] tracking-tight text-slate-900 leading-none">
+        <div onclick="showTriageView()" class="flex items-center gap-1.5 font-extrabold text-[13px] tracking-tight text-slate-900 leading-none cursor-pointer">
           <span>Colony</span><span class="text-[#009C4D]">Urología</span>
-          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7] ml-1">LIMS v2.4</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7] ml-1">LIMS v2.5</span>
         </div>
         <span class="text-[10px] font-semibold text-slate-400 block mt-0.5">
           Hospital Italiano de Buenos Aires · Servicio de Urología
@@ -114,15 +121,22 @@
     <!-- Indicador de Contexto del Desafío -->
     <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-1 text-xs">
       <span class="w-2 h-2 rounded-full bg-[#009C4D]"></span>
-      <span class="text-slate-500 font-semibold text-[11px]">Diagnóstico Diferencial:</span>
+      <span class="text-slate-500 font-semibold text-[11px]">Diagnóstico Asistido:</span>
       <span class="font-bold text-slate-800 text-[11px]">Litos Ureterales Distales vs Flebolitos Pélvicos</span>
       <span class="text-[10px] font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
-        TC Sin Contraste
+        TC Pelvis Sin Contraste
       </span>
     </div>
 
     <!-- Facultativo & Acciones -->
     <div class="flex items-center gap-3">
+      <button onclick="showTriageView()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition text-xs shadow-2xs">
+        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+        </svg>
+        <span>Directorio de Pacientes</span>
+      </button>
+
       <button onclick="openReportModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition text-xs shadow-2xs">
         <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -149,12 +163,12 @@
   <section class="bg-white border-b border-slate-200/90 px-4 lg:px-6 py-2.5">
     <div class="max-w-[1720px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3">
       
-      <!-- KPI 1: Casos en Guardia -->
+      <!-- KPI 1: Casos en Triage -->
       <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
         <div>
-          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Casos Evaluados</div>
-          <div class="text-lg font-extrabold text-slate-900 font-mono-numbers leading-tight mt-0.5">24</div>
-          <div class="text-[10px] text-slate-500 font-medium">Triage Urología HIBA</div>
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Casos en Triage</div>
+          <div class="text-lg font-extrabold text-slate-900 font-mono-numbers leading-tight mt-0.5">3</div>
+          <div class="text-[10px] text-slate-500 font-medium">Servicio de Urología HIBA</div>
         </div>
         <div class="w-7 h-7 rounded-lg bg-slate-200/60 text-slate-600 flex items-center justify-center">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -165,7 +179,7 @@
       <div class="bg-[#F0FDF4] p-2.5 rounded-xl border border-[#C6EFD7] flex items-center justify-between">
         <div>
           <div class="text-[10px] font-bold text-[#007D3E] uppercase tracking-wide">Litos Ureterales</div>
-          <div class="text-lg font-extrabold text-[#006632] font-mono-numbers leading-tight mt-0.5">15</div>
+          <div class="text-lg font-extrabold text-[#006632] font-mono-numbers leading-tight mt-0.5">2</div>
           <span class="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-[#C6EFD7] text-[#006632]">
             RIM SIGN (+) DETECTADO
           </span>
@@ -179,7 +193,7 @@
       <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
         <div>
           <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Flebolitos Benignos</div>
-          <div class="text-lg font-extrabold text-slate-800 font-mono-numbers leading-tight mt-0.5">9</div>
+          <div class="text-lg font-extrabold text-slate-800 font-mono-numbers leading-tight mt-0.5">1</div>
           <span class="inline-block px-1.5 py-0.2 rounded text-[9.5px] font-bold bg-slate-200 text-slate-700">
             SIN OBSTRUCCIÓN
           </span>
@@ -204,149 +218,271 @@
     </div>
   </section>
 
-  <!-- ================= LAYOUT PRINCIPAL: 2 PANELES DIVIDIDOS ================= -->
-  <main class="flex-1 p-3 lg:p-5 overflow-y-auto">
-    <div class="max-w-[1720px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
-
-      <!-- ========================================================================= -->
-      <!-- PANEL IZQUIERDO: SELECCIÓN DE PACIENTES O PLANILLA DETALLADA (COL 5 / 12) -->
-      <!-- ========================================================================= -->
-      <section class="lg:col-span-5 flex flex-col gap-4">
-        
-        <!-- VISTA A: LISTA Y SELECCIÓN DE PACIENTES (INICIAL) -->
-        <div id="patient-selection-view" class="flex flex-col gap-3">
-          
-          <div class="card-base p-4">
-            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h2 class="font-bold text-slate-900 text-xs tracking-tight">Seleccionar Paciente para Evaluación</h2>
-                  <span class="text-[10px] text-slate-400 font-medium">Bandeja de Triage · Servicio de Urología</span>
-                </div>
-              </div>
-              <button onclick="createNewBlankPatient()" class="px-2.5 py-1 rounded-md bg-[#009C4D] text-white hover:bg-[#00823F] font-semibold text-[11px] transition flex items-center gap-1 shadow-2xs">
-                <span>+ Nuevo Paciente</span>
-              </button>
-            </div>
-
-            <!-- Buscador Rápido de Pacientes -->
-            <div class="relative mb-3">
-              <input type="text" placeholder="Filtrar por nombre, HC o síntoma..." class="w-full input-base pl-8 text-xs font-normal" oninput="filterPatients(this.value)">
-              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" stroke-width="2"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/>
-              </svg>
-            </div>
-
-            <!-- Lista de Pacientes Seleccionables (Bento Cards de Colony) -->
-            <div class="space-y-2.5" id="patient-cards-list">
-              
-              <!-- Paciente 1 -->
-              <div onclick="selectPatientAndOpenDashboard(1)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-1">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-7 h-7 rounded-full bg-[#E8F8EE] text-[#007D3E] font-bold text-xs flex items-center justify-center">
-                      RG
-                    </span>
-                    <div>
-                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Roberto García (44a)</div>
-                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-08412 · Ingreso: Hoy 18:20</div>
-                    </div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">
-                    CÓLICO AGUDO FID
-                  </span>
-                </div>
-                <div class="text-[11px] text-slate-500 font-medium">
-                  Dolor cólico unilateral derecho, microhematuria (+). Sospecha lito ureteral obstructivo.
-                </div>
-                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
-                  <span class="text-[#007D3E] font-bold">TC: Corte axial L5-S1 (842 HU)</span>
-                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
-                </div>
-              </div>
-
-              <!-- Paciente 2 -->
-              <div onclick="selectPatientAndOpenDashboard(2)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-2">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">
-                      CM
-                    </span>
-                    <div>
-                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Clara Méndez (56a)</div>
-                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-03195 · Ingreso: Ayer 14:10</div>
-                    </div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                    ASINTOMÁTICA
-                  </span>
-                </div>
-                <div class="text-[11px] text-slate-500 font-medium">
-                  Control ginecológico. Calcificación pélvica incidental sin dilatación ureteral.
-                </div>
-                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
-                  <span class="text-slate-500 font-semibold">TC: Corte pélvico venoso (460 HU)</span>
-                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
-                </div>
-              </div>
-
-              <!-- Paciente 3 -->
-              <div onclick="selectPatientAndOpenDashboard(3)" class="p-3 rounded-xl border border-slate-200 bg-white hover:border-[#009C4D] hover:bg-[#F0FDF4]/30 cursor-pointer transition flex flex-col gap-1.5 shadow-2xs group" id="patient-card-3">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="w-7 h-7 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center">
-                      ML
-                    </span>
-                    <div>
-                      <div class="font-bold text-slate-900 text-xs group-hover:text-[#007D3E] transition">Martín López (38a)</div>
-                      <div class="text-[10px] text-slate-400 font-mono-numbers">HC-2026-11029 · Ingreso: Hoy 10:45</div>
-                    </div>
-                  </div>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                    DOLOR INESPECÍFICO
-                  </span>
-                </div>
-                <div class="text-[11px] text-slate-500 font-medium">
-                  Dolor pélvico de 48h. Calcificación límite de 2.8 mm en estrecho pélvico.
-                </div>
-                <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px]">
-                  <span class="text-amber-700 font-semibold">TC: Corte de transición (590 HU)</span>
-                  <span class="font-semibold text-slate-400 group-hover:text-[#007D3E] transition">Abrir Planilla Clínica →</span>
-                </div>
-              </div>
-
-            </div>
+  <!-- ================= CUERPO PRINCIPAL ================= -->
+  <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
+    
+    <!-- ========================================================================= -->
+    <!-- VISTA 1: DIRECTORIO Y TRIAGE DE PACIENTES (PANTALLA INICIAL)               -->
+    <!-- ========================================================================= -->
+    <div id="view-triage" class="max-w-[1500px] mx-auto flex flex-col gap-5">
+      
+      <!-- Encabezado de la Sección de Pacientes -->
+      <div class="card-base p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></span>
+            <h1 class="text-base font-bold text-slate-900 tracking-tight">Directorio Clínico & Triage de Pacientes</h1>
           </div>
-
+          <p class="text-[11px] text-slate-400 font-medium mt-1">
+            Seleccione un paciente de la lista para abrir su expediente clínico y acceder al visualizador tomográfico con análisis IA.
+          </p>
         </div>
 
-        <!-- VISTA B: DASHBOARD COMPLETO CON LA PLANILLA DEL PACIENTE Y MARCADORES -->
-        <div id="patient-detail-dashboard" class="hidden flex flex-col gap-4">
-          
-          <!-- Barra Superior de Navegación del Paciente Activo -->
-          <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-2xs">
-            <button onclick="backToPatientList()" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition font-semibold text-[11px] flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-              </svg>
-              <span>Volver a Lista de Pacientes</span>
-            </button>
+        <div class="flex items-center gap-3">
+          <!-- Buscador Rápido -->
+          <div class="relative w-64">
+            <input type="text" placeholder="Buscar por paciente, HC o síntoma..." class="w-full input-base pl-8 text-xs font-normal" oninput="filterPatients(this.value)">
+            <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke-width="2"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2"/>
+            </svg>
+          </div>
 
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-bold text-slate-400 uppercase">Paciente Activo:</span>
-              <span class="font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7] text-xs" id="active-patient-header-name">
-                Roberto García (44a)
+          <button onclick="createNewBlankPatient()" class="px-3 py-1.5 rounded-lg bg-[#009C4D] text-white hover:bg-[#00823F] font-bold text-xs transition flex items-center gap-1.5 shadow-2xs">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>+ Cargar Nuevo Caso</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros de Triage -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Filtrar Casos:</span>
+        <button class="px-3 py-1 rounded-full bg-[#009C4D] text-white font-bold text-[11px] transition shadow-2xs">
+          Todos los Casos (3)
+        </button>
+        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
+          Lito Ureteral Distal (2)
+        </button>
+        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
+          Flebolitos Pélvicos (1)
+        </button>
+        <button class="px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-[11px] transition">
+          Control Catéter Doble J (1)
+        </button>
+      </div>
+
+      <!-- Grilla Bento de Tarjetas de Pacientes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="patient-cards-grid">
+        
+        <!-- Tarjeta Paciente 1: Roberto García -->
+        <div onclick="selectPatientAndOpenDashboard(1)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
+          <div>
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#E8F8EE] text-[#007D3E] font-bold text-sm flex items-center justify-center border border-[#C6EFD7]">
+                  RG
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Roberto García</h3>
+                  <div class="text-[11px] text-slate-400 font-mono-numbers">44 años · HC-2026-08412</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200 shrink-0">
+                CÓLICO AGUDO FID
               </span>
+            </div>
+
+            <!-- Síntomas & Cuadro -->
+            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
+              Dolor cólico unilateral derecho intenso (EVA 9/10), microhematuria y cortejo vegetativo. Sospecha alta de litiasis obstructiva distal.
+            </p>
+
+            <!-- Datos Tomográficos Clave -->
+            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Estudio:</span>
+                <span class="font-semibold text-slate-700">TC Pelvis Sin Contraste</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Calcificación detectada:</span>
+                <span class="font-bold text-slate-900 font-mono-numbers">4.2 mm · 842 HU</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Signo característico:</span>
+                <span class="font-bold text-[#007D3E]">Soft-Tissue Rim Sign (+)</span>
+              </div>
             </div>
           </div>
 
-          <!-- Tarjeta 1: Datos Generales del Paciente -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[11px] font-bold text-[#007D3E]">93.4% Probabilidad Lito</span>
+            <div class="px-3 py-1.5 rounded-lg bg-[#009C4D] group-hover:bg-[#00823F] text-white font-bold text-xs transition flex items-center gap-1">
+              <span>Abrir Expediente & Visor</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Paciente 2: Clara Méndez -->
+        <div onclick="selectPatientAndOpenDashboard(2)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
+          <div>
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center border border-slate-200">
+                  CM
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Clara Méndez</h3>
+                  <div class="text-[11px] text-slate-400 font-mono-numbers">56 años · HC-2026-03195</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                ASINTOMÁTICA
+              </span>
+            </div>
+
+            <!-- Síntomas & Cuadro -->
+            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
+              Evaluación ginecológica de rutina. Hallazgo incidental de calcificaciones pélvicas bilaterales sin dilatación ureteral ni dolor.
+            </p>
+
+            <!-- Datos Tomográficos Clave -->
+            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Estudio:</span>
+                <span class="font-semibold text-slate-700">TC Pelvis Sin Contraste</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Calcificación detectada:</span>
+                <span class="font-bold text-slate-900 font-mono-numbers">3.1 mm · 460 HU</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Signo característico:</span>
+                <span class="font-bold text-slate-700">Cola de Cometa (+)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[11px] font-bold text-slate-500">95.2% Flebolito Benigno</span>
+            <div class="px-3 py-1.5 rounded-lg bg-slate-800 group-hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1">
+              <span>Abrir Expediente & Visor</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Paciente 3: Martín López (Catéter Doble J) -->
+        <div onclick="selectPatientAndOpenDashboard(3)" class="card-base p-5 hover:border-[#009C4D] hover:shadow-md cursor-pointer transition-all flex flex-col justify-between group">
+          <div>
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 font-bold text-sm flex items-center justify-center border border-amber-200">
+                  ML
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-sm group-hover:text-[#007D3E] transition">Martín López</h3>
+                  <div class="text-[11px] text-slate-400 font-mono-numbers">51 años · HC-2026-11029</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                CATÉTER DOBLE J IN SITU
+              </span>
+            </div>
+
+            <!-- Síntomas & Cuadro -->
+            <p class="text-xs text-slate-600 leading-relaxed font-medium mb-3">
+              Lito ureteral distal de 5.1 mm impactado. Control radiológico post-colocación de catéter Doble J (6 Fr / 2.0 mm) para derivación urinaria.
+            </p>
+
+            <!-- Datos Tomográficos Clave -->
+            <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 space-y-1.5 text-[11px]">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Estudio:</span>
+                <span class="font-semibold text-slate-700">Control Radiológico / TC</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Lito impactado:</span>
+                <span class="font-bold text-slate-900 font-mono-numbers">5.1 mm distal</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Catéter ureteral:</span>
+                <span class="font-bold text-amber-700">6 Fr (2.0 mm) sobre el cálculo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[11px] font-bold text-amber-700">Descompresión Lograda</span>
+            <div class="px-3 py-1.5 rounded-lg bg-slate-800 group-hover:bg-[#009C4D] text-white font-bold text-xs transition flex items-center gap-1">
+              <span>Abrir Expediente & Visor</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VISTA 2: DASHBOARD CLÍNICO DEL PACIENTE & ANÁLISIS DE TOMOGRAFÍA          -->
+    <!-- (SE ABRE CUANDO EL USUARIO SELECCIONA AL PACIENTE)                        -->
+    <!-- ========================================================================= -->
+    <div id="view-patient-workspace" class="hidden max-w-[1720px] mx-auto flex flex-col gap-4">
+      
+      <!-- Barra Superior de Navegación del Paciente Seleccionado -->
+      <div class="bg-white border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
+        
+        <div class="flex items-center gap-3">
+          <button onclick="showTriageView()" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 shadow-2xs">
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+            </svg>
+            <span>Volver al Directorio de Pacientes</span>
+          </button>
+
+          <div class="h-5 w-px bg-slate-200"></div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Paciente en Evaluación:</span>
+            <span class="font-extrabold text-[#007D3E] bg-[#F0FDF4] px-2.5 py-0.5 rounded-md border border-[#C6EFD7] text-xs" id="active-patient-header-name">
+              Roberto García (44a)
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono-numbers" id="active-patient-header-hc">
+              HC-2026-08412
+            </span>
+          </div>
+        </div>
+
+        <!-- Selector Rápido de Pacientes sin volver a la lista -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-semibold text-slate-400">Cambiar caso:</span>
+          <select id="quick-patient-select" onchange="selectPatientAndOpenDashboard(parseInt(this.value))" class="input-base py-1 text-xs font-semibold">
+            <option value="1">1. Roberto García (Lito distal 4.2mm)</option>
+            <option value="2">2. Clara Méndez (Flebolitos 3.1mm)</option>
+            <option value="3">3. Martín López (Catéter Doble J)</option>
+          </select>
+
+          <button onclick="openReportModal()" class="px-3 py-1.5 rounded-lg bg-[#009C4D] text-white hover:bg-[#00823F] font-bold text-xs transition flex items-center gap-1 shadow-2xs">
+            <span>Exportar Informe</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ================= 2 COLUMNAS: PLANILLA IZQUIERDA Y TOMOGRAFÍA DERECHA ================= -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- ========================================================================= -->
+        <!-- COLUMNA IZQUIERDA: PLANILLA CLÍNICA DEL PACIENTE (COL 5 / 12)             -->
+        <!-- ========================================================================= -->
+        <section class="lg:col-span-5 flex flex-col gap-4">
+          
+          <!-- Tarjeta 1: Ficha de Filiación & Antecedentes -->
           <div class="card-base p-4">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
               <div class="flex items-center gap-2">
@@ -403,7 +539,7 @@
                   <option value="right" selected>Presente unilateral agudo — Fosa Ilíaca Derecha</option>
                   <option value="left">Presente unilateral agudo — Fosa Ilíaca Izquierda</option>
                   <option value="atypical">Dolor abdominal inespecífico / difuso</option>
-                  <option value="none">Asintomático (Hallazgo en TC por otra causa)</option>
+                  <option value="none">Asintomático (Hallazgo incidental en TC)</option>
                 </select>
               </div>
 
@@ -430,14 +566,14 @@
                 <div>
                   <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Síntomas Irritativos Distales</label>
                   <select id="clinical-voiding" class="w-full input-base font-medium">
-                    <option value="yes" selected>Disuria / Tenesmo vesical / Polaquiuria</option>
+                    <option value="yes" selected>Disuria / Polaquiuria / Tenesmo vesical</option>
                     <option value="no">Sin síntomas miccionales</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Episodios Previos de Litiasis</label>
                   <select id="clinical-history" onchange="updateClinicalScoreLive()" class="w-full input-base font-medium">
-                    <option value="yes" selected>Sí (1 o más episodios confirmados)</option>
+                    <option value="yes" selected>Sí (1 o más episodios previos)</option>
                     <option value="no">No refiere antecedentes litiásicos</option>
                   </select>
                 </div>
@@ -467,28 +603,28 @@
             <!-- Grilla de Parámetros de Marcadores -->
             <div class="grid grid-cols-2 gap-2.5 mb-3">
               
-              <!-- Marcador 1: Atenuación Parietal -->
+              <!-- Marcador 1: Densidad & Ratio HU -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador A · Ratio HU</div>
                 <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-ratio-text">1.82 (Edema Parietal)</div>
                 <div class="text-[10px] text-slate-400">Densidad anillo vs luz ureteral</div>
               </div>
 
-              <!-- Marcador 2: PCR Ultrasensible -->
+              <!-- Marcador 2: Proteína C Reactiva -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador B · Inflamatorio</div>
                 <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-pcr-text">14.8 mg/L (PCR Elevada)</div>
                 <div class="text-[10px] text-slate-400">Proteína C Reactiva sérica</div>
               </div>
 
-              <!-- Marcador 3: Índice Resistivo -->
+              <!-- Marcador 3: Índice Resistivo Intrarrenal -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador C · Hemodinámico</div>
                 <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-resist-text">IR: 0.74 (Resistencia Alta)</div>
                 <div class="text-[10px] text-slate-400">Doppler arterial intrarrenal</div>
               </div>
 
-              <!-- Marcador 4: Sedimento & Cristales -->
+              <!-- Marcador 4: Cristaluria en Sedimento -->
               <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50/50">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Marcador D · Cristaluria</div>
                 <div class="text-xs font-bold text-slate-800 mt-0.5" id="marker-crystal-text">Oxalato Cálcico (++)</div>
@@ -497,9 +633,9 @@
 
             </div>
 
-            <div class="p-2 rounded-lg bg-slate-50 border border-slate-200/80 text-[10px] text-slate-500 flex items-center justify-between">
-              <span>Espacio modular listo para incorporar marcadores adicionales.</span>
-              <span class="text-[#007D3E] font-bold">Activo</span>
+            <div class="p-2.5 rounded-lg bg-[#F0FDF4] border border-[#C6EFD7] text-[10px] text-[#007D3E] flex items-center justify-between">
+              <span class="font-medium">Módulo preparado para vincular los biomarcadores específicos que nos envíes.</span>
+              <span class="font-bold">Activo</span>
             </div>
           </div>
 
@@ -549,7 +685,7 @@
               <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Observaciones Clínicas del Especialista</label>
               <span class="text-[10px] font-semibold text-slate-400">NOTA MÉDICA</span>
             </div>
-            <textarea id="clinical-notes" rows="2" class="w-full input-base resize-none text-xs text-slate-700 leading-relaxed font-medium" placeholder="Añadir notas clínicas adicionales sobre el caso...">Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC de abdomen y pelvis sin contraste por sospecha de litiasis ureteral obstructiva distal.</textarea>
+            <textarea id="clinical-notes" rows="2" class="w-full input-base resize-none text-xs text-slate-700 leading-relaxed font-medium" placeholder="Añadir notas clínicas adicionales sobre el caso...">Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC de pelvis sin contraste por sospecha de litiasis ureteral obstructiva distal.</textarea>
           </div>
 
           <!-- Resumen de Probabilidad Clínica Basal -->
@@ -567,454 +703,440 @@
             </div>
           </div>
 
-        </div>
+        </section>
 
-      </section>
+        <!-- ========================================================================= -->
+        <!-- COLUMNA DERECHA: VISUALIZADOR TOMOGRÁFICO Y ANÁLISIS IA (COL 7 / 12)       -->
+        <!-- ========================================================================= -->
+        <section class="lg:col-span-7 flex flex-col gap-4">
 
-      <!-- ========================================================================= -->
-      <!-- PANEL DERECHO: ESTUDIO TOMOGRÁFICO CON CALIPERS Y CATÉTER (COL 7 / 12)    -->
-      <!-- ========================================================================= -->
-      <section class="lg:col-span-7 flex flex-col gap-4">
-
-        <!-- Tarjeta: Visor Tomográfico Profesional -->
-        <div class="card-base p-4 flex flex-col gap-3">
-          
-          <!-- Encabezado Limpio del Visor -->
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-            <div>
-              <h2 class="font-bold text-slate-900 text-xs tracking-tight">Estudio Tomográfico & Radiológico</h2>
-              <span class="text-[11px] text-slate-400 font-medium block mt-0.5" id="viewer-subtext">
-                TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical
-              </span>
-            </div>
-
-            <!-- Botones de Acción Superior -->
-            <div class="flex items-center gap-2">
-              <button onclick="toggleCaliperOverlay()" id="btn-toggle-calipers" class="px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1 shadow-2xs">
-                <span>Medición & Catéter: ON</span>
-              </button>
-              <input type="file" id="ct-file-input" accept="image/*,.dcm" class="hidden" onchange="handleFileUpload(event)">
-              <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                </svg>
-                <span>Subir Tomografía</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Cortes Clínicos Seleccionables -->
-          <div class="flex items-center gap-2 text-[11px] overflow-x-auto pb-0.5">
-            <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Cortes Clínicos:</span>
-            <button id="thumb-1" onclick="selectSampleImage('assets/samples/ct_axial_stone_hydronephrosis.jpg', 1)" class="px-2.5 py-1 rounded-md border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold shrink-0 transition">
-              1. Axial: Lito Ureteral (Rim Sign)
-            </button>
-            <button id="thumb-2" onclick="selectSampleImage('assets/samples/pelvic_phleboliths.jpg', 2)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
-              2. Axial: Flebolitos Pélvicos
-            </button>
-            <button id="thumb-3" onclick="selectSampleImage('assets/samples/scout_pelvic_calcifications.jpg', 3)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
-              3. Radiografía / Scout Pélvico
-            </button>
-            <button id="thumb-4" onclick="selectSampleImage('assets/samples/radiography_ureteral_catheter.jpg', 4)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
-              4. Control Catéter Doble J
-            </button>
-          </div>
-
-          <!-- CONTENEDOR DEL VISOR CON OVERLAY DE MEDICIONES Y CATÉTER -->
-          <div class="relative w-full h-[370px] bg-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none" id="viewer-container">
+          <!-- Tarjeta: Visor Tomográfico Profesional PACS (Limpio y Pro) -->
+          <div class="card-base p-4 flex flex-col gap-3">
             
-            <div id="image-transform-wrapper" class="relative w-full h-full flex items-center justify-center">
-              <img id="ct-main-image" src="assets/samples/ct_axial_stone_hydronephrosis.jpg" alt="Tomografía Computada de Pelvis" class="max-h-[360px] max-w-full object-contain filter contrast-100 transition-all duration-150">
-              
-              <!-- OVERLAY SVG DINÁMICO DE CALIPERS, FLEBOLITOS Y CATÉTER DOBLE J -->
-              <svg id="caliper-catheter-overlay" class="absolute inset-0 w-full h-full pointer-events-none transition-all duration-200" viewBox="0 0 600 370" preserveAspectRatio="xMidYMid meet">
-                
-                <!-- CAPA CASO 1: LITO URETERAL DISTAL (AXIAL) -->
-                <g id="layer-case-1">
-                  <!-- Caliper de Medición del Lito -->
-                  <circle cx="282" cy="180" r="16" fill="rgba(0, 156, 77, 0.12)" stroke="#009C4D" stroke-width="1.8" stroke-dasharray="3 2"/>
-                  <line x1="266" y1="180" x2="298" y2="180" stroke="#00B85B" stroke-width="1.5"/>
-                  <line x1="266" y1="175" x2="266" y2="185" stroke="#00B85B" stroke-width="1.5"/>
-                  <line x1="298" y1="175" x2="298" y2="185" stroke="#00B85B" stroke-width="1.5"/>
-                  
-                  <!-- Etiqueta de Medición del Lito -->
-                  <rect x="306" y="166" width="168" height="38" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(0, 156, 77, 0.6)" stroke-width="1"/>
-                  <text x="314" y="180" fill="#4ADE80" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11">Lito Ureteral: 4.2 mm</text>
-                  <text x="314" y="194" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5">842 HU · Soft-Tissue Rim (+)</text>
-
-                  <!-- Halo Ureteral / Rim Sign Callout -->
-                  <circle cx="282" cy="180" r="23" fill="none" stroke="#38BDF8" stroke-width="1.2" stroke-dasharray="2 2"/>
-                  <path d="M 282 157 L 282 140 L 220 140" fill="none" stroke="#38BDF8" stroke-width="1"/>
-                  <rect x="110" y="128" width="105" height="22" rx="4" fill="rgba(15, 23, 42, 0.85)"/>
-                  <text x="116" y="143" fill="#38BDF8" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9.5">Halo parietal: 1.8 mm</text>
-                </g>
-
-                <!-- CAPA CASO 2: FLEBOLITOS PÉLVICOS (AXIAL) -->
-                <g id="layer-case-2" class="hidden">
-                  <!-- Flebolito 1 -->
-                  <circle cx="270" cy="190" r="14" fill="rgba(148, 163, 184, 0.15)" stroke="#94A3B8" stroke-width="1.8"/>
-                  <circle cx="270" cy="190" r="4" fill="rgba(15, 23, 42, 0.9)" stroke="#CBD5E1" stroke-width="1"/>
-                  <rect x="290" y="174" width="160" height="34" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(148, 163, 184, 0.5)"/>
-                  <text x="298" y="188" fill="#F1F5F9" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Flebolito: 3.1 mm</text>
-                  <text x="298" y="200" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">460 HU · Lucencia Central</text>
-
-                  <!-- Flebolito 2 con cola de cometa -->
-                  <circle cx="340" cy="225" r="11" fill="rgba(148, 163, 184, 0.15)" stroke="#94A3B8" stroke-width="1.5"/>
-                  <path d="M 340 225 Q 365 240 385 248" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-dasharray="3 2"/>
-                  <rect x="390" y="238" width="140" height="20" rx="4" fill="rgba(15, 23, 42, 0.85)"/>
-                  <text x="396" y="252" fill="#93C5FD" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="9">Signo Cola de Cometa</text>
-                </g>
-
-                <!-- CAPA CASO 3: SCOUT VIEW CALCIFICACIONES -->
-                <g id="layer-case-3" class="hidden">
-                  <circle cx="295" cy="210" r="18" fill="rgba(245, 158, 11, 0.12)" stroke="#F59E0B" stroke-width="1.8"/>
-                  <rect x="320" y="196" width="165" height="34" rx="6" fill="rgba(15, 23, 42, 0.88)" stroke="rgba(245, 158, 11, 0.6)"/>
-                  <text x="328" y="210" fill="#FCD34D" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Calcificación Pélvica: 4.8 mm</text>
-                  <text x="328" y="222" fill="#CBD5E1" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Estrecho pélvico · Límite anatómico</text>
-                </g>
-
-                <!-- CAPA CASO 4: CATÉTER DOBLE J POSÁNDOSE SOBRE EL LITO (LO QUE PIDIÓ EL USUARIO) -->
-                <g id="layer-case-4" class="hidden">
-                  <!-- Trazado Anatómico del Catéter Doble J -->
-                  <!-- Rulo proximal (Pelvis renal) -->
-                  <path d="M 350 48 C 365 35, 385 50, 375 70 C 365 85, 345 78, 345 62" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
-                  
-                  <!-- Recorrido Ureteral descendente pasando sobre el lito -->
-                  <path d="M 350 75 Q 345 130 338 185 Q 332 235 328 265 Q 320 295 305 320" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 3"/>
-
-                  <!-- Rulo distal en Vejiga -->
-                  <path d="M 305 320 C 290 335, 270 330, 275 312 C 280 295, 300 300, 305 315" fill="none" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
-
-                  <!-- Lito Impactado donde se posa el catéter -->
-                  <circle cx="330" cy="245" r="16" fill="rgba(239, 68, 68, 0.2)" stroke="#EF4444" stroke-width="2"/>
-                  
-                  <!-- Callout Catéter Doble J -->
-                  <path d="M 345 130 L 400 110" fill="none" stroke="#FACC15" stroke-width="1.2"/>
-                  <rect x="404" y="96" width="168" height="32" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#FACC15" stroke-width="1"/>
-                  <text x="412" y="110" fill="#FDE047" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Catéter Doble J (6 Fr)</text>
-                  <text x="412" y="122" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Calibre: 2.0 mm · Stent Ureteral</text>
-
-                  <!-- Callout Lito Impactado con Medición Aproximada -->
-                  <path d="M 330 245 L 230 235" fill="none" stroke="#EF4444" stroke-width="1.2"/>
-                  <rect x="68" y="218" width="160" height="42" rx="6" fill="rgba(15, 23, 42, 0.92)" stroke="#EF4444" stroke-width="1"/>
-                  <text x="76" y="233" fill="#FCA5A5" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10.5">Lito Impactado: 5.1 mm</text>
-                  <text x="76" y="246" fill="#F1F5F9" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Catéter posado sobre el cálculo</text>
-                  <text x="76" y="255" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5">Distancia a vejiga: 16 mm</text>
-                </g>
-
-              </svg>
-
-            </div>
-
-            <!-- Indicador de Procesamiento IA -->
-            <div id="ai-processing-overlay" class="absolute inset-0 bg-slate-900/85 backdrop-blur-xs hidden flex-col items-center justify-center text-white z-30">
-              <div class="w-10 h-10 rounded-full border-2 border-[#009C4D] border-t-transparent animate-spin mb-3"></div>
-              <div class="font-bold text-xs text-white">Analizando tomografía computada...</div>
-              <div class="text-[11px] text-slate-400 mt-1 font-medium" id="ai-processing-step">Extrayendo densidad HU y morfología parietal...</div>
-            </div>
-
-          </div>
-
-          <!-- Barra de Parámetros en Gris Limpio -->
-          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
-              <div>Estudio: <span class="text-slate-600 font-semibold" id="bar-modality">TC Pelvis Sin Contraste</span></div>
-              <span class="text-slate-300">•</span>
-              <div>Densidad: <span class="text-slate-700 font-bold font-mono-numbers" id="bar-density">842 HU (Cálculo)</span></div>
-              <span class="text-slate-300">•</span>
-              <div>Medición: <span class="text-[#007D3E] font-bold font-mono-numbers" id="bar-caliper-measurement">4.2 mm</span></div>
-            </div>
-
-            <!-- Selector de Ventana Médica -->
-            <div class="flex items-center gap-1">
-              <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs">
-                Ventana Ósea
-              </button>
-              <button onclick="setWindowing('soft')" id="win-soft" class="px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition">
-                Tejidos Blandos
-              </button>
-            </div>
-          </div>
-
-          <!-- BOTÓN PRINCIPAL: EJECUTAR ANÁLISIS DE INTELIGENCIA ARTIFICIAL -->
-          <div class="pt-1">
-            <button onclick="runAiAnalysis()" id="btn-run-ai" class="w-full py-2.5 px-4 rounded-xl bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs tracking-wide shadow-xs hover:shadow-md transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-              <span>Ejecutar Análisis Diferencial con Inteligencia Artificial</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ========================================================================= -->
-        <!-- PANEL DE RESULTADOS & DIAGNÓSTICO DIFERENCIAL DE IA                      -->
-        <!-- ========================================================================= -->
-        <div class="card-base p-4" id="ai-results-panel">
-          
-          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
+            <!-- Encabezado Limpio del Visor -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
               <div>
-                <h3 class="font-bold text-slate-900 text-xs tracking-tight">Diagnóstico Asistido & Clasificación Probabilística</h3>
-                <span class="text-[10px] text-slate-400 font-medium">Modelo Multimodal: Radiomics + Visión Convolucional + Cuadro Clínico</span>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#009C4D]"></span>
+                  <h2 class="font-bold text-slate-900 text-xs tracking-tight">Estudio Tomográfico & Radiológico</h2>
+                </div>
+                <span class="text-[11px] text-slate-400 font-medium block mt-0.5" id="viewer-subtext">
+                  TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical
+                </span>
               </div>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7]" id="confidence-badge">
-              CONFIANZA: 94.6%
-            </span>
-          </div>
 
-          <!-- Barra de Probabilidad Comparativa Lito vs Flebolito -->
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 mb-4">
-            <div class="flex justify-between items-center mb-1.5">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></span>
-                <span class="font-bold text-slate-900 text-xs">Lito Ureteral Distal</span>
-                <span class="text-[10px] text-slate-400 font-medium">(Litiasis Obstructiva)</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] text-slate-400 font-medium">(Calcificación Venosa)</span>
-                <span class="font-bold text-slate-900 text-xs">Flebolito Pélvico</span>
-                <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-              </div>
-            </div>
-
-            <!-- Barra de Progreso Dividida -->
-            <div class="h-3.5 w-full bg-slate-200 rounded-full overflow-hidden flex shadow-inner">
-              <div id="bar-stone" class="bg-[#009C4D] h-full transition-all duration-700 flex items-center justify-start pl-2" style="width: 93.4%;">
-                <span class="text-[9px] font-bold text-white font-mono-numbers" id="prob-stone-text">93.4%</span>
-              </div>
-              <div id="bar-phlebolith" class="bg-slate-400 h-full transition-all duration-700 flex items-center justify-end pr-2" style="width: 6.6%;">
-                <span class="text-[9px] font-bold text-white font-mono-numbers" id="prob-phlebolith-text">6.6%</span>
+              <!-- Botones de Acción Superior -->
+              <div class="flex items-center gap-2">
+                <button onclick="toggleCaliperOverlay()" id="btn-toggle-calipers" class="px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1.5 shadow-2xs">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                  <span>Calipers & Catéter: ON</span>
+                </button>
+                <input type="file" id="ct-file-input" accept="image/*,.dcm" class="hidden" onchange="handleFileUpload(event)">
+                <button onclick="document.getElementById('ct-file-input').click()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
+                  <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                  </svg>
+                  <span>Subir Tomografía</span>
+                </button>
               </div>
             </div>
 
-            <div class="flex justify-between items-center mt-2 text-[10px] text-slate-500">
-              <span id="stone-verdict-tag" class="text-[#007D3E] font-bold bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
-                ALTA PROBABILIDAD DE LITIASIS URETERAL
-              </span>
-              <span id="phlebolith-verdict-tag" class="text-slate-400 font-medium">
-                BAJA PROBABILIDAD DE FLEBOLITO
-              </span>
+            <!-- Cortes Clínicos Seleccionables (Tabs Limpias y Sobrias) -->
+            <div class="flex items-center gap-2 text-[11px] overflow-x-auto pb-0.5">
+              <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Cortes Clínicos:</span>
+              <button id="thumb-1" onclick="selectSampleImage('assets/samples/ct_axial_stone_clean.jpg', 1)" class="px-2.5 py-1 rounded-md border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold shrink-0 transition">
+                1. Axial: Lito Ureteral (Rim Sign)
+              </button>
+              <button id="thumb-2" onclick="selectSampleImage('assets/samples/ct_axial_phleboliths_clean.jpg', 2)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
+                2. Axial: Flebolitos Pélvicos
+              </button>
+              <button id="thumb-3" onclick="selectSampleImage('assets/samples/ct_coronal_clean.jpg', 3)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
+                3. Coronal: Vía Renal & Dilatación
+              </button>
+              <button id="thumb-4" onclick="selectSampleImage('assets/samples/radiography_ureteral_catheter.jpg', 4)" class="px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium shrink-0 transition">
+                4. Control: Catéter Doble J Guiado
+              </button>
             </div>
-          </div>
 
-          <!-- DESGLOSE EXPLICABLE DE CRITERIOS DIAGNÓSTICOS -->
-          <div class="space-y-2 mb-4">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-bold uppercase text-slate-400">Desglose de Criterios Clínico-Radiológicos:</span>
-              <span class="text-[10px] font-bold text-slate-400">5 SIGNOS EVALUADOS</span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]" id="criteria-container">
+            <!-- CONTENEDOR DEL VISOR PACS CON OVERLAY LIMPIO Y PRO -->
+            <div class="relative w-full h-[430px] bg-[#0A0E17] rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center select-none shadow-inner" id="viewer-container">
               
-              <!-- Criterio 1: Trayecto Ureteral -->
-              <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-path-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
-                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-800 text-[11px]" id="crit-path-title">Trayecto Ureteral</div>
-                  <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-path-desc">Ubicación estricta sobre el recorrido del uréter distal prevesical.</div>
-                </div>
-              </div>
+              <!-- Wrapper centrado que escala exactamente con la imagen -->
+              <div id="image-transform-wrapper" class="relative inline-flex items-center justify-center max-h-[410px] max-w-full">
+                
+                <!-- Imagen Tomográfica Limpia -->
+                <img id="ct-main-image" src="assets/samples/ct_axial_stone_clean.jpg" alt="Tomografía Computada de Pelvis" class="max-h-[410px] max-w-full object-contain filter contrast-100 transition-all duration-150 rounded-sm">
+                
+                <!-- OVERLAY SVG DINÁMICO DE CALIPERS, FLEBOLITOS Y CATÉTER DOBLE J -->
+                <svg id="caliper-catheter-overlay" class="absolute inset-0 w-full h-full pointer-events-none transition-all duration-200" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                  
+                  <!-- ======================================================== -->
+                  <!-- CAPA CORTE 1: LITO URETERAL DISTAL (AXIAL RIM SIGN)     -->
+                  <!-- ======================================================== -->
+                  <g id="layer-case-1">
+                    <!-- Caliper de Medición del Diámetro del Lito -->
+                    <!-- Círculo concéntrico de calcificación -->
+                    <circle cx="510" cy="530" r="28" fill="rgba(0, 156, 77, 0.18)" stroke="#009C4D" stroke-width="2.5"/>
+                    
+                    <!-- Caliper ortogonal +---+ -->
+                    <line x1="482" y1="530" x2="538" y2="530" stroke="#00E676" stroke-width="2"/>
+                    <line x1="482" y1="520" x2="482" y2="540" stroke="#00E676" stroke-width="2"/>
+                    <line x1="538" y1="520" x2="538" y2="540" stroke="#00E676" stroke-width="2"/>
 
-              <!-- Criterio 2: Signo del Halo / Soft-Tissue Rim Sign -->
-              <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-rim-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
-                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-800 text-[11px]" id="crit-rim-title">Signo del Halo (Rim Sign)</div>
-                  <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-rim-desc">Halo circunferencial de tejido blando (1.8 mm) por edema parietal.</div>
-                </div>
-              </div>
+                    <!-- Anillo del Halo Edematoso (Soft-Tissue Rim Sign) -->
+                    <circle cx="510" cy="530" r="48" fill="none" stroke="#38BDF8" stroke-width="2" stroke-dasharray="5 3"/>
 
-              <!-- Criterio 3: Signo de la Cola de Cometa -->
-              <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-comet-icon" class="w-4 h-4 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 mt-0.5">
-                  <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-800 text-[11px]" id="crit-comet-title">Cola de Cometa (Comet-Tail)</div>
-                  <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-comet-desc">Ausente. No se visualiza prolongación tubular venosa contigua.</div>
-                </div>
-              </div>
+                    <!-- Línea guía al callout -->
+                    <path d="M 548 510 L 610 440 L 700 440" fill="none" stroke="#009C4D" stroke-width="1.8"/>
 
-              <!-- Criterio 4: Signos Secundarios de Obstrucción -->
-              <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-obstr-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
-                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-800 text-[11px]" id="crit-obstr-title">Obstrucción Secundaria</div>
-                  <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-obstr-desc">Dilatación ureteral proximal (&gt; 4 mm) y estriación periureteral.</div>
-                </div>
-              </div>
+                    <!-- Tarjeta de Medición Pro -->
+                    <rect x="700" y="415" width="270" height="70" rx="8" fill="rgba(15, 23, 42, 0.92)" stroke="rgba(0, 156, 77, 0.8)" stroke-width="1.5"/>
+                    <text x="716" y="440" fill="#4ADE80" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Lito Ureteral: 4.2 mm</text>
+                    <text x="716" y="460" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="16">842 HU · Soft-Tissue Rim (+)</text>
+                    <text x="716" y="476" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Halo edematoso: 1.8 mm</text>
+                  </g>
 
-              <!-- Criterio 5: Morfología y Atenuación HU -->
-              <div class="sm:col-span-2 p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
-                <div id="crit-hu-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
-                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-800 text-[11px]" id="crit-hu-title">Densidad & Morfología de la Calcificación</div>
-                  <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-hu-desc">Morfología facetada irregular con alta densidad homogénea (842 HU). Sin lucencia central radiológica.</div>
-                </div>
-              </div>
+                  <!-- ======================================================== -->
+                  <!-- CAPA CORTE 2: FLEBOLITOS PÉLVICOS (SIN TEXTO PEGADO)     -->
+                  <!-- ======================================================== -->
+                  <g id="layer-case-2" class="hidden">
+                    <!-- Flebolito 1 con centro radiolúcido -->
+                    <circle cx="480" cy="510" r="26" fill="rgba(148, 163, 184, 0.2)" stroke="#94A3B8" stroke-width="2.5"/>
+                    <circle cx="480" cy="510" r="9" fill="rgba(10, 14, 23, 0.95)" stroke="#CBD5E1" stroke-width="1.5"/>
 
-            </div>
-          </div>
+                    <!-- Caliper Flebolito 1 -->
+                    <line x1="454" y1="510" x2="506" y2="510" stroke="#CBD5E1" stroke-width="1.8"/>
+                    <line x1="454" y1="502" x2="454" y2="518" stroke="#CBD5E1" stroke-width="1.8"/>
+                    <line x1="506" y1="502" x2="506" y2="518" stroke="#CBD5E1" stroke-width="1.8"/>
 
-          <!-- CONDUCTA CLÍNICA Y TERAPÉUTICA ASISTIDA -->
-          <div class="bg-[#F0FDF4] border border-[#C6EFD7] rounded-xl p-3 flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold uppercase text-[#007D3E]">Conducta Médica Recomendada (Servicio de Urología):</span>
-              <span class="text-[10px] font-bold text-[#006632] bg-white px-2 py-0.5 rounded border border-[#C6EFD7]">MET RECOMENDADO</span>
-            </div>
-            <p class="text-slate-700 text-[11px] leading-relaxed font-medium" id="recommendation-text">
-              Lito de 4.2 mm no complicado en uréter terminal derecho con adecuada función renal. Se sugiere <strong>Tratamiento Expulsivo Médico (MET)</strong> con Tamsulosina 0.4 mg/día + hidratación reglada y analgesia pautada. Control ecográfico/clínico en 72 horas. Ante persistencia de dolor o fiebre, coordinar evaluación para ureteroscopia (URS).
-            </p>
-          </div>
+                    <!-- Línea guía al callout Flebolito -->
+                    <path d="M 506 495 L 560 430 L 650 430" fill="none" stroke="#94A3B8" stroke-width="1.8"/>
+                    <rect x="650" y="405" width="290" height="66" rx="8" fill="rgba(15, 23, 42, 0.92)" stroke="rgba(148, 163, 184, 0.7)" stroke-width="1.5"/>
+                    <text x="666" y="432" fill="#F8FAFC" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Flebolito Pélvico: 3.1 mm</text>
+                    <text x="666" y="455" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="16">460 HU · Lucencia Central radiolúcida</text>
 
-          <!-- Botones de Acción de Reporte -->
-          <div class="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
-            <div class="text-[10px] text-slate-400 font-medium">
-              ID ANÁLISIS: <span class="text-slate-700 font-bold font-mono-numbers" id="analysis-stamp">AN-2026-X8841</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="copyFindingsToClipboard()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold transition text-xs flex items-center gap-1 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                    <!-- Flebolito 2 con cola de cometa (trayecto venoso) -->
+                    <circle cx="370" cy="610" r="22" fill="rgba(148, 163, 184, 0.2)" stroke="#94A3B8" stroke-width="2"/>
+                    <path d="M 370 610 Q 320 640 280 660" fill="none" stroke="#60A5FA" stroke-width="3" stroke-dasharray="6 3"/>
+                    <rect x="100" y="640" width="220" height="42" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#60A5FA" stroke-width="1.2"/>
+                    <text x="115" y="667" fill="#93C5FD" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="16">Signo de Cola de Cometa</text>
+                  </g>
+
+                  <!-- ======================================================== -->
+                  <!-- CAPA CORTE 3: RECONSTRUCCIÓN CORONAL / VÍA RENAL         -->
+                  <!-- ======================================================== -->
+                  <g id="layer-case-3" class="hidden">
+                    <!-- Dilatación pielocalicial -->
+                    <ellipse cx="490" cy="380" rx="35" ry="50" fill="rgba(56, 189, 248, 0.15)" stroke="#38BDF8" stroke-width="2" stroke-dasharray="4 2"/>
+                    <path d="M 525 380 L 620 350 L 710 350" fill="none" stroke="#38BDF8" stroke-width="1.8"/>
+                    <rect x="710" y="325" width="260" height="64" rx="8" fill="rgba(15, 23, 42, 0.92)" stroke="#38BDF8" stroke-width="1.5"/>
+                    <text x="726" y="352" fill="#38BDF8" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Hidronefrosis Grado II</text>
+                    <text x="726" y="374" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="16">Dilatación ureteral: 7.8 mm</text>
+                  </g>
+
+                  <!-- ======================================================== -->
+                  <!-- CAPA CORTE 4: CATÉTER DOBLE J POSÁNDOSE SOBRE EL CÁLCULO  -->
+                  <!-- ======================================================== -->
+                  <g id="layer-case-4" class="hidden">
+                    <!-- Trazado Anatómico del Catéter Doble J (Stent Ureteral 6 Fr) -->
+                    <!-- Espira proximal (Pelvis renal) -->
+                    <path d="M 570 140 C 600 115, 645 140, 630 180 C 615 210, 575 195, 570 165" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
+                    
+                    <!-- Trayecto Ureteral descendente guiado pasando justo sobre el cálculo -->
+                    <path d="M 570 190 Q 565 310 550 440 Q 538 560 530 630 Q 515 700 480 760" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 6"/>
+
+                    <!-- Espira distal en Vejiga urinaria -->
+                    <path d="M 480 760 C 450 790, 410 780, 420 740 C 430 705, 470 720, 480 750" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
+
+                    <!-- Lito Ureteral Obstructivo donde se posa y hace tope el catéter -->
+                    <circle cx="535" cy="595" r="32" fill="rgba(239, 68, 68, 0.25)" stroke="#EF4444" stroke-width="3"/>
+                    
+                    <!-- Callout Catéter Doble J -->
+                    <path d="M 555 310 L 640 260 L 730 260" fill="none" stroke="#FACC15" stroke-width="2"/>
+                    <rect x="730" y="235" width="250" height="66" rx="8" fill="rgba(15, 23, 42, 0.92)" stroke="#FACC15" stroke-width="1.8"/>
+                    <text x="746" y="262" fill="#FDE047" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Catéter Doble J: 6 Fr</text>
+                    <text x="746" y="284" fill="#E2E8F0" font-family="'Plus Jakarta Sans', sans-serif" font-size="16">Calibre: 2.0 mm · Stent in situ</text>
+
+                    <!-- Callout Lito Impactado Medido -->
+                    <path d="M 503 595 L 410 570 L 110 570" fill="none" stroke="#EF4444" stroke-width="2"/>
+                    <rect x="70" y="535" width="270" height="78" rx="8" fill="rgba(15, 23, 42, 0.94)" stroke="#EF4444" stroke-width="1.8"/>
+                    <text x="86" y="565" fill="#FCA5A5" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Lito Impactado: 5.1 mm</text>
+                    <text x="86" y="587" fill="#F8FAFC" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="16">Catéter posado sobre el cálculo</text>
+                    <text x="86" y="605" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Distancia a meato vesical: 16 mm</text>
+                  </g>
+
                 </svg>
-                <span id="copy-btn-text">Copiar Hallazgos</span>
-              </button>
-              <button onclick="openReportModal()" class="px-3.5 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-semibold transition text-xs flex items-center gap-1.5 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+
+              </div>
+
+              <!-- Indicadores Anatómicos Radiológicos en los Bordes -->
+              <div class="absolute top-2 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded">A</div>
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded">P</div>
+              <div class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded">R</div>
+              <div class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded">L</div>
+
+              <!-- Metadatos DICOM en las esquinas -->
+              <div class="absolute top-2.5 left-3 text-[10px] font-mono text-slate-400 leading-tight">
+                <div>HIBA · SERV. UROLOGÍA</div>
+                <div class="text-slate-500 text-[9px]" id="dicom-corner-id">HC-2026-08412</div>
+              </div>
+
+              <div class="absolute top-2.5 right-3 text-[10px] font-mono text-slate-400 text-right leading-tight">
+                <div>TC PELVIS S/C</div>
+                <div class="text-slate-500 text-[9px]">FOV: 240mm · 512x512</div>
+              </div>
+
+              <!-- Indicador de Procesamiento IA -->
+              <div id="ai-processing-overlay" class="absolute inset-0 bg-slate-900/85 backdrop-blur-xs hidden flex-col items-center justify-center text-white z-30">
+                <div class="w-10 h-10 rounded-full border-2 border-[#009C4D] border-t-transparent animate-spin mb-3"></div>
+                <div class="font-bold text-xs text-white">Analizando tomografía computada con IA...</div>
+                <div class="text-[11px] text-slate-400 mt-1 font-medium" id="ai-processing-step">Extrayendo densidad HU y morfología parietal...</div>
+              </div>
+
+            </div>
+
+            <!-- Barra de Herramientas y Parámetros en Gris Limpio -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
+                <div>Estudio: <span class="text-slate-600 font-semibold" id="bar-modality">TC Pelvis Sin Contraste</span></div>
+                <span class="text-slate-300">•</span>
+                <div>Densidad: <span class="text-slate-700 font-bold font-mono-numbers" id="bar-density">842 HU (Cálculo)</span></div>
+                <span class="text-slate-300">•</span>
+                <div>Medición: <span class="text-[#007D3E] font-bold font-mono-numbers" id="bar-caliper-measurement">4.2 mm</span></div>
+              </div>
+
+              <!-- Selector de Ventana Médica -->
+              <div class="flex items-center gap-1">
+                <button onclick="setWindowing('bone')" id="win-bone" class="px-2.5 py-1 rounded text-[10px] bg-[#009C4D] text-white font-bold transition shadow-2xs">
+                  Ventana Ósea (W:1500 L:400)
+                </button>
+                <button onclick="setWindowing('soft')" id="win-soft" class="px-2.5 py-1 rounded text-[10px] text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold transition">
+                  Tejidos Blandos (W:350 L:40)
+                </button>
+              </div>
+            </div>
+
+            <!-- BOTÓN PRINCIPAL: EJECUTAR ANÁLISIS DE INTELIGENCIA ARTIFICIAL -->
+            <div class="pt-1">
+              <button onclick="runAiAnalysis()" id="btn-run-ai" class="w-full py-2.5 px-4 rounded-xl bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs tracking-wide shadow-xs hover:shadow-md transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
-                <span>Generar Informe Médico</span>
+                <span>Ejecutar Análisis Diferencial con Inteligencia Artificial</span>
               </button>
             </div>
           </div>
 
-        </div>
+          <!-- ========================================================================= -->
+          <!-- PANEL DE RESULTADOS & DIAGNÓSTICO DIFERENCIAL DE IA                      -->
+          <!-- ========================================================================= -->
+          <div class="card-base p-4" id="ai-results-panel">
+            
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#F0FDF4] border border-[#C6EFD7] flex items-center justify-center text-[#007D3E]">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-xs tracking-tight">Diagnóstico Asistido & Clasificación Probabilística</h3>
+                  <span class="text-[10px] text-slate-400 font-medium">Modelo Multimodal: Radiomics + Visión Convolucional + Cuadro Clínico</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F0FDF4] text-[#007D3E] border border-[#C6EFD7]" id="confidence-badge">
+                CONFIANZA: 94.6%
+              </span>
+            </div>
 
-      </section>
+            <!-- Barra de Probabilidad Comparativa Lito vs Flebolito -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 mb-4">
+              <div class="flex justify-between items-center mb-1.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#009C4D]"></span>
+                  <span class="font-bold text-slate-900 text-xs">Lito Ureteral Distal</span>
+                  <span class="text-[10px] text-slate-400 font-medium">(Litiasis Obstructiva)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] text-slate-400 font-medium">(Calcificación Venosa)</span>
+                  <span class="font-bold text-slate-900 text-xs">Flebolito Pélvico</span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+
+              <!-- Barra de Progreso Dividida -->
+              <div class="h-3.5 w-full bg-slate-200 rounded-full overflow-hidden flex shadow-inner">
+                <div id="bar-stone" class="bg-[#009C4D] h-full transition-all duration-700 flex items-center justify-start pl-2" style="width: 93.4%;">
+                  <span class="text-[9px] font-bold text-white font-mono-numbers" id="prob-stone-text">93.4%</span>
+                </div>
+                <div id="bar-phlebolith" class="bg-slate-400 h-full transition-all duration-700 flex items-center justify-end pr-2" style="width: 6.6%;">
+                  <span class="text-[9px] font-bold text-white font-mono-numbers" id="prob-phlebolith-text">6.6%</span>
+                </div>
+              </div>
+
+              <div class="flex justify-between items-center mt-2 text-[10px] text-slate-500">
+                <span id="stone-verdict-tag" class="text-[#007D3E] font-bold bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
+                  ALTA PROBABILIDAD DE LITIASIS URETERAL
+                </span>
+                <span id="phlebolith-verdict-tag" class="text-slate-400 font-medium">
+                  BAJA PROBABILIDAD DE FLEBOLITO
+                </span>
+              </div>
+            </div>
+
+            <!-- DESGLOSE EXPLICABLE DE CRITERIOS DIAGNÓSTICOS DEL HOSPITAL ITALIANO -->
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-slate-400">Desglose de Criterios Clínico-Radiológicos:</span>
+                <span class="text-[10px] font-bold text-slate-400">5 SIGNOS EVALUADOS</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]" id="criteria-container">
+                
+                <!-- Criterio 1: Trayecto Ureteral -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
+                  <div id="crit-path-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-[11px]" id="crit-path-title">Trayecto Ureteral</div>
+                    <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-path-desc">Ubicación estricta sobre el recorrido del uréter distal prevesical.</div>
+                  </div>
+                </div>
+
+                <!-- Criterio 2: Signo del Halo / Soft-Tissue Rim Sign -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
+                  <div id="crit-rim-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-[11px]" id="crit-rim-title">Signo del Halo (Rim Sign)</div>
+                    <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-rim-desc">Halo circunferencial de tejido blando (1.8 mm) por edema parietal.</div>
+                  </div>
+                </div>
+
+                <!-- Criterio 3: Signo de la Cola de Cometa -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
+                  <div id="crit-comet-icon" class="w-4 h-4 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-[11px]" id="crit-comet-title">Cola de Cometa (Comet-Tail)</div>
+                    <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-comet-desc">Ausente. No se visualiza prolongación tubular venosa contigua.</div>
+                  </div>
+                </div>
+
+                <!-- Criterio 4: Signos Secundarios de Obstrucción -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2">
+                  <div id="crit-obstr-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-[11px]" id="crit-obstr-title">Obstrucción Secundaria</div>
+                    <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-obstr-desc">Dilatación ureteral proximal (> 4 mm) y estriación perirrenal.</div>
+                  </div>
+                </div>
+
+                <!-- Criterio 5: Densidad HU y Morfología -->
+                <div class="p-2.5 rounded-lg border border-slate-200 bg-white flex items-start gap-2 sm:col-span-2">
+                  <div id="crit-hu-icon" class="w-4 h-4 rounded-full bg-[#E8F8EE] text-[#007D3E] flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-800 text-[11px]" id="crit-hu-title">Densidad HU & Morfología</div>
+                    <div class="text-[10px] text-slate-500 font-medium leading-relaxed" id="crit-hu-desc">Morfología facetada irregular con alta densidad homogénea (842 HU). Sin lucencia central.</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Conducta Clínica Urológica Sugerida -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-slate-400">Conducta Urológica Sugerida (Hospital Italiano):</span>
+                <span class="text-[10px] font-bold text-[#007D3E] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#C6EFD7]">
+                  GUÍAS EAU / CAU 2026
+                </span>
+              </div>
+              <div id="recommendation-text" class="text-xs text-slate-700 font-medium leading-relaxed">
+                Lito de 4.2 mm no complicado en uréter terminal derecho con adecuada función renal. Se sugiere Tratamiento Expulsivo Médico (MET) con Tamsulosina 0.4 mg/día + analgesia pautada. Control ecográfico/clínico en 72 horas. Ante persistencia de dolor o fiebre, coordinar evaluación para ureteroscopia (URS).
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
 
     </div>
+
   </main>
 
-  <!-- ================= MODAL DE INFORME MÉDICO ESTANDARIZADO ================= -->
-  <div id="report-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 shadow-2xl flex flex-col">
+  <!-- ================= MODAL DE INFORME MÉDICO ================= -->
+  <div id="report-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 flex flex-col gap-4">
       
-      <!-- Modal Header -->
-      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded bg-[#009C4D] text-white flex items-center justify-center font-bold text-xs">
-            HI
-          </div>
+          <div class="w-8 h-8 rounded-lg bg-[#009C4D] text-white flex items-center justify-center font-bold text-xs">HI</div>
           <div>
-            <h3 class="font-bold text-slate-900 text-sm">Informe Diagnóstico de Tomografía Computada</h3>
-            <span class="text-[10px] text-slate-400 font-medium">Servicio de Urología · Asistencia IA Validada</span>
+            <h3 class="font-bold text-slate-900 text-sm">Informe Urológico Estandarizado</h3>
+            <span class="text-[10px] text-slate-400">Hospital Italiano de Buenos Aires · Servicio de Urología</span>
           </div>
         </div>
-        <button onclick="closeReportModal()" class="p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button onclick="closeReportModal()" class="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <!-- Printable Report Content -->
-      <div class="p-6 space-y-4 text-xs" id="printable-report">
-        
-        <!-- Encabezado Institucional del Reporte -->
-        <div class="border-b border-slate-200 pb-3 flex justify-between items-start">
-          <div>
-            <div class="text-xs font-bold text-slate-900">HOSPITAL ITALIANO DE BUENOS AIRES</div>
-            <div class="text-[11px] text-slate-600 font-medium">Servicio de Urología · Unidad de Litiasis Urinaria</div>
-            <div class="text-[10px] text-slate-400 mt-0.5 font-medium">Congreso I+I+I 2026 · Hackathon Biociencias</div>
-          </div>
-          <div class="text-right text-[10px] text-slate-500 font-medium">
-            <div>FECHA: <span id="rep-date" class="font-bold text-slate-700">19/10/2026</span></div>
-            <div>ESTUDIO: <span class="font-bold text-[#007D3E]">TC ABDOMEN Y PELVIS S/C</span></div>
-            <div>HC: <span id="rep-hc" class="font-bold text-slate-900 font-mono-numbers">HC-2026-08412</span></div>
-          </div>
+      <div class="space-y-3 text-xs" id="printable-report">
+        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/80 grid grid-cols-2 gap-2 text-[11px]">
+          <div><span class="text-slate-400">Paciente:</span> <strong id="rep-name" class="text-slate-800">Masculino, 44 años</strong></div>
+          <div><span class="text-slate-400">Historia Clínica:</span> <strong id="rep-hc" class="text-slate-800 font-mono-numbers">HC-2026-08412</strong></div>
+          <div><span class="text-slate-400">Dolor Clínico:</span> <span id="rep-pain" class="text-slate-700">Presente unilateral agudo</span></div>
+          <div><span class="text-slate-400">Hematuria:</span> <span id="rep-hematuria" class="text-slate-700">Microscópica</span></div>
         </div>
 
-        <!-- Paciente y Datos Clínicos -->
-        <div class="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-[11px]">
-          <div><span class="text-slate-400 font-semibold">PACIENTE:</span> <span class="font-bold text-slate-800" id="rep-name">Masculino, 44a</span></div>
-          <div><span class="text-slate-400 font-semibold">MOTIVO:</span> <span class="font-bold text-slate-800" id="rep-pain">Cólico Renal FID</span></div>
-          <div><span class="text-slate-400 font-semibold">HEMATURIA:</span> <span class="font-bold text-slate-800" id="rep-hematuria">Microscópica (+)</span></div>
-        </div>
-
-        <!-- Hallazgos Tomográficos & IA -->
-        <div class="space-y-2">
-          <div class="font-bold border-b border-slate-100 pb-1 text-[11px] uppercase tracking-wide text-[#007D3E]">
-            Hallazgos Tomográficos & Clasificación por Inteligencia Artificial
+        <div class="p-3 rounded-lg bg-[#F0FDF4] border border-[#C6EFD7]">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-[10px] font-bold text-[#007D3E] uppercase">Conclusión Multimodal IA</span>
+            <span class="text-xs font-bold text-[#006632] font-mono-numbers" id="rep-prob-badge">PROBABILIDAD LITO: 93.4%</span>
           </div>
-          
-          <div class="p-3 rounded-lg border border-[#C6EFD7] bg-[#F0FDF4] space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-slate-800 text-xs" id="rep-primary-diag">DIAGNÓSTICO: Lito Ureteral Distal Obstructivo</span>
-              <span class="font-bold text-[#006632] bg-[#C6EFD7] px-2 py-0.5 rounded text-[10px] font-mono-numbers" id="rep-prob-badge">PROBABILIDAD: 93.4%</span>
-            </div>
-            <p class="text-slate-600 leading-relaxed text-[11px] font-medium" id="rep-findings-text">
-              Se identifica imagen hiperdensa de aproximadamente 4.2 mm y atenuación de 842 HU en el trayecto del uréter distal prevesical ipsilateral. Se constata la presencia de <strong>signo del halo o tejido blando circunferencial (Soft-Tissue Rim Sign)</strong> compatible con edema parietal ureteral. Se descarta signo de la cola de cometa venosa. Se evidencian signos secundarios de obstrucción urinaria caracterizados por dilatación ureteral proximal y leve estriación de la grasa perirrenal.
-            </p>
-          </div>
-        </div>
-
-        <!-- Conducta Médica -->
-        <div class="space-y-1">
-          <div class="font-bold text-slate-900 text-[11px] uppercase tracking-wide text-slate-600">
-            Recomendación Terapéutica
-          </div>
-          <p class="text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed font-medium" id="rep-conduct-text">
-            Tratamiento expulsivo médico con Tamsulosina 0.4 mg/día, adecuada hidratación oral y analgesia reglada. Control de seguimiento urológico en 72 horas.
+          <p class="text-slate-700 leading-relaxed font-medium" id="rep-conduct-text">
+            Calcificación yuxtavesical derecha compatible con Lito Ureteral Distal sintomático. Presencia de Rim Sign (+) y dilatación ureteral proximal.
           </p>
         </div>
 
-        <!-- Firma Digital Médica -->
-        <div class="pt-4 border-t border-slate-200 flex justify-between items-end text-[10px] text-slate-400 font-medium">
-          <div>
-            <div>Validado mediante Colony Urología v2.4 (Hospital Italiano)</div>
-            <div>Servicio de Urología · HIBA</div>
-          </div>
-          <div class="text-right">
-            <div class="font-bold text-slate-700 text-xs">Dr. Diego Santillán</div>
-            <div>Servicio de Urología · Matrícula Nacional 114.920</div>
-          </div>
+        <div class="text-[10px] text-slate-400 flex justify-between pt-2 border-t border-slate-100">
+          <span>Servicio de Urología · Hospital Italiano</span>
+          <span id="rep-date"></span>
         </div>
-
       </div>
 
-      <!-- Modal Footer -->
-      <div class="px-6 py-3 border-t border-slate-200 bg-slate-50/50 flex justify-end gap-2">
-        <button onclick="closeReportModal()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-xs">
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeReportModal()" class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold text-xs transition">
           Cerrar
         </button>
-        <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span>Imprimir / Descargar PDF</span>
+        <button onclick="copyFindingsToClipboard()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          <span id="copy-btn-text">Copiar Hallazgos</span>
+        </button>
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-[#009C4D] hover:bg-[#00823F] text-white font-bold text-xs transition shadow-2xs">
+          Imprimir / Guardar PDF
         </button>
       </div>
 
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC & MEDICAL ENGINE ================= -->
+  <!-- ================= SCRIPTS & LÓGICA DE INTERACCIÓN ================= -->
   <script>
-    // Estado Global de la Aplicación
+    // ESTADO DE LA APLICACIÓN
     const state = {
       activeCase: 1,
-      currentImage: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
+      currentImage: 'assets/samples/ct_axial_stone_clean.jpg',
       currentImageIndex: 1,
       calipersVisible: true,
       windowMode: 'bone',
@@ -1033,8 +1155,8 @@
           creatinine: '1.18',
           leukocytes: 'normal',
           giordano: 'positive',
-          notes: 'Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC sin contraste por sospecha de litiasis ureteral obstructiva distal.',
-          image: 'assets/samples/ct_axial_stone_hydronephrosis.jpg',
+          notes: 'Paciente ingresa por guardia con cólico renal derecho irradiado a genitales. Se solicita TC de pelvis sin contraste por sospecha de litiasis ureteral obstructiva distal.',
+          image: 'assets/samples/ct_axial_stone_clean.jpg',
           imageIndex: 1,
           caliperMeasure: '4.2 mm (Lito distal)',
           subtext: 'TC pelvis sin contraste · Corte axial L5-S1 · Nivel de uréter distal prevesical',
@@ -1046,7 +1168,7 @@
           probStone: 93.4,
           probPhlebolith: 6.6,
           confidence: '94.6%',
-          critPath: { title: 'Trayecto Ureteral', desc: 'Ubicación estricta sobre el recorrido anatómico del uréter distal prevesical.', favStone: true },
+          critPath: { title: 'Trayecto Ureteral', desc: 'Ubicación estricta sobre el recorrido del uréter distal prevesical.', favStone: true },
           critRim: { title: 'Signo del Halo (Rim Sign)', desc: 'Halo circunferencial de tejido blando (1.8 mm) por edema parietal ureteral.', favStone: true },
           critComet: { title: 'Cola de Cometa (Comet-Tail)', desc: 'Ausente. No se visualiza prolongación tubular venosa contigua.', favStone: true },
           critObstr: { title: 'Obstrucción Secundaria', desc: 'Dilatación ureteral proximal (> 4 mm) y estriación periureteral presentes.', favStone: true },
@@ -1068,7 +1190,7 @@
           leukocytes: 'normal',
           giordano: 'negative',
           notes: 'Estudio de control solicitado por ginecología. Sin dolor lumbosacro ni síntomas del tracto urinario inferior.',
-          image: 'assets/samples/pelvic_phleboliths.jpg',
+          image: 'assets/samples/ct_axial_phleboliths_clean.jpg',
           imageIndex: 2,
           caliperMeasure: '3.1 mm (Flebolito)',
           subtext: 'TC pelvis sin contraste · Corte axial pélvico inferior · Plexo venoso perivesical',
@@ -1091,69 +1213,66 @@
           name: 'Martín López',
           initials: 'ML',
           patientId: 'HC-2026-11029',
-          age: 38,
+          age: 51,
           gender: 'M',
-          pain: 'atypical',
+          pain: 'right',
           onset: 'subacute',
           hematuria: 'micro',
-          voiding: 'no',
-          history: 'no',
-          creatinine: '1.02',
+          voiding: 'yes',
+          history: 'yes',
+          creatinine: '1.25',
           leukocytes: 'normal',
-          giordano: 'negative',
-          notes: 'Dolor pélvico vago de 48h de evolución. Sedimento con microhematuria aislada. TC de baja dosis con calcificación límite de 2.8 mm en estrecho pélvico.',
-          image: 'assets/samples/pelvic_calcification_differential.jpg',
-          imageIndex: 3,
-          caliperMeasure: '4.8 mm (Calcificación)',
-          subtext: 'TC pelvis sin contraste · Corte axial de transición · Nivel límite de resolución',
-          density: '590 HU (Indeterminada)',
-          markerRatio: '1.35 (Límite)',
-          markerPcr: '6.4 mg/L (Leve)',
-          markerResist: 'IR: 0.65 (Normal)',
-          markerCrystal: 'Fosfatos amorfos',
-          probStone: 52.3,
-          probPhlebolith: 47.7,
-          confidence: '61.4%',
-          critPath: { title: 'Trayecto Ureteral', desc: 'Adyacente al uréter terminal sin certeza de intraluminalidad estricta.', favStone: null },
-          critRim: { title: 'Signo del Halo (Rim Sign)', desc: 'Dudoso / Parcial. Halo tenue inferior sin rodete completo.', favStone: null },
-          critComet: { title: 'Cola de Cometa (Comet-Tail)', desc: 'No concluyente por grosor de corte y ruido tomográfico.', favStone: null },
-          critObstr: { title: 'Obstrucción Secundaria', desc: 'Sin dilatación pielocalicial franca. Uréter de 3 mm sin cambios inflamatorios.', favStone: null },
-          critHu: { title: 'Densidad & Morfología', desc: '590 HU, morfología subcentimétrica con borde redondeado.', favStone: null },
-          recommendation: 'Calcificación pélvica indeterminada de 2.8 mm. Se sugiere correlación clínica estrecha, hidratación y ecografía renal con vejiga repleta o TC de seguimiento si el cuadro doloroso se intensifica.'
+          giordano: 'positive',
+          notes: 'Lito ureteral distal izquierdo de 5.1 mm impactado con colocación de catéter Doble J (6 Fr / 2.0 mm) para descompresión renal. Control de posición y permeabilidad.',
+          image: 'assets/samples/radiography_ureteral_catheter.jpg',
+          imageIndex: 4,
+          caliperMeasure: '5.1 mm (Lito) · 6 Fr (Catéter)',
+          subtext: 'Control radiológico: Catéter Doble J posándose sobre lito ureteral impactado',
+          density: 'Catéter Doble J radiopaco',
+          markerRatio: '1.95 (Edema periestent)',
+          markerPcr: '18.2 mg/L',
+          markerResist: 'IR: 0.70 (Post-descompresión)',
+          markerCrystal: 'Oxalato cálcico monohidrato',
+          probStone: 96.5,
+          probPhlebolith: 3.5,
+          confidence: '98.2%',
+          critPath: { title: 'Trayecto Ureteral', desc: 'Trayecto ureteral guiado por el catéter Doble J posado exactamente sobre el cálculo.', favStone: true },
+          critRim: { title: 'Signo del Halo (Rim Sign)', desc: 'Halo parietal evidente previo a la instrumentación.', favStone: true },
+          critComet: { title: 'Cola de Cometa (Comet-Tail)', desc: 'Ausente. Cálculo dentro del lumen ureteral descomprimido por el stent.', favStone: true },
+          critObstr: { title: 'Obstrucción Secundaria', desc: 'Descompresión pielocalicial lograda por el catéter Doble J in situ.', favStone: true },
+          critHu: { title: 'Densidad & Morfología', desc: 'Cálculo distal radioopaco de 5.1 mm con visualización directa del catéter pasando a su lado.', favStone: true },
+          recommendation: 'Catéter Doble J 6 Fr normoposicionado con adecuada derivación urinaria. Se programa Ureterolitotricia Endoscópica con Láser (URS) diferida a 7-14 días con extracción completa del cálculo.'
         }
       }
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Por defecto iniciamos con el paciente 1 cargado para el visor, pero en vista lista o detalle
-      loadPatientData(1);
+      // Inicia en el Directorio de Pacientes (Triage)
+      showTriageView();
     });
 
-    // FLUJO: SELECCIONAR PACIENTE DE LA LISTA Y ABRIR DASHBOARD COMPLETO
+    // =======================================================
+    // NAVEGACIÓN: VISTA DE TRIAGE VS VISTA DE PACIENTE & VISOR
+    // =======================================================
+    function showTriageView() {
+      document.getElementById('view-triage').classList.remove('hidden');
+      document.getElementById('view-patient-workspace').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function selectPatientAndOpenDashboard(id) {
       state.activeCase = id;
       loadPatientData(id);
 
-      // Resaltar tarjeta seleccionada en la lista
-      [1, 2, 3].forEach(n => {
-        const card = document.getElementById(`patient-card-${n}`);
-        if (card) {
-          if (n === id) card.classList.add('patient-card-active');
-          else card.classList.remove('patient-card-active');
-        }
-      });
+      // Sincronizar select rápido
+      const sel = document.getElementById('quick-patient-select');
+      if (sel) sel.value = id;
 
-      // Transición fluida a la planilla completa
-      document.getElementById('patient-selection-view').classList.add('hidden');
-      document.getElementById('patient-detail-dashboard').classList.remove('hidden');
+      // Ocultar directorio y mostrar workspace completo
+      document.getElementById('view-triage').classList.add('hidden');
+      document.getElementById('view-patient-workspace').classList.remove('hidden');
 
-      // Scroll suave
-      document.getElementById('patient-detail-dashboard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function backToPatientList() {
-      document.getElementById('patient-detail-dashboard').classList.add('hidden');
-      document.getElementById('patient-selection-view').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function createNewBlankPatient() {
@@ -1166,9 +1285,11 @@
       document.getElementById('clinical-hematuria').value = 'none';
       document.getElementById('clinical-history').value = 'no';
       document.getElementById('active-patient-header-name').innerText = `Nuevo Paciente (${newId})`;
+      document.getElementById('active-patient-header-hc').innerText = newId;
+      document.getElementById('dicom-corner-id').innerText = newId;
 
-      document.getElementById('patient-selection-view').classList.add('hidden');
-      document.getElementById('patient-detail-dashboard').classList.remove('hidden');
+      document.getElementById('view-triage').classList.add('hidden');
+      document.getElementById('view-patient-workspace').classList.remove('hidden');
       updateClinicalScoreLive();
     }
 
@@ -1176,11 +1297,7 @@
       const q = query.toLowerCase();
       [1, 2, 3].forEach(n => {
         const p = state.patients[n];
-        const card = document.getElementById(`patient-card-${n}`);
-        if (card) {
-          const match = p.name.toLowerCase().includes(q) || p.patientId.toLowerCase().includes(q) || p.notes.toLowerCase().includes(q);
-          card.style.display = match ? 'flex' : 'none';
-        }
+        // simple filter hook if user searches
       });
     }
 
@@ -1189,6 +1306,8 @@
       if (!p) return;
 
       document.getElementById('active-patient-header-name').innerText = `${p.name} (${p.age}a)`;
+      document.getElementById('active-patient-header-hc').innerText = p.patientId;
+      document.getElementById('dicom-corner-id').innerText = p.patientId;
       document.getElementById('patient-badge-id').innerText = p.patientId;
       document.getElementById('patient-id').value = p.patientId;
       document.getElementById('patient-age').value = p.age;
@@ -1218,7 +1337,9 @@
       updateClinicalScoreLive();
     }
 
-    // VISOR DE IMÁGENES & CONTROL DE CALIPERS / CATÉTER
+    // =======================================================
+    // VISOR DE IMÁGENES PACS & OVERLAY DE CALIPERS / CATÉTER
+    // =======================================================
     function selectSampleImage(imgSrc, thumbIndex) {
       state.currentImage = imgSrc;
       state.currentImageIndex = thumbIndex;
@@ -1246,11 +1367,11 @@
         document.getElementById('bar-density').innerText = '460 HU (Flebolito)';
         document.getElementById('bar-caliper-measurement').innerText = '3.1 mm (Flebolito)';
       } else if (thumbIndex === 3) {
-        document.getElementById('viewer-subtext').innerText = 'Radiografía digital / Scout view · Evaluación de calcificaciones pélvicas';
-        document.getElementById('bar-density').innerText = 'Múltiples focos';
-        document.getElementById('bar-caliper-measurement').innerText = '4.8 mm';
+        document.getElementById('viewer-subtext').innerText = 'TC pelvis · Reconstrucción coronal · Dilatación del sistema excretor e hidronefrosis';
+        document.getElementById('bar-density').innerText = 'Unidad Renal Izq';
+        document.getElementById('bar-caliper-measurement').innerText = '7.8 mm (Dilatación)';
       } else if (thumbIndex === 4) {
-        document.getElementById('viewer-subtext').innerText = 'Radiografía con Catéter Doble J posándose sobre lito ureteral impactado';
+        document.getElementById('viewer-subtext').innerText = 'Radiografía con Catéter Doble J (6 Fr) posándose sobre lito ureteral impactado';
         document.getElementById('bar-density').innerText = 'Catéter Doble J radiopaco';
         document.getElementById('bar-caliper-measurement').innerText = '5.1 mm (Lito) · 6 Fr (Catéter)';
       }
@@ -1262,13 +1383,19 @@
       const overlay = document.getElementById('caliper-catheter-overlay');
 
       if (state.calipersVisible) {
-        btn.innerHTML = '<span>Medición & Catéter: ON</span>';
-        btn.className = 'px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1 shadow-2xs';
+        btn.innerHTML = `
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Calipers & Catéter: ON</span>
+        `;
+        btn.className = 'px-2.5 py-1.5 rounded-lg border border-[#009C4D] bg-[#F0FDF4] text-[#007D3E] font-bold text-[11px] transition flex items-center gap-1.5 shadow-2xs';
         overlay.classList.remove('opacity-0');
         selectSampleImage(state.currentImage, state.currentImageIndex);
       } else {
-        btn.innerHTML = '<span>Medición & Catéter: OFF</span>';
-        btn.className = 'px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 font-semibold text-[11px] transition flex items-center gap-1';
+        btn.innerHTML = `
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+          <span>Calipers & Catéter: OFF</span>
+        `;
+        btn.className = 'px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 font-semibold text-[11px] transition flex items-center gap-1.5';
         [1, 2, 3, 4].forEach(i => {
           const layer = document.getElementById(`layer-case-${i}`);
           if (layer) layer.classList.add('hidden');
@@ -1330,7 +1457,7 @@
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
 
-      stepText.innerText = 'Analizando signos radiológicos, calipers y catéter...';
+      stepText.innerText = 'Analizando corte tomográfico, calipers y catéter...';
 
       setTimeout(() => {
         stepText.innerText = 'Correlacionando con planilla clínica y marcadores...';
@@ -1369,7 +1496,7 @@
       } else if (state.activeCase === 2) {
         baseScore = Math.max(3, Math.min(18, baseScore - 30));
       } else {
-        baseScore = Math.max(35, Math.min(65, baseScore));
+        baseScore = Math.max(88, Math.min(98, baseScore + 15));
       }
 
       const probStone = parseFloat(baseScore.toFixed(1));
@@ -1405,10 +1532,10 @@
           favStone: probStone > 50
         },
         recommendation: probStone > 70 
-          ? 'Diagnóstico compatible con Lito Ureteral Distal sintomático. Se sugiere Tratamiento Expulsivo Médico (MET) con alfa-bloqueantes (Tamsulosina 0.4 mg) + hidratación reglada y control urológico en 72h. Si presenta fiebre o dolor refractario, programar Ureteroscopia (URS).'
-          : (probStone < 30 
-              ? 'Diagnóstico compatible con Flebolito Pélvico incidental benigno. No requiere tratamiento médico ni quirúrgico. Descartar causa urológica obstructiva.'
-              : 'Cuadro indeterminado. Se recomienda correlación con ecografía urinaria o control tomográfico de baja dosis si persisten los síntomas.')
+          ? (state.activeCase === 3 
+              ? 'Catéter Doble J 6 Fr normoposicionado con adecuada derivación urinaria. Se programa Ureterolitotricia Endoscópica con Láser (URS) diferida a 7-14 días con extracción completa del cálculo.'
+              : 'Diagnóstico compatible con Lito Ureteral Distal sintomático. Se sugiere Tratamiento Expulsivo Médico (MET) con alfa-bloqueantes (Tamsulosina 0.4 mg) + hidratación reglada y control urológico en 72h. Si presenta fiebre o dolor refractario, programar Ureteroscopia (URS).')
+          : 'Diagnóstico compatible con Flebolito Pélvico incidental benigno. No requiere tratamiento médico ni quirúrgico. Descartar causa urológica obstructiva.'
       };
 
       renderAiResults(res);
@@ -1448,7 +1575,6 @@
       updateCriterionUI('crit-hu', c.critHu);
 
       document.getElementById('recommendation-text').innerHTML = c.recommendation;
-      document.getElementById('analysis-stamp').innerText = `AN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
     function updateCriterionUI(prefix, crit) {
@@ -1517,6 +1643,7 @@
     function openReportModal() {
       const modal = document.getElementById('report-modal');
       modal.classList.remove('hidden');
+      modal.classList.add('flex');
 
       const id = document.getElementById('patient-id').value;
       const age = document.getElementById('patient-age').value;
@@ -1535,7 +1662,9 @@
     }
 
     function closeReportModal() {
-      document.getElementById('report-modal').classList.add('hidden');
+      const modal = document.getElementById('report-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
     function copyFindingsToClipboard() {
